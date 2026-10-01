@@ -45,8 +45,43 @@ const person = {
   <script type="application/ld+json" set:html={JSON.stringify(person)} />
 </head>
 <body>
+  {!bare && <div class="thread" aria-hidden="true"><span id="thread-fill"></span></div>}
   {!bare && <Header />}
   <main id="main"><slot /></main>
   {!bare && <Footer />}
+  <script>
+    // Motion layer: scroll reveals, the neural-thread progress bar and parallax backgrounds.
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const sel = '.section .head, .card, .quote, .pain > div, .step, .model > div, .photo, .reveal, .fn-card, .reel figure';
+    const els = document.querySelectorAll<HTMLElement>(sel);
+    if (!reduce && 'IntersectionObserver' in window) {
+      document.documentElement.classList.add('motion');
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      }, { rootMargin: '0px 0px -8% 0px' });
+      els.forEach((el) => {
+        const sibs = el.parentElement ? Array.from(el.parentElement.children).indexOf(el) : 0;
+        el.style.setProperty('--d', `${Math.min(sibs, 6) * 70}ms`);
+        io.observe(el);
+      });
+    }
+    const fill = document.getElementById('thread-fill');
+    const para = document.querySelectorAll<HTMLElement>('[data-parallax]');
+    let ticking = false;
+    const onScroll = () => {
+      ticking = false;
+      const h = document.documentElement.scrollHeight - innerHeight;
+      if (fill) fill.style.transform = `scaleX(${h > 0 ? scrollY / h : 0})`;
+      if (reduce) return;
+      para.forEach((el) => {
+        const r = el.parentElement!.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > innerHeight) return;
+        const k = (r.top + r.height / 2 - innerHeight / 2) / innerHeight;
+        el.style.transform = `translate3d(0, ${k * -60}px, 0) scale(1.15)`;
+      });
+    };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+    onScroll();
+  </script>
 </body>
 </html>

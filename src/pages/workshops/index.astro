@@ -4,15 +4,16 @@ import Base from '../../layouts/Base.astro';
 import Model from '../../components/Model.astro';
 import Quote from '../../components/Quote.astro';
 import CtaBand from '../../components/CtaBand.astro';
-import { workshops, engagement } from '../../data/site';
-import { ph } from '../../data/ph';
+import Gallery from '../../components/Gallery.astro';
+import { prototype } from '../../data/gallery';
+import { workshops, engagement, testimonials } from '../../data/site';
 import god from '../../assets/god-framework.jpg';
 const [sig, ...rest] = workshops;
 const model = [
   ['Discover', 'Stakeholder briefing on audience, objectives and business context.'],
   ['Design', 'Exercises and stories shaped around your strategy, reviewed with your team.'],
   ['Deliver', 'Facilitation on-site or virtual, for leadership teams or larger cohorts.'],
-  ['Measure', '[Agreed success measures, participant feedback and a post-session action plan.]'],
+  ['Measure', 'Agreed success measures, participant feedback and a post-session action plan.'],
 ];
 ---
 <Base title="Enterprise AI Adoption Workshops | The G.O.D. Framework | Marquis Harmon" description="Facilitated enterprise workshops for executive and cross-functional teams, including AI Adoption with the proprietary G.O.D. Framework, Creative CornerStore and the MAEx Hackathon.">
@@ -47,7 +48,7 @@ const model = [
       {rest.map((w) => (
         <article class="card">
           <h3>{w.title}</h3><p>{w.summary}</p>
-          <div class="outs">{w.outcomes.map(([o]) => <span set:html={'→ ' + ph(o)} />)}</div>
+          {w.outcomes.length > 0 && <div class="outs">{w.outcomes.map(([o]) => <span>→ {o}</span>)}</div>}
           <a class="link-arrow" href={`/workshops/${w.slug}/`}>Request details →</a>
         </article>
       ))}
@@ -58,8 +59,9 @@ const model = [
   <Model title="Built for your organization, not pulled off a shelf." items={model} />
 
   <section class="section mint"><div class="wrap split">
-    <div class="stack g16"><span class="res" style="font:500 3rem var(--serif);color:var(--primary)"><mark class="ph">[Result]</mark></span><span><mark class="ph">[What the result measures]</mark></span></div>
-    <Quote quote="Quote from a program sponsor about what changed after the workshop." />
+    <div class="stack g16"><span class="res" style="font:500 3rem var(--serif);color:var(--primary)">12 years</span><span>of research and data organized with a purpose-built AI tool stack</span></div>
+    <Quote {...testimonials.maryland} result="" />
   </div></section>
-  <CtaBand title="Planning an offsite, leadership program or change initiative?" text="Share your objectives and we'll recommend the right format." />
+  <Gallery eyebrow="Inside the workshops" title="Thinking you can see happening." text="Questioning, prototyping, listening and leading out loud: the cognitive reps every session is built around." />
+  <CtaBand photo={prototype} title="Planning an offsite, leadership program or change initiative?" text="Share your objectives and we'll recommend the right format." />
 </Base>

@@ -1,8 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import CtaBand from '../components/CtaBand.astro';
+import { breakout } from '../data/gallery';
 import Quote from '../components/Quote.astro';
-import { layers } from '../data/site';
+import { layers, testimonials } from '../data/site';
 ---
 <Base title="Executive Coaching: The 7 Layer Strategy | Marquis Harmon" description="The 7 Layer Strategy is a ground-up executive coaching engagement for senior leaders, from personal identity and presence to systems, teams and sustained momentum.">
   <section class="section dark">
@@ -31,6 +32,6 @@ import { layers } from '../data/site';
       <div class="card"><h3>High-stakes talks</h3><p>Leaders preparing for a defining moment in front of a board, a market or a company.</p></div>
     </div>
   </div></section>
-  <section class="section mint"><div class="wrap"><div style="max-width:640px"><Quote quote="Quote from a coaching client." /></div></div></section>
-  <CtaBand title="Ready to start from the ground up?" text="Tell us about the leader and the moment, and we'll recommend the right engagement." />
+  <section class="section mint"><div class="wrap"><div style="max-width:640px"><Quote {...testimonials.coaching} /></div></div></section>
+  <CtaBand photo={breakout} title="Ready to start from the ground up?" text="Tell us about the leader and the moment, and we'll recommend the right engagement." />
 </Base>

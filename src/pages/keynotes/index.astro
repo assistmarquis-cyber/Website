@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import { purpose } from '../../data/gallery';
 import { keynotes, site } from '../../data/site';
 ---
 <Base title="Keynote Speaker on Leadership, AI & Social Impact | Marquis Harmon" description="Three story-driven keynotes by Marquis Harmon: leadership and business development, AI thought management, and creating social impact.">
@@ -24,5 +25,5 @@ import { keynotes, site } from '../../data/site';
       </div>
     </div>
   </section>
-  <CtaBand title="Planning a summit, all-hands or conference?" text="Tell us about your audience and objectives and we'll recommend the right talk." />
+  <CtaBand photo={purpose} title="Planning a summit, all-hands or conference?" text="Tell us about your audience and objectives and we'll recommend the right talk." />
 </Base>

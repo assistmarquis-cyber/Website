@@ -6,17 +6,16 @@ import Model from '../../components/Model.astro';
 import { workshops } from '../../data/site';
 import { ph } from '../../data/ph';
 import god from '../../assets/god-framework.jpg';
-import room from '../../assets/workshop-room.jpg';
-import plan from '../../assets/studio-planning.jpg';
+import { roundtable, prototype, energizer } from '../../data/gallery';
 export function getStaticPaths() { return workshops.map((w) => ({ params: { slug: w.slug }, props: { w } })); }
 const { w } = Astro.props;
-const img = w.slug === 'ai-adoption-god-framework' ? god : w.slug === 'creative-cornerstore' ? plan : room;
-const alt = w.slug === 'ai-adoption-god-framework' ? 'The G.O.D. Framework diagram: Generator, Operator, Destroyer' : w.title;
+const img = w.slug === 'ai-adoption-god-framework' ? god : w.slug === 'creative-cornerstore' ? roundtable : prototype;
+const alt = w.slug === 'ai-adoption-god-framework' ? 'The G.O.D. Framework diagram: Generator, Operator, Destroyer' : w.slug === 'creative-cornerstore' ? 'A facilitator leads a roundtable discussion during a Creative CornerStore-style session' : 'A team builds a rapid prototype on the floor during a hackathon';
 const model = [
   ['Discover', 'Stakeholder briefing on audience, objectives and business context.'],
   ['Design', 'Exercises and stories shaped around your strategy, reviewed with your team.'],
   ['Deliver', 'Facilitation on-site or virtual, for leadership teams or larger cohorts.'],
-  ['Measure', '[Agreed success measures, participant feedback and a post-session action plan.]'],
+  ['Measure', 'Agreed success measures, participant feedback and a post-session action plan.'],
 ];
 ---
 <Base title={`${w.seo} | Marquis Harmon`} description={`${w.summary} Enterprise workshop by Marquis Harmon.`}>
@@ -33,12 +32,12 @@ const model = [
       <div class="photo wide"><Image src={img} alt={alt} widths={[480, 800, 1000]} sizes="(min-width:900px) 45vw, 100vw" /></div>
     </div>
   </section>
-  <section class="section mint"><div class="wrap">
+  {w.outcomes.length > 0 && <section class="section mint"><div class="wrap">
     <div class="head"><span class="eyebrow">{w.slug === 'ai-adoption-god-framework' ? 'Business outcomes' : 'Outcomes'}</span></div>
     <div class="grid c3">
       {w.outcomes.map(([h, p]) => <div class="card"><h3 set:html={ph(h)} />{p && <p>{p}</p>}</div>)}
     </div>
-  </div></section>
+  </div></section>}
   <Model title="Built for your organization, not pulled off a shelf." items={model} />
-  <CtaBand title="Planning an offsite or leadership program?" text="Share your objectives and we'll recommend the right format." />
+  <CtaBand photo={energizer} title="Planning an offsite or leadership program?" text="Share your objectives and we'll recommend the right format." />
 </Base>

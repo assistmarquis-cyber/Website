@@ -13,7 +13,7 @@ import { ph } from '../data/ph';
         <p class="lede">Share a few details and our team will respond within <Fragment set:html={ph(site.responseTime)} /> with availability and next steps.</p>
         <p>Speaker one-sheet, vendor onboarding and procurement documents available on request.</p>
         <div><a class="btn btn-secondary" href={site.oneSheet}>Download speaker one-sheet</a></div>
-        <p style="color:var(--muted)">Prefer email? <Fragment set:html={ph(site.email)} /></p>
+        {site.email && <p style="color:var(--muted)">Prefer email? {site.email}</p>}
       </div>
       <div class="card"><InquiryForm /></div>
     </div>
