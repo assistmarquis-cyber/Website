@@ -1,0 +1,33 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+import irl1 from '../assets/irl-1.jpg';
+import irl2 from '../assets/irl-2.jpg';
+---
+<Base title="IRL Productions: AR/VR Galleries, Live Pop-Ups & Hackathons | Marquis Harmon" description="IRL Productions (In Real Life) delivers augmented and virtual reality galleries, live performance pop-ups and hackathons for brands, institutions and communities.">
+  <section class="section">
+    <div class="wrap split even">
+      <div class="stack g22">
+        <span class="eyebrow">IRL Productions</span>
+        <h1 style="font-size:clamp(2.4rem,5.5vw,4rem)">In real life.</h1>
+        <p class="lede">Augmented and virtual reality galleries, live performance pop-ups and hackathons.</p>
+        <div><a class="btn btn-primary" href="/contact/">Request availability</a></div>
+      </div>
+      <div class="photo wide"><Image src={irl1} alt="IRL Productions stage rigging in progress" widths={[480, 800, 1000]} sizes="(min-width:900px) 45vw, 100vw" loading="eager" /></div>
+    </div>
+  </section>
+  <section class="section mint"><div class="wrap">
+    <div class="head"><span class="eyebrow">What we produce</span><h2>Experiences people walk into.</h2></div>
+    <div class="grid c3">
+      <div class="card"><h3>AR &amp; VR galleries</h3><p>Immersive augmented and virtual reality galleries that make an idea something people can step inside.</p></div>
+      <div class="card"><h3>Live performance pop-ups</h3><p>Live performance moments built to gather a crowd and carry a message.</p></div>
+      <div class="card"><h3>Hackathons</h3><p>Rapid prototyping events where teams go from idea to working prototype.</p></div>
+    </div>
+  </div></section>
+  <section class="section"><div class="wrap split even">
+    <div class="photo wide"><Image src={irl2} alt="IRL Productions stage rigging" widths={[480, 800, 1000]} sizes="(min-width:900px) 45vw, 100vw" /></div>
+    <div class="stack g16"><h2>Built on site, from the rigging up.</h2><p>Every production is designed around your audience, space and objectives. <mark class="ph">[IRL Productions description and past productions in Marquis's words.]</mark></p></div>
+  </div></section>
+  <CtaBand title="Have a venue, a launch or a community in mind?" text="Share the idea and we'll scope the production." />
+</Base>

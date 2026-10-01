@@ -1,0 +1,9 @@
+---
+interface Props { result?: string; quote: string; who?: string }
+const { result = '[Result]', quote, who = '[Name], [Title], [Company]' } = Astro.props;
+---
+<figure class="quote">
+  <span class="res"><mark class="ph">{result}</mark></span>
+  <blockquote>“<mark class="ph">[{quote}]</mark>”</blockquote>
+  <figcaption><mark class="ph">{who}</mark></figcaption>
+</figure>

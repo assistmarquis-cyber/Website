@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import InquiryForm from '../components/InquiryForm.astro';
+import { site } from '../data/site';
+import { ph } from '../data/ph';
+---
+<Base title="Request Availability | Book Marquis Harmon" description="Request availability for a keynote, enterprise workshop, executive coaching engagement or IRL production with Marquis Harmon.">
+  <section class="section">
+    <div class="wrap split">
+      <div class="stack g22">
+        <span class="eyebrow">Request availability</span>
+        <h1 style="font-size:clamp(2.2rem,5vw,3.6rem)">Let's plan your next leadership moment.</h1>
+        <p class="lede">Share a few details and our team will respond within <Fragment set:html={ph(site.responseTime)} /> with availability and next steps.</p>
+        <p>Speaker one-sheet, vendor onboarding and procurement documents available on request.</p>
+        <div><a class="btn btn-secondary" href={site.oneSheet}>Download speaker one-sheet</a></div>
+        <p style="color:var(--muted)">Prefer email? <Fragment set:html={ph(site.email)} /></p>
+      </div>
+      <div class="card"><InquiryForm /></div>
+    </div>
+  </section>
+</Base>

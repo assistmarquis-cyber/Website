@@ -1,0 +1,19 @@
+---
+import { nav, site } from '../data/site';
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="top">
+      <a class="brand" href="/"><b>Marquis Harmon</b><span>The Big Picture <span class="ark" style="color:#8FD0C9">Ark</span>itect</span></a>
+      <nav aria-label="Footer">
+        {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+        <a href="/contact/">Contact</a>
+        <a href={site.linkedin} rel="noopener">LinkedIn</a>
+      </nav>
+    </div>
+    <div class="bot">
+      <span>© {new Date().getFullYear()} {site.legal}. All rights reserved.</span>
+      <span><a href="/privacy/">Privacy policy</a> &nbsp;·&nbsp; <a href="/terms/">Terms</a></span>
+    </div>
+  </div>
+</footer>

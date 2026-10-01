@@ -1,0 +1,39 @@
+---
+import Base from '../../layouts/Base.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Quote from '../../components/Quote.astro';
+import { keynotes, site } from '../../data/site';
+import { ph } from '../../data/ph';
+export function getStaticPaths() { return keynotes.map((k) => ({ params: { slug: k.slug }, props: { k } })); }
+const { k } = Astro.props;
+const others = keynotes.filter((x) => x.slug !== k.slug);
+---
+<Base title={`${k.seo} | Marquis Harmon`} description={`${k.summary} A keynote by Marquis Harmon, The Big Picture Arkitect.`}>
+  <section class="section">
+    <div class="wrap split even">
+      <div class="stack g22">
+        <p class="crumbs"><a href="/keynotes/">Keynotes</a> / {k.topic}</p>
+        <span class="eyebrow">{k.topic}</span>
+        <h1 style="font-size:clamp(2.4rem,5.5vw,4rem)">{k.title}</h1>
+        <p class="lede">{k.summary}</p>
+        <div class="btn-row"><a class="btn btn-primary" href="/contact/">Request availability</a><a class="btn btn-secondary" href={site.oneSheet}>Download speaker one-sheet</a></div>
+      </div>
+      <div class="stack g28">
+        <div class="stack g16"><h3>About the talk</h3><p set:html={ph(k.description)} /></div>
+        <div class="stack g16"><h3>What your audience takes away</h3>
+          <ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px">{k.takeaways.map((t) => <li set:html={ph(t)} />)}</ul>
+        </div>
+        <div class="ideal" style="color:var(--muted);font-size:14px"><strong>Ideal for</strong> Leadership summits · All-hands · Conferences</div>
+      </div>
+    </div>
+  </section>
+  <section class="section mint"><div class="wrap">
+    <div class="head"><span class="eyebrow">Client outcomes</span></div>
+    <div style="max-width:640px"><Quote quote="Quote from an event sponsor about this talk." /></div>
+  </div></section>
+  <section class="section"><div class="wrap">
+    <div class="head"><h2 style="font-size:1.8rem">More keynotes</h2></div>
+    <div class="grid c2">{others.map((o) => <article class="card"><span class="eyebrow">{o.topic}</span><h3>{o.title}</h3><a class="link-arrow" href={`/keynotes/${o.slug}/`}>About this keynote →</a></article>)}</div>
+  </div></section>
+  <CtaBand title="Bring this talk to your stage." text="Share your date, audience and objectives and we'll respond with availability." />
+</Base>

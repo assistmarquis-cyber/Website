@@ -1,0 +1,65 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Model from '../../components/Model.astro';
+import Quote from '../../components/Quote.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { workshops, engagement } from '../../data/site';
+import { ph } from '../../data/ph';
+import god from '../../assets/god-framework.jpg';
+const [sig, ...rest] = workshops;
+const model = [
+  ['Discover', 'Stakeholder briefing on audience, objectives and business context.'],
+  ['Design', 'Exercises and stories shaped around your strategy, reviewed with your team.'],
+  ['Deliver', 'Facilitation on-site or virtual, for leadership teams or larger cohorts.'],
+  ['Measure', '[Agreed success measures, participant feedback and a post-session action plan.]'],
+];
+---
+<Base title="Enterprise AI Adoption Workshops | The G.O.D. Framework | Marquis Harmon" description="Facilitated enterprise workshops for executive and cross-functional teams, including AI Adoption with the proprietary G.O.D. Framework, Creative CornerStore and the MAEx Hackathon.">
+  <section class="section" style="padding-bottom:40px">
+    <div class="wrap split even">
+      <div class="stack g22"><span class="eyebrow">Enterprise workshops</span><h1 style="font-size:clamp(2.4rem,5.5vw,4rem)">Leave the room with momentum, not just notes.</h1></div>
+      <div class="stack g22">
+        <p class="lede">Facilitated sessions for executive and cross-functional teams, designed around your strategy, your culture and the gaps you need to close.</p>
+        <div class="chips"><span>Half-day</span><span>Full-day</span><span>Multi-session</span><span>On-site or virtual</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" aria-label="Workshops" style="padding-bottom:64px">
+    <article class="dark" style="border-radius:12px;overflow:hidden;display:grid" id="signature">
+      <div class="stack g22" style="padding:36px">
+        <span class="eyebrow">Signature program</span>
+        <h2>{sig.title}</h2>
+        <p style="font:500 1.3rem var(--serif);color:#8FD0C9">{sig.tagline}</p>
+        <div><span class="eyebrow" style="margin-bottom:6px">{sig.detail}</span><p>{sig.summary}</p></div>
+        <Image src={god} alt="The G.O.D. Framework diagram: Generator, Operator, Destroyer" widths={[480, 800]} style="border-radius:8px;background:#fff" />
+        <div><a class="btn btn-primary" href={`/workshops/${sig.slug}/`}>Program details</a></div>
+      </div>
+      <div class="checks" style="padding:36px;background:#35261B">
+        <span class="eyebrow">Business outcomes</span>
+        {sig.outcomes.map(([h, p]) => (
+          <div><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8FD0C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>{h}</strong><span style="color:#DCCFBF">{p}</span></span></div>
+        ))}
+      </div>
+    </article>
+    <div class="grid c2" style="margin-top:24px">
+      {rest.map((w) => (
+        <article class="card">
+          <h3>{w.title}</h3><p>{w.summary}</p>
+          <div class="outs">{w.outcomes.map(([o]) => <span set:html={'→ ' + ph(o)} />)}</div>
+          <a class="link-arrow" href={`/workshops/${w.slug}/`}>Request details →</a>
+        </article>
+      ))}
+    </div>
+  </section>
+  <style>@media(min-width:900px){#signature{grid-template-columns:7fr 5fr}}</style>
+
+  <Model title="Built for your organization, not pulled off a shelf." items={model} />
+
+  <section class="section mint"><div class="wrap split">
+    <div class="stack g16"><span class="res" style="font:500 3rem var(--serif);color:var(--primary)"><mark class="ph">[Result]</mark></span><span><mark class="ph">[What the result measures]</mark></span></div>
+    <Quote quote="Quote from a program sponsor about what changed after the workshop." />
+  </div></section>
+  <CtaBand title="Planning an offsite, leadership program or change initiative?" text="Share your objectives and we'll recommend the right format." />
+</Base>

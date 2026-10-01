@@ -1,0 +1,37 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+import portrait from '../assets/portrait.jpg';
+import panel from '../assets/stage-panel.jpg';
+import summit from '../assets/summit-session.jpg';
+---
+<Base title="About Marquis Harmon | Cultural Technologist, AI Strategist & Digital Griot" description="Marquis Harmon is a cultural technologist and AI strategist, founder of MAEx, and author of Thinking Out Loud to Myself: Psalms 1:3. He has spoken at the United Nations, COP22 and Harvard Business School.">
+  <section class="section">
+    <div class="wrap split even">
+      <div class="photo"><Image src={portrait} alt="Portrait of Marquis Harmon. Photo: LHT.HSE Creative Studio" widths={[480, 800, 1000]} sizes="(min-width:900px) 45vw, 100vw" loading="eager" /><p style="font-size:12px;color:var(--muted);margin-top:8px">Photo: LHT.HSE Creative Studio</p></div>
+      <div class="stack g22">
+        <span class="eyebrow">About Marquis</span>
+        <h1 style="font-size:clamp(2.2rem,5vw,3.6rem)">Strategist, founder and storyteller: the Digital Griot.</h1>
+        <p>Marquis Harmon is a cultural technologist and AI strategist who has advised leaders across multiple industries as a strategic and leadership consultant.</p>
+        <p>He founded MAEx, where he trains enterprise executives on AI adoption through the G.O.D. Framework, and a fintech venture grounded in regenerative economics.</p>
+        <p>He has spoken at the United Nations, COP22, the World Syrian Refugee Summit and Hive at Harvard Business School.</p>
+        <p><mark class="ph">[Full third-person bio, to be supplied in content/docs.]</mark></p>
+        <div class="btn-row"><a class="btn btn-primary" href="/contact/">Request availability</a></div>
+      </div>
+    </div>
+  </section>
+  <section class="section mint" id="book"><div class="wrap split even">
+    <div class="stack g22">
+      <span class="eyebrow">The book</span>
+      <h2><em>Thinking Out Loud to Myself: Psalms 1:3</em></h2>
+      <p><mark class="ph">[Book blurb and purchase link. Add the book cover to content/photos.]</mark></p>
+    </div>
+    <div class="grid c2">
+      <div class="photo wide"><Image src={panel} alt="Marquis Harmon on a panel at COP22" widths={[400, 700]} /></div>
+      <div class="photo wide"><Image src={summit} alt="Marquis Harmon at a World Humanitarian Summit session" widths={[400, 700]} /></div>
+    </div>
+  </div></section>
+  <CtaBand title="Bring Marquis to your next leadership moment." text="Share your objectives and we'll respond with availability." />
+</Base>

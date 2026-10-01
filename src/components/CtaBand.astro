@@ -1,0 +1,10 @@
+---
+interface Props { title: string; text: string }
+const { title, text } = Astro.props;
+---
+<section class="cta-band section" style="padding-top:56px;padding-bottom:56px">
+  <div class="wrap">
+    <div class="stack g16" style="max-width:640px"><h2 style="font-size:clamp(1.6rem,3.2vw,2.3rem)">{title}</h2><p>{text}</p></div>
+    <a class="btn btn-primary" href="/contact/">Request availability</a>
+  </div>
+</section>

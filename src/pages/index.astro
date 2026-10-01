@@ -1,0 +1,135 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Model from '../components/Model.astro';
+import Quote from '../components/Quote.astro';
+import InquiryForm from '../components/InquiryForm.astro';
+import { site, layers, engagement } from '../data/site';
+import { ph } from '../data/ph';
+import hero from '../assets/hero-stage.jpg';
+import portrait from '../assets/portrait.jpg';
+const icon = (d: string) => d;
+---
+<Base title="Marquis Harmon | Keynote Speaker, AI Adoption Workshops & Executive Coaching" description="Marquis Harmon, The Big Picture Arkitect, helps executive teams turn complex change, from AI adoption to new economic models, into a clear picture people understand, believe in and act on.">
+  <section class="wrap hero" id="top">
+    <div class="stack g28">
+      <span class="eyebrow">Keynotes · Workshops · Coaching · IRL Productions</span>
+      <h1>See the whole picture. Then build&nbsp;it.</h1>
+      <p class="lede">Marquis Harmon helps executive teams turn complex change, from AI adoption to new economic models, into a clear picture their people understand, believe in and act on.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="/contact/">Request availability</a>
+        <a class="btn btn-secondary" href={site.oneSheet}>Download speaker one-sheet</a>
+      </div>
+    </div>
+    <div class="hero-img">
+      <Image src={hero} alt="Marquis Harmon speaking at COP22" widths={[480, 800, 1100]} sizes="(min-width:900px) 40vw, 100vw" loading="eager" />
+      <div class="cap"><b>Featured at</b>The United Nations · COP22 · Harvard Business School</div>
+    </div>
+  </section>
+
+  <section class="credband" aria-label="Featured at">
+    <div class="wrap">
+      <span class="lbl">Featured at</span>
+      <span class="item">United Nations</span><span class="item">COP22</span><span class="item">World Syrian Refugee Summit</span><span class="item">Hive · Harvard Business School</span>
+      <span class="item"><mark class="ph">[Client logos, add files to content/logos]</mark></span>
+    </div>
+  </section>
+
+  <section class="section" aria-label="The challenge">
+    <div class="wrap split">
+      <div class="stack g16"><span class="eyebrow">The challenge</span><h2>The strategy is sound. The picture isn't landing.</h2></div>
+      <div class="pain">
+        <div><span class="n">01</span><div><h3>Transformation stalls between the boardroom and the front line</h3><p>People hear the plan but can't see where they fit in it.</p></div></div>
+        <div><span class="n">02</span><div><h3>AI adoption gets stuck at the pilot stage</h3><p>The tools are ready. The culture, confidence and habits aren't yet.</p></div></div>
+        <div><span class="n">03</span><div><h3>Leaders have the message but not the momentum</h3><p>Executive communication needs story, not just slides, to move a large organization.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section mint" id="engagements">
+    <div class="wrap">
+      <div class="head"><span class="eyebrow">Engagements</span><h2>Three ways to bring the big picture into your organization.</h2></div>
+      <div class="grid c3">
+        <article class="card">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1B6663" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg>
+          <h3>Keynotes</h3>
+          <p>Story-driven keynotes on leadership and business development, AI thought management, and creating social impact, for leadership summits, all-hands and industry stages.</p>
+          <div class="ideal"><strong>Ideal for</strong> Leadership summits · All-hands · Conferences</div>
+          <a class="link-arrow" href="/keynotes/">View keynote topics →</a>
+        </article>
+        <article class="card">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1B6663" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/><path d="M7 9h6"/><path d="M7 12h10"/></svg>
+          <h3>Enterprise Workshops</h3>
+          <p>Facilitated sessions for executive and cross-functional teams, including AI adoption through the proprietary G.O.D. Framework.</p>
+          <div class="ideal"><strong>Ideal for</strong> Offsites · Leadership programs · Change initiatives</div>
+          <a class="link-arrow" href="/workshops/">Explore workshops →</a>
+        </article>
+        <article class="card feature">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+          <h3>Executive Coaching</h3>
+          <p>The 7 Layer Strategy: a ground-up engagement for senior leaders, from identity and presence to systems, teams and sustained momentum.</p>
+          <div class="ideal"><strong>Ideal for</strong> C-suite · New executives · High-stakes talks</div>
+          <a class="link-arrow" href="/executive-coaching/">See the 7 layers →</a>
+        </article>
+      </div>
+      <p style="margin-top:28px">Also: <a href="/irl-productions/">IRL Productions</a>, augmented and virtual reality galleries, live performance pop-ups and hackathons.</p>
+    </div>
+  </section>
+
+  <section class="section dark" id="seven-layers">
+    <div class="wrap split">
+      <div class="stack g22">
+        <span class="eyebrow">Executive coaching</span>
+        <h2>The 7 Layer Strategy</h2>
+        <p>A ground-up approach. Each layer builds on the one beneath it, so leaders move from who they are to what they build, and the momentum holds.</p>
+        <p>Delivered one-to-one for senior leaders or as a program for leadership teams.</p>
+        <div><a class="btn btn-primary" href="/executive-coaching/">Discuss a coaching engagement</a></div>
+      </div>
+      <div class="stairs">
+        <div class="end"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8FD0C9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>Finish</div>
+        {[...layers].reverse().map(([t, d], i) => (
+          <div class="step"><span class="n">0{7 - i}</span><div><b>{t}</b><span class="d">{d}</span></div></div>
+        ))}
+        <div class="end">Start · Ground up</div>
+      </div>
+    </div>
+  </section>
+
+  <Model items={engagement} />
+
+  <section class="section mint" aria-label="Results">
+    <div class="wrap">
+      <div class="head"><span class="eyebrow">Client outcomes</span><h2>What leaders say after the room empties.</h2></div>
+      <div class="grid c3">
+        <Quote quote="Quote from an event or program sponsor." />
+        <Quote quote="Quote from a workshop participant or HR leader." />
+        <Quote quote="Quote from a coaching client." />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="wrap split even">
+      <div class="photo"><Image src={portrait} alt="Portrait of Marquis Harmon. Photo: LHT.HSE Creative Studio" widths={[480, 800, 1000]} sizes="(min-width:900px) 45vw, 100vw" /></div>
+      <div class="stack g22">
+        <span class="eyebrow">About Marquis</span>
+        <h2>Strategist, founder and storyteller: the Digital Griot.</h2>
+        <p>Marquis Harmon is a cultural technologist and AI strategist who has advised leaders across multiple industries as a strategic and leadership consultant. He founded MAEx, where he trains enterprise executives on AI adoption through the G.O.D. Framework, and a fintech venture grounded in regenerative economics.</p>
+        <p>He has spoken at the United Nations, COP22, the World Syrian Refugee Summit and Hive at Harvard Business School, and is the author of the memoir <em>Thinking Out Loud to Myself: Psalms 1:3</em>.</p>
+        <div class="btn-row"><a class="link-arrow" href="/about/">Read full bio →</a><a class="link-arrow" href="/about/#book">About the book →</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section mint" id="inquire">
+    <div class="wrap split">
+      <div class="stack g22">
+        <span class="eyebrow">Request availability</span>
+        <h2>Let's plan your next leadership moment.</h2>
+        <p>Share a few details and our team will respond within <Fragment set:html={ph(site.responseTime)} /> with availability and next steps.</p>
+        <p>Speaker one-sheet, vendor onboarding and procurement documents available on request.</p>
+      </div>
+      <div class="card"><InquiryForm /></div>
+    </div>
+  </section>
+</Base>

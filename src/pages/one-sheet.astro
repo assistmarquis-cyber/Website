@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { keynotes, workshops } from '../data/site';
+import portrait from '../assets/portrait.jpg';
+---
+<Base bare noindex title="Speaker One-Sheet | Marquis Harmon" description="Speaker one-sheet for Marquis Harmon.">
+  <div class="sheet">
+    <header class="sh"><div><b>Marquis Harmon</b><span>The Big Picture <span class="ark">Ark</span>itect</span></div>
+      <div class="r"><span>Keynotes · Workshops · Coaching · IRL Productions</span><span><mark class="ph">[work email]</mark> · <mark class="ph">[phone]</mark></span><span>marquisharmon.com</span></div></header>
+    <section class="hero2">
+      <div><h1>See the whole picture. Then build&nbsp;it.</h1>
+      <p>Marquis Harmon helps executive teams turn complex change, from AI adoption to new economic models, into a clear picture their people understand, believe in and act on. Cultural technologist, AI strategist, founder of MAEx and author of <em>Thinking Out Loud to Myself: Psalms 1:3</em>.</p></div>
+      <Image src={portrait} alt="Portrait of Marquis Harmon" widths={[400]} />
+    </section>
+    <section class="band"><b>FEATURED AT</b> United Nations · COP22 · World Syrian Refugee Summit · Hive at Harvard Business School</section>
+    <section class="sig">
+      <div><small>SIGNATURE PROGRAM</small><h2>AI Adoption with the G.O.D. Framework</h2><p>Generator · Operator · Destroyer: a rapid prototyping environment</p><p class="t">Ship it. Amplify them.</p></div>
+      <ul>
+        <li><b>Pilot to production</b> Stop experimenting and start shipping: AI pilots become results the business can measure.</li>
+        <li><b>People amplified, not replaced</b> Teams do more with the same people instead of fearing for their jobs.</li>
+        <li><b>Governance that proves ROI</b> Move fast without losing control, with the guardrails and ROI story boards want.</li>
+      </ul>
+    </section>
+    <section class="cols">
+      <div><small>KEYNOTES</small>{keynotes.map((k) => <p><i>{k.topic}</i><b>{k.title}</b></p>)}</div>
+      <div><small>ENTERPRISE WORKSHOPS</small><p><b>Creative CornerStore</b>Leadership and AI thought training: mind mapping and strategic planning</p><p><b>MAEx Hackathon</b>Rapid prototyping and design workshop</p></div>
+      <div><small>EXECUTIVE COACHING</small><p><b>The 7 Layer Strategy</b>A ground-up path from identity to execution, for individual leaders and leadership teams.</p><small style="margin-top:14px">IRL PRODUCTIONS</small><p><b>In real life</b>Augmented and virtual reality galleries, live performance pop-ups and hackathons.</p></div>
+    </section>
+    <section class="q"><blockquote>“<mark class="ph">[Quote from a client sponsor about the result.]</mark>”</blockquote><span><mark class="ph">[Name], [Title], [Company]</mark></span></section>
+    <footer class="sf"><div><b>Request availability</b><br /><mark class="ph">[work email]</mark> · <mark class="ph">[phone]</mark> · marquisharmon.com</div><span class="cta">Book a discovery call</span></footer>
+  </div>
+</Base>
+<style is:global>
+@page{size:letter;margin:0}
+.sheet{width:8.5in;height:11in;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;overflow:hidden}
+.sheet header.sh{display:flex;justify-content:space-between;align-items:flex-start;padding:.4in .5in .25in;background:#fff;border-bottom:1px solid var(--border)}
+.sh b{font:600 22px var(--serif);display:block}.sh>div>span{font:13px var(--serif);color:var(--muted)}
+.sh .r{text-align:right;font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+.hero2{display:grid;grid-template-columns:1fr 2.2in;gap:.3in;padding:.3in .5in;align-items:center}
+.hero2 h1{font-size:38px;margin-bottom:12px}.hero2 p{font-size:12.5px}
+.hero2 img{width:2.2in;height:2.6in;object-fit:cover;border-radius:10px}
+.band{background:var(--mint);padding:10px .5in;font-size:12px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.band b{letter-spacing:.15em;color:var(--muted);margin-right:10px;font-size:10px}
+.sig{display:grid;grid-template-columns:1fr 1.1fr;background:var(--dark);color:#F3ECE2;padding:.25in .5in;gap:.3in;margin:.2in 0 0}
+.sig small,.cols small{font-size:10px;letter-spacing:.18em;font-weight:600;color:#8FD0C9;display:block;margin-bottom:6px}
+.sig h2{color:#fff;font-size:22px;margin-bottom:6px}.sig p{font-size:12px;margin-bottom:6px}.sig .t{font:500 15px var(--serif);color:#8FD0C9}
+.sig ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:11.5px}.sig li b{display:block;color:#fff}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:.25in;padding:.25in .5in}
+.cols small{color:var(--primary)}.cols p{font-size:11.5px;margin:0 0 9px}.cols b{display:block;font:500 14px var(--serif);color:var(--text)}.cols i{display:block;font-size:10px;color:var(--muted);font-style:normal}
+.q{padding:0 .5in .1in}.q blockquote{margin:0;font:17px/1.4 var(--serif);color:var(--text)}.q span{font-size:11px;color:var(--muted)}
+.sf{margin-top:auto;display:flex;justify-content:space-between;align-items:center;background:var(--primary);color:#fff;padding:.22in .5in;font-size:12px}
+.sf b{font:500 18px var(--serif)}.sf .cta{background:var(--accent);padding:10px 18px;border-radius:6px;font-weight:600}
+</style>

@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { keynotes, site } from '../../data/site';
+---
+<Base title="Keynote Speaker on Leadership, AI & Social Impact | Marquis Harmon" description="Three story-driven keynotes by Marquis Harmon: leadership and business development, AI thought management, and creating social impact.">
+  <section class="section">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Keynotes</span>
+        <h1 style="font-size:clamp(2.2rem,5vw,3.8rem)">Three talks. One goal: a picture your people can act on.</h1>
+        <p class="lede">Story-driven keynotes for leadership summits, all-hands and industry stages.</p>
+        <div class="btn-row"><a class="btn btn-primary" href="/contact/">Request availability</a><a class="btn btn-secondary" href={site.oneSheet}>Download speaker one-sheet</a></div>
+      </div>
+      <div class="grid c3">
+        {keynotes.map((k) => (
+          <article class="card">
+            <span class="eyebrow">{k.topic}</span>
+            <h3>{k.title}</h3>
+            <p>{k.summary}</p>
+            <a class="link-arrow" href={`/keynotes/${k.slug}/`}>About this keynote →</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <CtaBand title="Planning a summit, all-hands or conference?" text="Tell us about your audience and objectives and we'll recommend the right talk." />
+</Base>

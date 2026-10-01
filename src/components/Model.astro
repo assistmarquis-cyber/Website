@@ -1,0 +1,15 @@
+---
+import { ph } from '../data/ph';
+interface Props { title?: string; items: string[][]; eyebrow?: string }
+const { title = 'Built around your objectives, measured against them.', items } = Astro.props;
+---
+<section class="section">
+  <div class="wrap">
+    <div class="head"><span class="eyebrow">Engagement model</span><h2>{title}</h2></div>
+    <div class="grid c4 model">
+      {items.map(([h, p], i) => (
+        <div><span class="n">0{i + 1}</span><h3>{h}</h3><p set:html={ph(p)} /></div>
+      ))}
+    </div>
+  </div>
+</section>

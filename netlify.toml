@@ -1,0 +1,28 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Redirect the other domains to the primary one
+[[redirects]]
+  from = "https://bigpicturearkitect.com/*"
+  to = "https://marquisharmon.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.bigpicturearkitect.com/*"
+  to = "https://marquisharmon.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://bigpicturearchitect.com/*"
+  to = "https://marquisharmon.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.bigpicturearchitect.com/*"
+  to = "https://marquisharmon.com/:splat"
+  status = 301
+  force = true
