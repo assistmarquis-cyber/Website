@@ -4,6 +4,7 @@ export const site = {
   url: 'https://marquisharmon.com',
   legal: 'Marquis Alan Experience LLC',
   oneSheet: '/marquis-harmon-speaker-one-sheet.pdf',
+  bookUrl: 'https://a.co/d/07B1V4Js',
   linkedin: 'https://www.linkedin.com', // [PLACEHOLDER: Marquis's LinkedIn profile URL]
   email: '[work email]',
   phone: '[phone]',
