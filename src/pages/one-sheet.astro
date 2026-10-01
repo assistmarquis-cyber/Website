@@ -1,13 +1,13 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import { keynotes, workshops } from '../data/site';
+import { keynotes, workshops, testimonials } from '../data/site';
 import portrait from '../assets/portrait.jpg';
 ---
 <Base bare noindex title="Speaker One-Sheet | Marquis Harmon" description="Speaker one-sheet for Marquis Harmon.">
   <div class="sheet">
     <header class="sh"><div><b>Marquis Harmon</b><span>The Big Picture <span class="ark">Ark</span>itect</span></div>
-      <div class="r"><span>Keynotes · Workshops · Coaching · IRL Productions</span><span><mark class="ph">[work email]</mark> · <mark class="ph">[phone]</mark></span><span>bigpicturearchitect.com</span></div></header>
+      <div class="r"><span>Keynotes · Workshops · Coaching · IRL Productions</span><span>bigpicturearchitect.com</span></div></header>
     <section class="hero2">
       <div><h1>See the whole picture. Then build&nbsp;it.</h1>
       <p>Marquis Harmon helps executive teams turn complex change, from AI adoption to new economic models, into a clear picture their people understand, believe in and act on. Cultural technologist, AI strategist, founder of MAEx and author of <em>Thinking Out Loud to Myself: Psalms 1:3</em>.</p></div>
@@ -27,8 +27,8 @@ import portrait from '../assets/portrait.jpg';
       <div><small>ENTERPRISE WORKSHOPS</small><p><b>Creative CornerStore</b>Leadership and AI thought training: mind mapping and strategic planning</p><p><b>MAEx Hackathon</b>Rapid prototyping and design workshop</p></div>
       <div><small>EXECUTIVE COACHING</small><p><b>The 7 Layer Strategy</b>A ground-up path from identity to execution, for individual leaders and leadership teams.</p><small style="margin-top:14px">IRL PRODUCTIONS</small><p><b>In real life</b>Augmented and virtual reality galleries, live performance pop-ups and hackathons.</p></div>
     </section>
-    <section class="q"><blockquote>“<mark class="ph">[Quote from a client sponsor about the result.]</mark>”</blockquote><span><mark class="ph">[Name], [Title], [Company]</mark></span></section>
-    <footer class="sf"><div><b>Request availability</b><br /><mark class="ph">[work email]</mark> · <mark class="ph">[phone]</mark> · bigpicturearchitect.com</div><span class="cta">Book a discovery call</span></footer>
+    <section class="q"><blockquote>“{testimonials.maryland.quote}”</blockquote><span>{testimonials.maryland.who}</span></section>
+    <footer class="sf"><div><b>Request availability</b><br />bigpicturearchitect.com</div><span class="cta">Book a discovery call</span></footer>
   </div>
 </Base>
 <style is:global>

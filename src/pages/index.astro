@@ -4,40 +4,54 @@ import Base from '../layouts/Base.astro';
 import Model from '../components/Model.astro';
 import Quote from '../components/Quote.astro';
 import InquiryForm from '../components/InquiryForm.astro';
-import { site, layers, engagement } from '../data/site';
+import Gallery from '../components/Gallery.astro';
+import NeuralCanvas from '../components/NeuralCanvas.astro';
+import { prototype, roundtable, breakout, boards, purpose, energizer, sfDay2 } from '../data/gallery';
+import { site, layers, engagement, testimonials } from '../data/site';
 import { ph } from '../data/ph';
 import hero from '../assets/hero-stage.jpg';
 import portrait from '../assets/portrait.jpg';
-const icon = (d: string) => d;
+const fns = [
+  { img: roundtable, k: 'Function 01', t: 'Questioning', d: 'The quality of your answers is capped by the quality of your questions, for people and for AI.', rep: 'Before your next prompt or meeting, write three better versions of the question.' },
+  { img: boards, k: 'Function 02', t: 'Pattern recognition', d: 'Seeing the signal in the noise: what keeps repeating across your data, market and people.', rep: 'Ask AI to summarize a week of notes, then find the one pattern it missed.' },
+  { img: prototype, k: 'Function 03', t: 'Systems thinking', d: 'Seeing how the parts move together, so change in one place does not break another.', rep: 'Map one decision three steps downstream before you make it.' },
+  { img: purpose, k: 'Function 04', t: 'Imagination', d: 'Picturing what does not exist yet, clearly enough that others can see it too.', rep: 'Describe your organization five years out, then have AI argue against it.' },
+  { img: breakout, k: 'Function 05', t: 'Deep listening', d: 'Hearing what people mean, not only what they say. No tool replaces it.', rep: 'In your next conversation, ask two follow-up questions before giving an answer.' },
+  { img: energizer, k: 'Function 06', t: 'Decisive action', d: 'Turning insight into a move: ship it, learn, and go again.', rep: 'Pick one idea from this week and put a working version in front of someone in 48 hours.' },
+];
+const words = 'See the whole picture. Then build it.'.split(' ');
 ---
 <Base title="Marquis Harmon | Keynote Speaker, AI Adoption Workshops & Executive Coaching" description="Marquis Harmon, The Big Picture Arkitect, helps executive teams turn complex change, from AI adoption to new economic models, into a clear picture people understand, believe in and act on.">
-  <section class="wrap hero" id="top">
+  <section class="mind" id="top">
+  <NeuralCanvas />
+  <div class="wrap hero">
     <div class="stack g28">
-      <span class="eyebrow">Keynotes · Workshops · Coaching · IRL Productions</span>
-      <h1>See the whole picture. Then build&nbsp;it.</h1>
+      <span class="eyebrow">Step inside the mind of The Big Picture Arkitect</span>
+      <h1 aria-label="See the whole picture. Then build it.">{words.map((w, i) => <><span class="h-word" aria-hidden="true" style={`animation-delay:${i * 110}ms`}>{w}</span>{' '}</>)}</h1>
       <p class="lede">Marquis Harmon helps executive teams turn complex change, from AI adoption to new economic models, into a clear picture their people understand, believe in and act on.</p>
       <div class="btn-row">
         <a class="btn btn-primary" href="/contact/">Request availability</a>
         <a class="btn btn-secondary" href={site.oneSheet}>Download speaker one-sheet</a>
       </div>
+      <a class="walk" href="#perceive"><i aria-hidden="true"></i>Begin the walkthrough</a>
     </div>
     <div class="hero-img">
       <Image src={hero} alt="Marquis Harmon speaking at COP22" widths={[480, 800, 1100]} sizes="(min-width:900px) 40vw, 100vw" loading="eager" />
       <div class="cap"><b>Featured at</b>The United Nations · COP22 · Harvard Business School</div>
     </div>
+  </div>
   </section>
 
   <section class="credband" aria-label="Featured at">
     <div class="wrap">
       <span class="lbl">Featured at</span>
       <span class="item">United Nations</span><span class="item">COP22</span><span class="item">World Syrian Refugee Summit</span><span class="item">Hive · Harvard Business School</span>
-      <span class="item"><mark class="ph">[Client logos, add files to content/logos]</mark></span>
     </div>
   </section>
 
-  <section class="section" aria-label="The challenge">
+  <section class="section" aria-label="The challenge" id="perceive">
     <div class="wrap split">
-      <div class="stack g16"><span class="eyebrow">The challenge</span><h2>The strategy is sound. The picture isn't landing.</h2></div>
+      <div class="stack g16"><div class="region"><b>01</b>Perceive</div><span class="eyebrow">The challenge</span><h2>The strategy is sound. The picture isn't landing.</h2></div>
       <div class="pain">
         <div><span class="n">01</span><div><h3>Transformation stalls between the boardroom and the front line</h3><p>People hear the plan but can't see where they fit in it.</p></div></div>
         <div><span class="n">02</span><div><h3>AI adoption gets stuck at the pilot stage</h3><p>The tools are ready. The culture, confidence and habits aren't yet.</p></div></div>
@@ -46,9 +60,35 @@ const icon = (d: string) => d;
     </div>
   </section>
 
+  <section class="section dark" id="practice" aria-label="Cognitive gym">
+    <div class="wrap">
+      <div class="head"><div class="region"><b>02</b>Practice</div><span class="eyebrow">The cognitive gym</span><h2>AI amplifies the mind you bring. So train it.</h2><p>These are the cognitive functions every leader has to flex and practice to get real value from AI. Hover or tap each one for a rep to try this week.</p></div>
+      <div class="gym">
+        {fns.map((f) => (
+          <button class="fn-card" type="button" aria-pressed="false">
+            <Image src={f.img} alt="" widths={[400, 700]} sizes="(min-width:1100px) 30vw, (min-width:760px) 45vw, 100vw" />
+            <span class="in-c">
+              <span class="k">{f.k}</span>
+              <span class="t">{f.t}</span>
+              <span class="rep">{f.d}<strong>The rep</strong>{f.rep}</span>
+              <span class="hint">Tap to flex →</span>
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+  <script>
+    document.querySelectorAll<HTMLButtonElement>('.fn-card').forEach((c) =>
+      c.addEventListener('click', () => c.setAttribute('aria-pressed', String(c.getAttribute('aria-pressed') !== 'true'))));
+  </script>
+
+  <div class="region wrap" style="padding-top:56px;margin-bottom:-40px"><b>03</b>Remember</div>
+  <Gallery />
+
   <section class="section mint" id="engagements">
     <div class="wrap">
-      <div class="head"><span class="eyebrow">Engagements</span><h2>Three ways to bring the big picture into your organization.</h2></div>
+      <div class="head"><div class="region"><b>04</b>Connect</div><span class="eyebrow">Engagements</span><h2>Three ways to bring the big picture into your organization.</h2></div>
       <div class="grid c3">
         <article class="card">
           <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1B6663" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg>
@@ -76,6 +116,15 @@ const icon = (d: string) => d;
     </div>
   </section>
 
+  <section class="photo-band section" aria-label="Build">
+    <div class="bg" data-parallax aria-hidden="true"><Image src={sfDay2} alt="" widths={[800, 1400]} sizes="100vw" /></div>
+    <div class="wrap"><div class="stack g16 reveal" style="max-width:820px">
+      <div class="region" style="color:#CDE7E4"><b>05</b>Build</div>
+      <h2 style="font-size:clamp(2rem,5vw,3.6rem)">AI won't think for you. It thinks with you.</h2>
+      <p class="lede" style="color:#E4F2F0">The tools change every month. The thinking underneath them is what compounds. Every engagement is built to strengthen it, layer by layer.</p>
+    </div></div>
+  </section>
+
   <section class="section dark" id="seven-layers">
     <div class="wrap split">
       <div class="stack g22">
@@ -99,11 +148,11 @@ const icon = (d: string) => d;
 
   <section class="section mint" aria-label="Results">
     <div class="wrap">
-      <div class="head"><span class="eyebrow">Client outcomes</span><h2>What leaders say after the room empties.</h2></div>
+      <div class="head"><div class="region"><b>06</b>Reflect</div><span class="eyebrow">Client outcomes</span><h2>What leaders say after the room empties.</h2></div>
       <div class="grid c3">
-        <Quote quote="Quote from an event or program sponsor." />
-        <Quote quote="Quote from a workshop participant or HR leader." />
-        <Quote quote="Quote from a coaching client." />
+        <Quote {...testimonials.tunefm} />
+        <Quote {...testimonials.maryland} />
+        <Quote {...testimonials.coaching} />
       </div>
     </div>
   </section>
@@ -124,6 +173,7 @@ const icon = (d: string) => d;
   <section class="section mint" id="inquire">
     <div class="wrap split">
       <div class="stack g22">
+        <div class="region"><b>07</b>Act</div>
         <span class="eyebrow">Request availability</span>
         <h2>Let's plan your next leadership moment.</h2>
         <p>Share a few details and our team will respond within <Fragment set:html={ph(site.responseTime)} /> with availability and next steps.</p>

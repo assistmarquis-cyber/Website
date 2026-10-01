@@ -1,10 +1,14 @@
 ---
-interface Props { title: string; text: string }
-const { title, text } = Astro.props;
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { group } from '../data/gallery';
+interface Props { title: string; text: string; photo?: ImageMetadata; alt?: string }
+const { title, text, photo = group, alt = '' } = Astro.props;
 ---
-<section class="cta-band section" style="padding-top:56px;padding-bottom:56px">
+<section class="cta-band photo-band section" style="padding-top:88px;padding-bottom:88px">
+  <div class="bg" data-parallax aria-hidden={alt ? undefined : 'true'}><Image src={photo} alt={alt} widths={[800, 1400, 1800]} sizes="100vw" /></div>
   <div class="wrap">
-    <div class="stack g16" style="max-width:640px"><h2 style="font-size:clamp(1.6rem,3.2vw,2.3rem)">{title}</h2><p>{text}</p></div>
+    <div class="stack g16 reveal" style="max-width:640px"><h2 style="font-size:clamp(1.6rem,3.2vw,2.3rem)">{title}</h2><p>{text}</p></div>
     <a class="btn btn-primary" href="/contact/">Request availability</a>
   </div>
 </section>
