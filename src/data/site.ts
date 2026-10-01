@@ -1,7 +1,7 @@
 export const site = {
   name: 'Marquis Harmon',
   tagline: 'The Big Picture Arkitect',
-  url: 'https://marquisharmon.com',
+  url: 'https://bigpicturearchitect.com',
   legal: 'Marquis Alan Experience LLC',
   oneSheet: '/marquis-harmon-speaker-one-sheet.pdf',
   bookUrl: 'https://a.co/d/07B1V4Js',
