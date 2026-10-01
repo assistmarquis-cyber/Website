@@ -37,6 +37,7 @@ p{margin:0}
 .brand b{font:600 21px var(--serif);letter-spacing:-.01em}
 .brand span{font:400 13px var(--serif);letter-spacing:.01em;color:var(--muted)}
 .nav{display:none;align-items:center;gap:32px;font-size:15px;font-weight:500}
+.nav a,.brand{white-space:nowrap}
 .nav a{text-decoration:none;color:var(--body)}.nav a:hover,.nav a[aria-current=page]{color:var(--primary)}
 .nav .btn{color:#fff;padding:11px 18px}
 .menu-btn{background:none;border:0;padding:8px;cursor:pointer}
@@ -44,8 +45,8 @@ p{margin:0}
 .mobile-nav.open{display:flex}
 .mobile-nav a{padding:12px 0;text-decoration:none;color:var(--body);font-weight:500;border-bottom:1px solid var(--border)}
 .mobile-nav .btn{margin-top:12px;color:#fff;border:0}
-@media(min-width:1100px){.nav{display:flex}.menu-btn,.mobile-nav{display:none!important}}
-@media(min-width:1100px) and (max-width:1250px){.nav{gap:20px;font-size:14px}}
+@media(min-width:1180px){.nav{display:flex}.menu-btn,.mobile-nav{display:none!important}}
+@media(min-width:1180px) and (max-width:1400px){.nav{gap:22px;font-size:14px}.nav .btn{padding:10px 14px}}
 /* hero */
 .hero{display:grid;gap:32px;padding-top:40px;padding-bottom:48px}
 .hero-img{border-radius:12px;overflow:hidden;position:relative}

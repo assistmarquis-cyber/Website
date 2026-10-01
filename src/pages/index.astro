@@ -2,7 +2,6 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Model from '../components/Model.astro';
-import Quote from '../components/Quote.astro';
 import InquiryForm from '../components/InquiryForm.astro';
 import { site, layers, engagement } from '../data/site';
 import { ph } from '../data/ph';
@@ -31,7 +30,6 @@ const icon = (d: string) => d;
     <div class="wrap">
       <span class="lbl">Featured at</span>
       <span class="item">United Nations</span><span class="item">COP22</span><span class="item">World Syrian Refugee Summit</span><span class="item">Hive · Harvard Business School</span>
-      <span class="item"><mark class="ph">[Client logos, add files to content/logos]</mark></span>
     </div>
   </section>
 
@@ -97,17 +95,6 @@ const icon = (d: string) => d;
 
   <Model items={engagement} />
 
-  <section class="section mint" aria-label="Results">
-    <div class="wrap">
-      <div class="head"><span class="eyebrow">Client outcomes</span><h2>What leaders say after the room empties.</h2></div>
-      <div class="grid c3">
-        <Quote quote="Quote from an event or program sponsor." />
-        <Quote quote="Quote from a workshop participant or HR leader." />
-        <Quote quote="Quote from a coaching client." />
-      </div>
-    </div>
-  </section>
-
   <section class="section" id="about">
     <div class="wrap split even">
       <div class="photo"><Image src={portrait} alt="Portrait of Marquis Harmon. Photo: LHT.HSE Creative Studio" widths={[480, 800, 1000]} sizes="(min-width:900px) 45vw, 100vw" /></div>
@@ -126,7 +113,7 @@ const icon = (d: string) => d;
       <div class="stack g22">
         <span class="eyebrow">Request availability</span>
         <h2>Let's plan your next leadership moment.</h2>
-        <p>Share a few details and our team will respond within <Fragment set:html={ph(site.responseTime)} /> with availability and next steps.</p>
+        <p>Share a few details and our team will respond with availability and next steps.</p>
         <p>Speaker one-sheet, vendor onboarding and procurement documents available on request.</p>
       </div>
       <div class="card"><InquiryForm /></div>

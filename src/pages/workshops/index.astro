@@ -2,7 +2,6 @@
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Model from '../../components/Model.astro';
-import Quote from '../../components/Quote.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { workshops, engagement } from '../../data/site';
 import { ph } from '../../data/ph';
@@ -12,7 +11,7 @@ const model = [
   ['Discover', 'Stakeholder briefing on audience, objectives and business context.'],
   ['Design', 'Exercises and stories shaped around your strategy, reviewed with your team.'],
   ['Deliver', 'Facilitation on-site or virtual, for leadership teams or larger cohorts.'],
-  ['Measure', '[Agreed success measures, participant feedback and a post-session action plan.]'],
+  ['Measure', 'Agreed success measures, participant feedback and a post-session action plan.'],
 ];
 ---
 <Base title="Enterprise AI Adoption Workshops | The G.O.D. Framework | Marquis Harmon" description="Facilitated enterprise workshops for executive and cross-functional teams, including AI Adoption with the proprietary G.O.D. Framework, Creative CornerStore and the MAEx Hackathon.">
@@ -57,9 +56,5 @@ const model = [
 
   <Model title="Built for your organization, not pulled off a shelf." items={model} />
 
-  <section class="section mint"><div class="wrap split">
-    <div class="stack g16"><span class="res" style="font:500 3rem var(--serif);color:var(--primary)"><mark class="ph">[Result]</mark></span><span><mark class="ph">[What the result measures]</mark></span></div>
-    <Quote quote="Quote from a program sponsor about what changed after the workshop." />
-  </div></section>
   <CtaBand title="Planning an offsite, leadership program or change initiative?" text="Share your objectives and we'll recommend the right format." />
 </Base>

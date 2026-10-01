@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
 import CtaBand from '../../components/CtaBand.astro';
-import Quote from '../../components/Quote.astro';
 import { keynotes, site } from '../../data/site';
 import { ph } from '../../data/ph';
 export function getStaticPaths() { return keynotes.map((k) => ({ params: { slug: k.slug }, props: { k } })); }
@@ -27,10 +26,6 @@ const others = keynotes.filter((x) => x.slug !== k.slug);
       </div>
     </div>
   </section>
-  <section class="section mint"><div class="wrap">
-    <div class="head"><span class="eyebrow">Client outcomes</span></div>
-    <div style="max-width:640px"><Quote quote="Quote from an event sponsor about this talk." /></div>
-  </div></section>
   <section class="section"><div class="wrap">
     <div class="head"><h2 style="font-size:1.8rem">More keynotes</h2></div>
     <div class="grid c2">{others.map((o) => <article class="card"><span class="eyebrow">{o.topic}</span><h3>{o.title}</h3><a class="link-arrow" href={`/keynotes/${o.slug}/`}>About this keynote →</a></article>)}</div>
