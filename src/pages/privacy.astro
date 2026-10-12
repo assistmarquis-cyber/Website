@@ -1,20 +1,44 @@
 ---
 import Base from '../layouts/Base.astro';
+import { ph } from '../data/ph';
+const P = (s: string) => ph(s);
 ---
 <Base title="Privacy Policy | Marquis Harmon" description="Privacy Policy for bigpicturearchitect.com, operated by Marquis Alan Experience LLC.">
-  <section class="section"><div class="wrap stack g22" style="max-width:720px">
+  <section class="section"><div class="wrap stack g22 legal" style="max-width:720px">
     <h1 style="font-size:clamp(2.2rem,5vw,3.4rem)">Privacy Policy</h1>
-    <p style="color:var(--muted)">Marquis Alan Experience LLC operates this website. This policy explains what information we collect and how we use it.</p>
+    <p style="color:var(--muted)">Last updated: <b set:html={P('[date]')} /></p>
+    <p>Marquis Alan Experience LLC, a Texas limited liability company based in Philadelphia, Pennsylvania, operates bigpicturearchitect.com. This policy explains what information we collect and how we use it.</p>
     <h3>Information we collect</h3>
-    <p>When you submit the inquiry form we collect the details you provide: your name, work email, company, title, event details and objectives. Our hosting provider may also log standard technical data such as IP address and browser type.</p>
+    <ul>
+      <li><b>Forms.</b> When you submit the inquiry or mindset coaching application form, we collect what you provide: name, email, company or role, title, event or coaching details, and your answers about your objectives.</li>
+      <li><b>Email.</b> If you email us or reply to our messages, we keep those messages.</li>
+      <li><b>Technical data.</b> Our hosting provider may log standard technical data, such as IP address, browser type, and pages visited. <b set:html={P('[If you use analytics or cookies, name them here, or state that the Site uses none.]')} /></li>
+    </ul>
+    <p>We ask that you not include medical or mental health details in forms.</p>
     <h3>How we use it</h3>
-    <p>We use your information only to respond to your inquiry, plan any engagement you request and operate and secure this site. We do not sell your personal information.</p>
-    <h3>Sharing</h3>
-    <p>Form submissions are processed by our hosting provider, Netlify, and delivered to our team. We share information with others only when needed to deliver an engagement you requested or when required by law.</p>
-    <h3>Your choices</h3>
-    <p>You can ask us to access, correct or delete the information you submitted by contacting us through the inquiry form.</p>
+    <p>We use your information to respond to your inquiry or application, plan any engagement you request, send you emails you have agreed to receive or that relate to your request, and operate and secure the Site. We do not sell your personal information.</p>
+    <h3>Email communications</h3>
+    <p>If you submit a form and agree to be contacted, we may email you about your inquiry or application. Every marketing or follow-up email includes our mailing address and a way to opt out, and we honor opt-out requests promptly.</p>
+    <h3>Who we share it with</h3>
+    <p>We share information only with service providers that help us run the Site and our business, and only as needed:</p>
+    <ul>
+      <li><b>Netlify</b>, which hosts the Site and processes form submissions</li>
+      <li><b>Hostinger</b>, which provides <b set:html={P('[domain and email services; confirm exact role]')} /></li>
+      <li><b set:html={P('[Scheduling, payment, and video tools you use]')} /></li>
+      <li><b set:html={P('[Software tools, including AI-assisted tools, used for notes or drafting. We do not enter information that identifies you into an AI tool without your consent.]')} /></li>
+    </ul>
+    <p>We also share information when you ask us to, to deliver an engagement you requested, or when required by law.</p>
+    <h3>How long we keep it</h3>
+    <p>We keep form submissions and related emails for <b set:html={P('[period, e.g., 3 years]')} /> unless the law requires longer or you ask us to delete them sooner.</p>
+    <h3>Security</h3>
+    <p>We take reasonable steps to protect your information, but no website or email is perfectly secure.</p>
+    <h3>Your choices and rights</h3>
+    <p>You may ask us to access, correct, or delete the information you submitted, and you may opt out of emails at any time, by emailing <b set:html={P('[email]')} />. We will respond within <b set:html={P('[30]')} /> days. Depending on where you live, including Texas and Pennsylvania, you may have additional rights under state law, and we will honor requests as the law requires.</p>
+    <h3>Children</h3>
+    <p>The Site is not for people under 18, and we do not knowingly collect information from them.</p>
     <h3>Updates</h3>
     <p>We may update this policy from time to time. The current version is always on this page.</p>
-
+    <h3>Contact</h3>
+    <p>Marquis Alan Experience LLC<br />Registered office (Texas): <b set:html={P('[address]')} /><br />Operating address (Pennsylvania): <b set:html={P('[Philadelphia address]')} /><br />Email: <b set:html={P('[email]')} /></p>
   </div></section>
 </Base>
