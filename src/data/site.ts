@@ -5,7 +5,7 @@ export const site = {
   legal: 'Marquis Alan Experience LLC',
   oneSheet: '/marquis-harmon-speaker-one-sheet.pdf',
   bookUrl: 'https://a.co/d/07B1V4Js',
-  email: '',
+  email: 'book@bigpicturearchitect.com',
   phone: '',
   responseTime: '48 hours',
 };
