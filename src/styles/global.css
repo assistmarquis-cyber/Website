@@ -195,3 +195,4 @@ input:focus,select:focus,textarea:focus,.btn:focus-visible,a:focus-visible{outli
 .hero-alt{font-size:15px}.mind .hero-alt a{color:#8FD0C9}
 .legal ul{margin:0;padding-left:1.2em;display:grid;gap:8px}
 .site-footer .legal-line{display:flex;flex-direction:column;gap:4px}
+.price-link{margin-top:auto;font-weight:600;color:var(--primary)}

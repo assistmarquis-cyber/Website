@@ -8,9 +8,9 @@ const steps = [
   ['Act', 'You build the habit of catching an impulse and acting in the moment, with me as your accountability partner.'],
 ];
 const offers = [
-  ['Pattern Audit', 'One 60 to 90 minute session plus a written action map', '[price]'],
-  ['Mindset Sprint', 'Six weeks of weekly sessions and accountability check-ins', '[price]'],
-  ['Mindset Retainer', 'Monthly sessions and ongoing accountability for Sprint graduates', '[price] a month'],
+  ['Pattern Audit', 'One 60 to 90 minute session plus a written action map'],
+  ['Mindset Sprint', 'Six weeks of weekly sessions and accountability check-ins'],
+  ['Mindset Retainer', 'Monthly sessions and ongoing accountability for Sprint graduates'],
 ];
 const faq = [
   ['Who is this for?', 'Founders, executives, and creators who are under pressure and want to act with more clarity and speed.'],
@@ -56,7 +56,7 @@ const faq = [
     <div class="wrap">
       <div class="head"><h2>Ways to work together</h2></div>
       <div class="grid c3">
-        {offers.map(([t, d, price]) => <article class="card"><h3>{t}</h3><p>{d}</p><p><b>Investment:</b> <Fragment set:html={ph(price)} /></p></article>)}
+        {offers.map(([t, d]) => <article class="card"><h3>{t}</h3><p>{d}</p><a class="price-link" href="#apply">Inquire for pricing →</a></article>)}
       </div>
       <p style="margin-top:28px">Looking for a deeper, ground-up engagement for senior leaders? See the <a href="/executive-coaching/">7 Layer Strategy</a>.</p>
     </div>
