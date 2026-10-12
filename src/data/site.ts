@@ -14,6 +14,7 @@ export const nav = [
   { href: '/keynotes/', label: 'Keynotes' },
   { href: '/workshops/', label: 'Enterprise Workshops' },
   { href: '/executive-coaching/', label: 'Executive Coaching' },
+  { href: '/mindset-coaching/', label: 'Mindset Coaching' },
   { href: '/irl-productions/', label: 'IRL Productions' },
   { href: '/about/', label: 'About' },
 ];

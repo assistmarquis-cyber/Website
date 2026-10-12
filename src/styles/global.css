@@ -45,8 +45,8 @@ p{margin:0}
 .mobile-nav.open{display:flex}
 .mobile-nav a{padding:12px 0;text-decoration:none;color:var(--body);font-weight:500;border-bottom:1px solid var(--border)}
 .mobile-nav .btn{margin-top:12px;color:#fff;border:0}
-@media(min-width:1180px){.nav{display:flex}.menu-btn,.mobile-nav{display:none!important}}
-@media(min-width:1180px) and (max-width:1400px){.nav{gap:22px;font-size:14px}.nav .btn{padding:10px 14px}}
+@media(min-width:1320px){.nav{display:flex}.menu-btn,.mobile-nav{display:none!important}}
+@media(min-width:1320px) and (max-width:1500px){.nav{gap:20px;font-size:14px}.nav .btn{padding:10px 14px}}
 /* hero */
 .hero{display:grid;gap:32px;padding-top:40px;padding-bottom:48px}
 .hero-img{border-radius:12px;overflow:hidden;position:relative}
@@ -186,3 +186,10 @@ input:focus,select:focus,textarea:focus,.btn:focus-visible,a:focus-visible{outli
 .photo-band h2{color:#fff}.photo-band p{color:#E4F2F0}
 .photo-band .credit{position:absolute;right:14px;bottom:10px;font-size:11px;color:rgba(255,255,255,.65)}
 .cta-band.photo-band{background:#0F2E2D}
+/* mindset coaching application */
+.notice{background:#FFF4E5;border-left:4px solid #C2410C;padding:12px 14px;border-radius:6px;font-size:15px}
+.form .check{flex-direction:row;align-items:flex-start;gap:10px;font-weight:400}
+.form .check input{width:auto;margin-top:3px}
+.form .hint{font-weight:400;color:var(--muted)}
+.form .small{font-size:13px;color:var(--muted)}
+.hero-alt{font-size:15px}.mind .hero-alt a{color:#8FD0C9}
