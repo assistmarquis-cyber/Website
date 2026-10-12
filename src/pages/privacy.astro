@@ -1,18 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
-import { ph } from '../data/ph';
-const P = (s: string) => ph(s);
 ---
 <Base title="Privacy Policy | Marquis Harmon" description="Privacy Policy for bigpicturearchitect.com, operated by Marquis Alan Experience LLC.">
   <section class="section"><div class="wrap stack g22 legal" style="max-width:720px">
     <h1 style="font-size:clamp(2.2rem,5vw,3.4rem)">Privacy Policy</h1>
-    <p style="color:var(--muted)">Last updated: <b set:html={P('[date]')} /></p>
     <p>Marquis Alan Experience LLC, a Texas limited liability company operating remotely, operates bigpicturearchitect.com. This policy explains what information we collect and how we use it.</p>
     <h3>Information we collect</h3>
     <ul>
       <li><b>Forms.</b> When you submit the inquiry or mindset coaching application form, we collect what you provide: name, email, company or role, title, event or coaching details, and your answers about your objectives.</li>
       <li><b>Email.</b> If you email us or reply to our messages, we keep those messages.</li>
-      <li><b>Technical data.</b> Our hosting provider may log standard technical data, such as IP address, browser type, and pages visited. <b set:html={P('[If you use analytics or cookies, name them here, or state that the Site uses none.]')} /></li>
+      <li><b>Technical data.</b> Our hosting provider may log standard technical data, such as IP address, browser type, and pages visited.</li>
     </ul>
     <p>We ask that you not include medical or mental health details in forms.</p>
     <h3>How we use it</h3>
@@ -23,17 +20,15 @@ const P = (s: string) => ph(s);
     <p>We share information only with service providers that help us run the Site and our business, and only as needed:</p>
     <ul>
       <li><b>Netlify</b>, which hosts the Site and processes form submissions</li>
-      <li><b>Hostinger</b>, which provides <b set:html={P('[domain and email services; confirm exact role]')} /></li>
-      <li><b set:html={P('[Scheduling, payment, and video tools you use]')} /></li>
-      <li><b set:html={P('[Software tools, including AI-assisted tools, used for notes or drafting. We do not enter information that identifies you into an AI tool without your consent.]')} /></li>
+      <li><b>Hostinger</b>, which provides our email services</li>
     </ul>
     <p>We also share information when you ask us to, to deliver an engagement you requested, or when required by law.</p>
     <h3>How long we keep it</h3>
-    <p>We keep form submissions and related emails for <b set:html={P('[period, e.g., 3 years]')} /> unless the law requires longer or you ask us to delete them sooner.</p>
+    <p>We keep form submissions and related emails only as long as we need them for the purposes above, unless the law requires longer or you ask us to delete them sooner.</p>
     <h3>Security</h3>
     <p>We take reasonable steps to protect your information, but no website or email is perfectly secure.</p>
     <h3>Your choices and rights</h3>
-    <p>You may ask us to access, correct, or delete the information you submitted, and you may opt out of emails at any time, by emailing <b><a href="mailto:book@bigpicturearchitect.com">book@bigpicturearchitect.com</a></b>. We will respond within <b set:html={P('[30]')} /> days. Depending on where you live, including Texas and Pennsylvania, you may have additional rights under state law, and we will honor requests as the law requires.</p>
+    <p>You may ask us to access, correct, or delete the information you submitted, and you may opt out of emails at any time, by emailing <b><a href="mailto:book@bigpicturearchitect.com">book@bigpicturearchitect.com</a></b>. We will respond within 30 days. Depending on where you live, including Texas and Pennsylvania, you may have additional rights under state law, and we will honor requests as the law requires.</p>
     <h3>Children</h3>
     <p>The Site is not for people under 18, and we do not knowingly collect information from them.</p>
     <h3>Updates</h3>

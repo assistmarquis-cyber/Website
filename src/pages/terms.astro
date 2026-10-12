@@ -1,12 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
-import { ph } from '../data/ph';
-const P = (s: string) => ph(s);
 ---
 <Base title="Terms of Use | Marquis Harmon" description="Terms of Use for bigpicturearchitect.com, operated by Marquis Alan Experience LLC.">
   <section class="section"><div class="wrap stack g22 legal" style="max-width:720px">
     <h1 style="font-size:clamp(2.2rem,5vw,3.4rem)">Terms of Use</h1>
-    <p style="color:var(--muted)">Last updated: <b set:html={P('[date]')} /></p>
     <p>This website, bigpicturearchitect.com (the "Site"), is operated by <b>Marquis Alan Experience LLC</b>, a Texas limited liability company operating remotely ("we," "us"). By using the Site you agree to these terms. If you do not agree, please do not use it.</p>
     <h3>Use of this site</h3>
     <p>The Site provides information about the keynotes, workshops, coaching, and productions offered by Marquis Harmon. Content is for general information and may change without notice. You may use the Site only for lawful purposes and may not interfere with its operation or security.</p>
@@ -25,7 +22,7 @@ const P = (s: string) => ph(s);
     <h3>Limitation of liability</h3>
     <p>To the fullest extent the law allows, Marquis Alan Experience LLC is not liable for indirect, incidental, or consequential damages arising from your use of the Site. Nothing in these terms limits liability that cannot be limited by law.</p>
     <h3>Governing law and venue</h3>
-    <p>These terms are governed by the laws of the State of Texas, where Marquis Alan Experience LLC is registered, without limiting any mandatory consumer protections of the state where you live, including Pennsylvania. Any dispute will be brought in the state or federal courts located in <b set:html={P('[a county in Texas to be named by your attorney, or Philadelphia County, Pennsylvania if you live in Pennsylvania]')} />. <b set:html={P('[Attorney to confirm.]')} /></p>
+    <p>These terms are governed by the laws of the State of Texas, where Marquis Alan Experience LLC is registered, without limiting any mandatory consumer protections of the state where you live, including Pennsylvania. Any dispute will be brought in the state or federal courts located in Dallas County, Texas.</p>
     <h3>Changes</h3>
     <p>We may update these terms from time to time. The current version is always on this page, and your continued use of the Site means you accept it.</p>
     <h3>Contact</h3>

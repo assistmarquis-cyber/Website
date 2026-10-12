@@ -14,7 +14,7 @@ const offers = [
 ];
 const faq = [
   ['Who is this for?', 'Founders, executives, and creators who are under pressure and want to act with more clarity and speed.'],
-  ['What happens after I apply?', 'I review every application personally and reply within [2 business days] to schedule your paid discovery call or Pattern Audit.'],
+  ['What happens after I apply?', 'I review every application personally and reply within 2 business days to schedule your paid discovery call or Pattern Audit.'],
   ['Is it confidential?', 'Yes, within the limits described in the coaching agreement, which you will see before we begin.'],
   ['Do you guarantee results?', 'No. I commit to showing up fully and holding you accountable. Results depend on the action you take.'],
 ];
@@ -108,11 +108,8 @@ const faq = [
             <label>When do you want to start?
               <select name="start" required><option value="">Choose one</option><option>This month</option><option>Within 3 months</option><option>Just exploring</option></select>
             </label>
-            <label>Investment range you are comfortable with
-              <select name="investment_range"><option value="">Choose one</option><option>[ranges]</option></select>
-            </label>
+            <label>How did you hear about me?<input type="text" name="referral" /></label>
           </div>
-          <label>How did you hear about me?<input type="text" name="referral" /></label>
           <label class="check"><input type="checkbox" name="consent" value="yes" required /><span>I agree to be contacted by email about my application and understand I can opt out any time.</span></label>
           <div><button class="btn btn-primary" type="submit">Submit application</button></div>
           <p class="small"><a href="/privacy/">Privacy policy</a> &nbsp;·&nbsp; <a href="/terms/">Terms</a></p>
