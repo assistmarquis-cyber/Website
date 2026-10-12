@@ -2,6 +2,8 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import CtaBand from '../components/CtaBand.astro';
+import Gallery from '../components/Gallery.astro';
+import { welcome } from '../data/gallery';
 import { site } from '../data/site';
 import portrait from '../assets/portrait.jpg';
 import panel from '../assets/stage-panel.jpg';
@@ -33,5 +35,6 @@ import summit from '../assets/summit-session.jpg';
       <div class="photo wide"><Image src={summit} alt="Marquis Harmon at a World Humanitarian Summit session" widths={[400, 700]} /></div>
     </div>
   </div></section>
-  <CtaBand title="Bring Marquis to your next leadership moment." text="Share your objectives and we'll respond with availability." />
+  <Gallery eyebrow="In the room" title="Where the big picture gets built, together." text="From Hive gatherings to hands-on prototyping sessions, these are the rooms where Marquis practices what he teaches." />
+  <CtaBand photo={welcome} title="Bring Marquis to your next leadership moment." text="Share your objectives and we'll respond with availability." />
 </Base>

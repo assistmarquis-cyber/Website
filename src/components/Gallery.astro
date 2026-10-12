@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import { photos } from '../data/gallery';
+interface Props { eyebrow?: string; title?: string; text?: string; id?: string }
+const {
+  eyebrow = 'Memory bank',
+  title = 'Rooms where the thinking gets practiced.',
+  text = 'Every cognitive function is a muscle. These are the rooms where people flex them together: questioning, building, listening and leading out loud.',
+  id = 'gallery',
+} = Astro.props;
+---
+<section class="section" id={id} aria-label="Photo gallery" style="padding-bottom:48px">
+  <div class="wrap" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:28px">
+    <div class="head" style="margin-bottom:0"><span class="eyebrow">{eyebrow}</span><h2>{title}</h2><p>{text}</p></div>
+    <div class="reel-nav"><button type="button" data-reel="-1" aria-label="Previous photos">←</button><button type="button" data-reel="1" aria-label="Next photos">→</button></div>
+  </div>
+  <div class="reel" tabindex="0" aria-label="Scrollable photo gallery">
+    {photos.map((p, i) => (
+      <figure>
+        <button type="button" data-i={i} aria-label={`Enlarge photo: ${p.alt}`}>
+          <Image src={p.src} alt={p.alt} widths={[400, 700, 1000]} sizes="(min-width:900px) 520px, 78vw" loading="lazy" />
+        </button>
+        <figcaption>{p.fn}</figcaption>
+      </figure>
+    ))}
+  </div>
+  <p class="wrap" style="font-size:12px;color:var(--muted)">Some photos: Ryan M Rogers. Drag, swipe or use the arrows to explore.</p>
+  <dialog class="lightbox" aria-label="Enlarged photo">
+    <button class="x" type="button" aria-label="Close">×</button>
+    <img alt="" />
+    <p></p>
+  </dialog>
+</section>
+<script>
+  document.querySelectorAll<HTMLElement>('.reel').forEach((reel) => {
+    const sec = reel.closest('section')!;
+    sec.querySelectorAll<HTMLButtonElement>('[data-reel]').forEach((b) =>
+      b.addEventListener('click', () => reel.scrollBy({ left: Number(b.dataset.reel) * reel.clientWidth * 0.7, behavior: 'smooth' })));
+    // Mouse drag to scroll (touch already scrolls natively).
+    let x0 = 0, s0 = 0, down = false, moved = false;
+    reel.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') return; down = true; moved = false; x0 = e.clientX; s0 = reel.scrollLeft; });
+    addEventListener('pointermove', (e) => { if (!down) return; const dx = e.clientX - x0; if (Math.abs(dx) > 5) { moved = true; reel.classList.add('drag'); } reel.scrollLeft = s0 - dx; });
+    addEventListener('pointerup', () => { down = false; reel.classList.remove('drag'); });
+    const dlg = sec.querySelector('dialog')!, big = dlg.querySelector('img')!, cap = dlg.querySelector('p')!;
+    reel.querySelectorAll<HTMLButtonElement>('button[data-i]').forEach((b) => b.addEventListener('click', (e) => {
+      if (moved) { e.preventDefault(); return; }
+      const img = b.querySelector('img')!;
+      big.src = img.currentSrc || img.src; big.alt = img.alt; cap.textContent = img.alt;
+      dlg.showModal();
+    }));
+    dlg.querySelector('.x')!.addEventListener('click', () => dlg.close());
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+  });
+</script>

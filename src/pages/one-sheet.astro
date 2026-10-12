@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import { keynotes, workshops } from '../data/site';
+import { keynotes, workshops, testimonials } from '../data/site';
 import portrait from '../assets/portrait.jpg';
 ---
 <Base bare noindex title="Speaker One-Sheet | Marquis Harmon" description="Speaker one-sheet for Marquis Harmon.">
@@ -27,6 +27,7 @@ import portrait from '../assets/portrait.jpg';
       <div><small>ENTERPRISE WORKSHOPS</small><p><b>Creative CornerStore</b>Leadership and AI thought training: mind mapping and strategic planning</p><p><b>MAEx Hackathon</b>Rapid prototyping and design workshop</p></div>
       <div><small>EXECUTIVE COACHING</small><p><b>The 7 Layer Strategy</b>A ground-up path from identity to execution, for individual leaders and leadership teams.</p><small style="margin-top:14px">IRL PRODUCTIONS</small><p><b>In real life</b>Augmented and virtual reality galleries, live performance pop-ups and hackathons.</p></div>
     </section>
+    <section class="q"><blockquote>“{testimonials.maryland.quote}”</blockquote><span>{testimonials.maryland.who}</span></section>
     <footer class="sf"><div><b>Request availability</b><br />bigpicturearchitect.com/contact</div><span class="cta">Book a discovery call</span></footer>
   </div>
 </Base>
