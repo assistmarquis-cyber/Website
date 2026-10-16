@@ -10,9 +10,13 @@ const roles = [
   ['Operator', 'Executes', 'Turns the best idea into concrete next steps you can act on today.'],
   ['Destroyer', 'Eliminates', 'Calls out what is in the way: the habit, the task or the assumption to cut.'],
 ];
-const steps = [
+const steps = godCoach.payUrl ? [
+  ['Pay the ' + godCoach.price + ' setup', 'Check out securely through Stripe. It takes about a minute.'],
+  ['Tell me your goal', 'Fill in the short form below so your setup fits what you want the coach to help with.'],
+  ['Start coaching', 'I set the G.O.D. Coach up in your own Claude account and show you how to get the most from it.'],
+] : [
   ['Request your setup', 'Tell me a little about what you want the coach to help with.'],
-  ['Pay the ' + godCoach.price + ' setup', godCoach.payUrl ? 'Checkout is handled by a secure payment page.' : 'I email you a secure payment link, usually within 24 to 48 hours.'],
+  ['Pay the ' + godCoach.price + ' setup', 'I email you a secure payment link, usually within 24 to 48 hours.'],
   ['Start coaching', 'I set the G.O.D. Coach up in your own Claude account and show you how to get the most from it.'],
 ];
 ---
@@ -49,8 +53,8 @@ const steps = [
   <section class="section mint" id="get"><div class="wrap split even">
     <div class="stack g16">
       <span class="eyebrow">Get the G.O.D. Coach</span>
-      <h2>Request your {godCoach.price} setup.</h2>
-      <p>Tell me what you want to use it for. I'll reply with next steps{godCoach.payUrl ? '' : ' and a secure payment link'} within 24 to 48 hours.</p>
+      <h2>{godCoach.payUrl ? 'Pay, then tell me your goal.' : `Request your ${godCoach.price} setup.`}</h2>
+      <p>{godCoach.payUrl ? 'Checkout is secure through Stripe. Then use the form to tell me what you want the coach for, and I\'ll reach out within 24 to 48 hours to set it up.' : 'Tell me what you want to use it for. I\'ll reply with next steps and a secure payment link within 24 to 48 hours.'}</p>
       {godCoach.payUrl && <div><a class="btn btn-primary" href={godCoach.payUrl} target="_blank" rel="noopener">Pay {godCoach.price} now ↗</a></div>}
     </div>
     <form class="form card" name="god-coach" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="bot-field">
@@ -65,7 +69,7 @@ const steps = [
       </label>
       <label>What do you want the coach to help you with?<textarea name="goal" rows="4"></textarea></label>
       <label class="check"><input type="checkbox" name="consent" value="yes" required /><span>I agree to be contacted by email about my G.O.D. Coach setup and understand I can opt out any time.</span></label>
-      <div><button class="btn btn-primary" type="submit">Request my setup</button></div>
+      <div><button class={godCoach.payUrl ? 'btn btn-secondary' : 'btn btn-primary'} type="submit">{godCoach.payUrl ? 'Send my goal' : 'Request my setup'}</button></div>
       <p class="small"><a href="/privacy/">Privacy policy</a> &nbsp;·&nbsp; <a href="/terms/">Terms</a></p>
     </form>
   </div></section>

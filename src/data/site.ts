@@ -145,5 +145,5 @@ export const affiliations = [
 // Left empty, the button scrolls to the request form and Marquis emails a payment link.
 export const godCoach = {
   price: '$88',
-  payUrl: '',
+  payUrl: 'https://buy.stripe.com/4gMcN53ek9BY3DQ4jDaZi04',
 };
