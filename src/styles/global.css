@@ -45,8 +45,8 @@ p{margin:0}
 .mobile-nav.open{display:flex}
 .mobile-nav a{padding:12px 0;text-decoration:none;color:var(--body);font-weight:500;border-bottom:1px solid var(--border)}
 .mobile-nav .btn{margin-top:12px;color:#fff;border:0}
-@media(min-width:1320px){.nav{display:flex}.menu-btn,.mobile-nav{display:none!important}}
-@media(min-width:1320px) and (max-width:1500px){.nav{gap:20px;font-size:14px}.nav .btn{padding:10px 14px}}
+@media(min-width:1440px){.nav{display:flex}.menu-btn,.mobile-nav{display:none!important}}
+@media(min-width:1440px) and (max-width:1600px){.nav{gap:20px;font-size:14px}.nav .btn{padding:10px 14px}}
 /* hero */
 .hero{display:grid;gap:32px;padding-top:40px;padding-bottom:48px}
 .hero-img{border-radius:12px;overflow:hidden;position:relative}
