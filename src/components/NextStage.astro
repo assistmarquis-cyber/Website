@@ -1,0 +1,28 @@
+---
+import { nextStage as n } from '../data/site';
+---
+<aside class="next-stage" data-until={n.until} aria-label="Upcoming keynote">
+  <div class="wrap ns-in">
+    <span class="ns-pulse" aria-hidden="true"></span>
+    <div class="ns-text">
+      <span class="ns-lbl">Next on stage · {n.date}</span>
+      <strong>Keynote at the {n.event}</strong>
+      <span class="ns-sub">{n.topic} {n.place}.</span>
+    </div>
+    <a class="btn btn-primary" href={n.url} target="_blank" rel="noopener">See the summit ↗</a>
+  </div>
+</aside>
+<script is:inline>
+  document.querySelectorAll('.next-stage').forEach(function (el) { if (new Date() >= new Date(el.dataset.until + 'T00:00:00')) el.remove(); });
+</script>
+<style>
+  .next-stage{background:linear-gradient(90deg,#0F2E2D,#163f3d 60%,#3a1d1a);color:#fff;border-top:1px solid rgba(143,208,201,.25);border-bottom:1px solid rgba(143,208,201,.25)}
+  .ns-in{display:flex;align-items:center;gap:18px;padding-top:18px;padding-bottom:18px;flex-wrap:wrap}
+  .ns-pulse{width:12px;height:12px;border-radius:50%;background:#FFB4A8;box-shadow:0 0 0 0 rgba(255,180,168,.7);animation:ns 1.8s infinite;flex:none}
+  @keyframes ns{70%{box-shadow:0 0 0 14px rgba(255,180,168,0)}100%{box-shadow:0 0 0 0 rgba(255,180,168,0)}}
+  .ns-text{display:grid;gap:2px;flex:1;min-width:240px}
+  .ns-lbl{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#8FD0C9}
+  .ns-text strong{font:500 1.2rem var(--serif);color:#fff}
+  .ns-sub{font-size:14px;color:#CDE7E4}
+  @media(prefers-reduced-motion:reduce){.ns-pulse{animation:none}}
+</style>

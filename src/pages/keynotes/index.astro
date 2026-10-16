@@ -1,6 +1,7 @@
 ---
 import NeuralCanvas from '../../components/NeuralCanvas.astro';
 import Base from '../../layouts/Base.astro';
+import NextStage from '../../components/NextStage.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { purpose } from '../../data/gallery';
 import { keynotes, site } from '../../data/site';
@@ -26,5 +27,6 @@ import { keynotes, site } from '../../data/site';
       </div>
     </div>
   </section>
+  <NextStage />
   <CtaBand photo={purpose} title="Planning a summit, all-hands or conference?" text="Tell us about your audience and objectives and we'll recommend the right talk." />
 </Base>

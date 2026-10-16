@@ -5,7 +5,7 @@ import Base from '../layouts/Base.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Gallery from '../components/Gallery.astro';
 import { welcome } from '../data/gallery';
-import { site } from '../data/site';
+import { site, affiliations } from '../data/site';
 import portrait from '../assets/portrait.jpg';
 import panel from '../assets/stage-panel.jpg';
 import summit from '../assets/summit-session.jpg';
@@ -24,6 +24,14 @@ import summit from '../assets/summit-session.jpg';
       </div>
     </div>
   </section>
+  <section class="section mint" id="affiliations"><div class="wrap">
+    <div class="head"><span class="eyebrow">Affiliations and partners</span><h2>Where the work connects.</h2></div>
+    <div class="grid c2">
+      {affiliations.map((a) => (
+        <div class="card"><span class="eyebrow">{a.role}</span><h3>{a.name}</h3><div><a class="link-arrow" href={a.url} target="_blank" rel="noopener">{a.cta} ↗</a></div></div>
+      ))}
+    </div>
+  </div></section>
   <section class="section dark" id="mindset"><div class="wrap split">
     <div class="stack g16"><span class="eyebrow">Mindset coach and supreme accountability partner</span><h2>Know your voice. Trust your instinct. Act fast.</h2></div>
     <div class="stack g16">
