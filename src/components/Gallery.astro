@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { photos as defaultPhotos } from '../data/gallery';
-interface Props { eyebrow?: string; title?: string; text?: string; id?: string; photos?: { src: ImageMetadata; alt: string; fn: string }[] }
+interface Props { eyebrow?: string; title?: string; text?: string; id?: string; photos?: { src: ImageMetadata; alt: string; fn: string; cap?: string }[] }
 const {
   eyebrow = 'Memory bank',
   title = 'Rooms where the thinking gets practiced.',
@@ -22,7 +22,7 @@ const {
         <button type="button" data-i={i} aria-label={`Enlarge photo: ${p.alt}`}>
           <Image src={p.src} alt={p.alt} widths={[400, 700, 1000]} sizes="(min-width:900px) 520px, 78vw" loading="lazy" />
         </button>
-        <figcaption>{p.fn}</figcaption>
+        <figcaption>{p.cap || p.fn}</figcaption>
       </figure>
     ))}
   </div>
