@@ -8,7 +8,7 @@
 // Needs these Netlify environment variables, set in the Netlify UI (never in code,
 // because this repository is public):
 //   STRIPE_WEBHOOK_SECRET  the signing secret Stripe shows for this webhook (whsec_...)
-//   GOD_COACH_URL          private link to the G.O.D. Coach prompt (e.g. a view-only doc)
+//   GOD_COACH_URL          link to the G.O.D. Coach (the Momentum Coach artifact, shared as "anyone with the link")
 //   SMTP_PASSWORD          the password for book@bigpicturearchitect.com (already set)
 //   MAILING_ADDRESS        the postal address shown in the email footer (already set)
 import crypto from 'node:crypto';
@@ -39,16 +39,15 @@ const firstName = (name = '') => name.trim().split(/\s+/)[0] || 'there';
 
 const buyerEmail = (name, url) => `Hi ${firstName(name)}, thank you for getting the G.O.D. Coach.
 
-Your prompt is here:
+Open your coach here:
 ${url}
 
-To set it up in Claude:
-1. Sign in at claude.ai.
-2. Create a new Project and name it "G.O.D. Coach".
-3. Open the project's instructions, paste in the full prompt, and save.
-4. Start a chat in that project and tell it what you're working on.
+To start:
+1. Open the link while signed in to Claude (claude.ai). A free account works to get started.
+2. When it asks, allow it to chat using your Claude account.
+3. Tell it what you're working on right now. It checks in with you, names your mode, and scores your momentum.
 
-It works in three modes: the Generator creates ideas, the Operator turns the best one into next steps, and the Destroyer cuts what's in the way. Ask for whichever one you need.
+It works in three modes from the G.O.D. Framework: the Generator creates, the Operator executes, and the Destroyer cuts what's in the way. Your check-in log stays in your browser.
 
 Your $88 setup also includes my help getting it running. Reply to this email with what you want the coach to help you with, and I'll follow up within 24 to 48 hours.
 
