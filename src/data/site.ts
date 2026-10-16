@@ -123,3 +123,19 @@ export const testimonials = {
     who: 'Mark W., Executive Director',
   },
 };
+
+// "Next on stage" banner (home and keynotes). It hides itself the day after `until`.
+export const nextStage = {
+  event: 'F.A.B.A. Live Music & Content Protection Summit',
+  date: 'Saturday, October 24, 2026',
+  place: 'The Historic Florence, Missoula, Montana',
+  topic: 'Live music, protecting intellectual property, and specific intelligence.',
+  url: 'https://fabasummit.com/',
+  until: '2026-10-25',
+};
+
+// Affiliations and partners shown on the About page.
+export const affiliations = [
+  { name: 'Just Economy Institute', role: 'Fellow, Cohort 4 (2020 to 2021)', url: 'https://justeconomyinstitute.org/all_fellows/marquis-harmon/', cta: 'View fellow profile' },
+  { name: 'Tune.FM', role: 'Production partner, Philly Tech Week 2026', url: 'https://tune.fm/', cta: 'Visit Tune.FM' },
+];

@@ -1,4 +1,5 @@
 // Client portal content. Edit freely: each concept is one "world" on /portal/.
+// read (optional): a post or article about the concept, shown as a link on its card.
 // progress: 0-100, how far along the concept is. img and photos: files in src/assets.
 export const themes = [
   { id: 'web3-ai', name: 'Web3 and AI', line: 'Machines that amplify people, and value people can own.' },
@@ -18,6 +19,7 @@ export const concepts = [
     summary: 'Putting AI to work in real teams: the Generator creates, the Operator executes, the Destroyer eliminates.',
     detail: 'We are turning pilots into production systems while keeping people amplified, not replaced. Each team leaves with one workflow that runs on AI and a person who owns it.',
     questions: ['Where in your work would a Generator, Operator and Destroyer each save you hours?', 'What would you need to trust an AI agent with a real task?'],
+    read: { label: 'Read my response to the White House national AI policy', url: 'https://www.linkedin.com/posts/joinmaex_white-houses-national-ai-policy-framework-ugcPost-7441279887740571648-canY/' },
   },
   {
     id: 'open-web',

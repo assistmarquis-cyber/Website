@@ -45,6 +45,7 @@ const reactions = [
               <h3>{c.title}</h3>
               <p>{c.summary}</p>
               <div class="meter" role="img" aria-label={`${c.progress}% of the way there`}><span style={`--p:${c.progress}%`}></span><em>{c.progress}% built</em></div>
+              {c.read && <a class="read-link" href={c.read.url} target="_blank" rel="noopener">{c.read.label} <span aria-hidden="true">↗</span></a>}
               <button class="deeper" aria-expanded="false">Go deeper <i aria-hidden="true">+</i></button>
               <div class="depth" hidden>
                 <p>{c.detail}</p>
@@ -155,6 +156,8 @@ const reactions = [
   @keyframes grow{from{transform:scaleX(0)}}
   .deeper{align-self:flex-start;background:none;border:0;color:#8FD0C9;font:600 14px var(--sans);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;padding:4px 0;display:flex;gap:8px;align-items:center}
   .deeper i{font-style:normal;font-size:18px;transition:transform .3s}.deeper[aria-expanded=true] i{transform:rotate(45deg)}
+  .read-link{color:#FFB4A8;font-weight:600;text-decoration:underline;text-underline-offset:3px;width:fit-content}
+  .read-link:hover{color:#fff}
   .depth{display:grid;gap:10px;animation:rise .5s both}
   .depth strong{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#FFB4A8}
   .thumbs{display:flex;gap:10px;margin-top:6px;overflow-x:auto}
