@@ -36,7 +36,7 @@ const model = [
         <p style="font:500 1.3rem var(--serif);color:#8FD0C9">{sig.tagline}</p>
         <div><span class="eyebrow" style="margin-bottom:6px">{sig.detail}</span><p>{sig.summary}</p></div>
         <Image src={god} alt="The G.O.D. Framework diagram: Generator, Operator, Destroyer" widths={[480, 800]} style="border-radius:8px;background:#fff" />
-        <div><a class="btn btn-primary" href={`/workshops/${sig.slug}/`}>Program details</a></div>
+        <div class="btn-row"><a class="btn btn-primary" href={`/workshops/${sig.slug}/`}>Program details</a><a class="btn btn-secondary" href="/god-coach/">Try the G.O.D. Coach on Claude</a></div>
       </div>
       <div class="checks" style="padding:36px;background:#35261B">
         <span class="eyebrow">Business outcomes</span>
