@@ -1,0 +1,166 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Base from '../layouts/Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { stops } from '../data/maex-gallery';
+
+const imgs = import.meta.glob<{ default: ImageMetadata }>('../assets/**/*.jpg', { eager: true });
+const img = (p: string) => imgs[`../assets/${p}`].default;
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+<Base title="MAEx Gallery: Step Into How Marquis Harmon Works" description="Teleport through the rooms where Marquis Harmon works: listening, mapping, prototyping, building the room, taking the stage and building community.">
+  <section class="tp" aria-roledescription="carousel" aria-label="MAEx Gallery">
+    {stops.map((s, i) => (
+      <div class={`scene${i === 0 ? ' on' : ''}`} data-i={i} aria-hidden={i === 0 ? 'false' : 'true'} role="group" aria-label={`${i + 1} of ${stops.length}: ${s.step}, ${s.place}`}>
+        <div class="bg"><Image src={img(s.main)} alt={`${s.step}: ${s.place}`} widths={[800, 1400, 2000]} sizes="100vw" loading={i < 2 ? 'eager' : 'lazy'} /></div>
+        <div class="floats">
+          {s.extras.map((e, j) => (
+            <figure class={`float f${j}`} data-depth={(j + 1) * 14}><Image src={img(e)} alt="" widths={[400, 700]} sizes="(min-width:900px) 300px, 40vw" loading="lazy" /></figure>
+          ))}
+        </div>
+        <div class="wrap caption">
+          <span class="count">{pad(i + 1)} <i>/ {pad(stops.length)}</i></span>
+          <h2>{s.step}</h2>
+          <p class="place"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>{s.place}</p>
+          <p class="line">{s.line}</p>
+        </div>
+      </div>
+    ))}
+
+    <div class="intro" id="intro">
+      <div class="wrap stack g22">
+        <span class="eyebrow">MAEx Gallery</span>
+        <h1>Step into how I work.</h1>
+        <p class="lede">Teleport through the rooms where the work happens, from the first conversation to the community that keeps building after I leave.</p>
+        <div><button class="btn btn-primary" id="begin">Begin the journey</button></div>
+      </div>
+    </div>
+
+    <div class="warp" aria-hidden="true"></div>
+
+    <nav class="dial" aria-label="Destinations">
+      <button class="arrow" data-go="-1" aria-label="Previous destination">←</button>
+      <ol>
+        {stops.map((s, i) => (
+          <li><button data-to={i} aria-current={i === 0 ? 'step' : 'false'}><b>{pad(i + 1)}</b><span>{s.step}</span></button></li>
+        ))}
+      </ol>
+      <button class="arrow" data-go="1" aria-label="Next destination">→</button>
+      <button class="auto" id="auto" aria-pressed="false">Auto-teleport</button>
+    </nav>
+  </section>
+
+  <CtaBand title="Want this energy in your room?" text="Tell me about your team, your stage or your community, and I'll show you how we'd build it together." />
+</Base>
+
+<style is:global>
+  .tp{position:relative;height:calc(100svh - 72px);min-height:560px;overflow:hidden;background:#0A1D1C;color:#fff;isolation:isolate;touch-action:pan-y}
+  .scene{position:absolute;inset:0;visibility:hidden}
+  .scene.on,.scene.out{visibility:visible}
+  .scene.on{z-index:2}.scene.out{z-index:1}
+  .scene .bg{position:absolute;inset:0}
+  .scene .bg img{width:100%;height:100%;object-fit:cover}
+  .scene.on .bg img{animation:drift 14s ease-out both}
+  @keyframes drift{from{transform:scale(1.18) translate(1.5%,1%)}to{transform:scale(1.04)}}
+  .scene::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,29,28,.25) 0,rgba(10,29,28,.1) 40%,rgba(10,29,28,.92) 100%),radial-gradient(ellipse at 20% 80%,rgba(10,29,28,.7),transparent 60%);pointer-events:none}
+  .scene.in{animation:portal-in 1.1s cubic-bezier(.7,0,.2,1) both}
+  @keyframes portal-in{from{clip-path:circle(0 at var(--x,50%) var(--y,50%));filter:brightness(2.2) saturate(1.6)}to{clip-path:circle(150% at var(--x,50%) var(--y,50%));filter:none}}
+  .scene.out{animation:portal-out 1.1s cubic-bezier(.7,0,.2,1) both}
+  @keyframes portal-out{to{transform:scale(1.25);filter:blur(10px) brightness(.6)}}
+  .floats{position:absolute;inset:0;z-index:1;pointer-events:none;display:none}
+  @media(min-width:900px){.floats{display:block}}
+  .float{position:absolute;margin:0;width:min(22vw,300px);border-radius:12px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.7);border:3px solid rgba(255,255,255,.85);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+  .float img{width:100%;aspect-ratio:4/3;object-fit:cover}
+  .float.f0{right:7%;top:12%;rotate:3deg}
+  .float.f1{right:22%;top:46%;rotate:-4deg;width:min(17vw,230px)}
+  .scene.on .float{animation:float-in 1.2s cubic-bezier(.2,.7,.2,1) both}
+  .scene.on .float.f1{animation-delay:.25s}
+  @keyframes float-in{from{opacity:0;translate:0 60px;scale:.85}}
+  .caption{position:absolute;left:0;right:0;bottom:120px;z-index:2;display:flex;flex-direction:column;gap:10px;max-width:1440px}
+  .scene.on .caption>*{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+  .scene.on .caption>*:nth-child(2){animation-delay:.12s}.scene.on .caption>*:nth-child(3){animation-delay:.22s}.scene.on .caption>*:nth-child(4){animation-delay:.32s}
+  .count{font:500 1rem var(--sans);letter-spacing:.2em;color:#FFB4A8}.count i{font-style:normal;color:rgba(255,255,255,.6)}
+  .caption h2{color:#fff;font-size:clamp(2.8rem,8vw,6rem);line-height:.95}
+  .place{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#8FD0C9}
+  .place svg{width:16px;height:16px;fill:currentColor}
+  .line{font-size:1.15rem;color:#E4F2F0;max-width:46ch}
+  .intro{position:absolute;inset:0;z-index:5;display:flex;align-items:center;background:radial-gradient(ellipse at 30% 50%,rgba(10,29,28,.55),rgba(10,29,28,.92));transition:opacity .8s,visibility .8s}
+  .intro h1{color:#fff;max-width:12ch}.intro .lede{color:#CDE7E4}.intro .eyebrow{color:#8FD0C9}
+  .intro.gone{opacity:0;visibility:hidden}
+  .tp:has(.intro:not(.gone)) .caption{opacity:0}
+  .warp{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;background:radial-gradient(circle at var(--x,50%) var(--y,50%),rgba(255,180,168,.9) 0,rgba(143,208,201,.5) 8%,transparent 30%)}
+  .warp.go{animation:warp .9s ease-out}
+  @keyframes warp{0%{opacity:0}25%{opacity:1}100%{opacity:0;transform:scale(1.6)}}
+  .dial{position:absolute;left:0;right:0;bottom:0;z-index:6;display:flex;align-items:center;gap:8px;padding:16px var(--pad);background:linear-gradient(transparent,rgba(10,29,28,.85))}
+  .dial ol{position:relative;display:flex;gap:4px;list-style:none;margin:0;padding:0;flex:1;overflow-x:auto;scrollbar-width:none}
+  .dial ol button{background:none;border:0;color:rgba(255,255,255,.6);font:inherit;cursor:pointer;padding:10px 12px;border-top:2px solid rgba(255,255,255,.2);display:flex;flex-direction:column;align-items:flex-start;gap:2px;white-space:nowrap;transition:color .3s,border-color .3s}
+  .dial ol button b{font-size:11px;letter-spacing:.16em}
+  .dial ol button span{font-size:14px;font-weight:500}
+  .dial ol button:hover{color:#fff}
+  .dial ol button[aria-current=step]{color:#fff;border-color:#FFB4A8}
+  .dial .arrow{width:44px;height:44px;flex:0 0 auto;border-radius:50%;border:1px solid rgba(255,255,255,.5);background:rgba(10,29,28,.4);color:#fff;font-size:18px;cursor:pointer}
+  .dial .arrow:hover{background:#FFB4A8;color:#2A1D14;border-color:#FFB4A8}
+  .dial .auto{flex:0 0 auto;border:1px solid rgba(255,255,255,.5);background:none;color:#fff;border-radius:999px;padding:10px 16px;font:600 13px var(--sans);cursor:pointer}
+  .dial .auto[aria-pressed=true]{background:#8FD0C9;color:#0A1D1C;border-color:#8FD0C9}
+  @media(max-width:700px){.dial ol button span{display:none}.dial .auto{display:none}.caption{bottom:96px}}
+</style>
+
+<script>
+  const tp = document.querySelector<HTMLElement>('.tp')!;
+  const scenes = [...tp.querySelectorAll<HTMLElement>('.scene')];
+  const dots = [...tp.querySelectorAll<HTMLButtonElement>('[data-to]')];
+  const warp = tp.querySelector<HTMLElement>('.warp')!;
+  const intro = tp.querySelector<HTMLElement>('#intro')!;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let cur = 0, busy = false, timer = 0;
+
+  const go = (to: number, x = 50, y = 50) => {
+    to = (to + scenes.length) % scenes.length;
+    intro.classList.add('gone');
+    if (to === cur || busy) return;
+    const from = scenes[cur], next = scenes[to];
+    tp.style.setProperty('--x', `${x}%`); tp.style.setProperty('--y', `${y}%`);
+    dots.forEach((d, i) => d.setAttribute('aria-current', i === to ? 'step' : 'false'));
+    const ol = dots[to].closest('ol')!, li = dots[to].parentElement!;
+    ol.scrollTo({ left: li.offsetLeft - (ol.clientWidth - li.clientWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
+    from.setAttribute('aria-hidden', 'true'); next.setAttribute('aria-hidden', 'false');
+    cur = to;
+    if (reduce) { from.classList.remove('on'); next.classList.add('on'); return; }
+    busy = true;
+    from.classList.remove('on'); from.classList.add('out');
+    next.classList.add('on', 'in');
+    warp.classList.remove('go'); void warp.offsetWidth; warp.classList.add('go');
+    setTimeout(() => { from.classList.remove('out'); next.classList.remove('in'); busy = false; }, 1100);
+  };
+
+  // Teleport from where the visitor clicked.
+  const at = (e: MouseEvent) => { const r = tp.getBoundingClientRect(); return [((e.clientX - r.left) / r.width) * 100, ((e.clientY - r.top) / r.height) * 100]; };
+  tp.querySelector('#begin')!.addEventListener('click', () => intro.classList.add('gone'));
+  dots.forEach((d) => d.addEventListener('click', (e) => go(Number(d.dataset.to), ...at(e))));
+  tp.querySelectorAll<HTMLButtonElement>('[data-go]').forEach((b) => b.addEventListener('click', (e) => go(cur + Number(b.dataset.go), ...at(e))));
+  addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') go(cur + 1);
+    if (e.key === 'ArrowLeft') go(cur - 1);
+  });
+
+  // Swipe on touch screens.
+  let sx = 0;
+  tp.addEventListener('touchstart', (e) => (sx = e.touches[0].clientX), { passive: true });
+  tp.addEventListener('touchend', (e) => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) go(cur + (dx < 0 ? 1 : -1)); });
+
+  // Floating photos drift with the cursor for depth.
+  if (!reduce) tp.addEventListener('pointermove', (e) => {
+    const r = tp.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+    scenes[cur].querySelectorAll<HTMLElement>('.float').forEach((f) => { const d = Number(f.dataset.depth); f.style.transform = `translate(${-x * d}px, ${-y * d}px)`; });
+  });
+
+  // Auto-teleport every 6 seconds.
+  const auto = tp.querySelector<HTMLButtonElement>('#auto')!;
+  auto.addEventListener('click', () => {
+    const on = auto.getAttribute('aria-pressed') !== 'true';
+    auto.setAttribute('aria-pressed', String(on));
+    clearInterval(timer);
+    if (on) { go(cur + 1, 70, 40); timer = window.setInterval(() => go(cur + 1, 30 + Math.random() * 40, 30 + Math.random() * 40), 6000); }
+  });
+</script>

@@ -1,0 +1,60 @@
+// MAEx Gallery: each stop is one environment Marquis works in, in the order of how the work flows.
+// main and extras are files in src/assets. Edit freely.
+export const stops = [
+  {
+    id: 'listen',
+    step: 'Listen',
+    place: 'Roundtables and workshop rooms',
+    main: 'gallery/hive-roundtable.jpg',
+    extras: ['portal/workshop-room-chicago.jpg', 'workshop-room.jpg'],
+    line: 'Every engagement starts in the room, listening for what people mean, not just what they say.',
+  },
+  {
+    id: 'map',
+    step: 'Map',
+    place: 'The studio',
+    main: 'studio-planning.jpg',
+    extras: ['gallery/concept-boards.jpg', 'portal/presentation-the-rhythm-slide.jpg'],
+    line: 'Chalk walls and concept boards: turning what I heard into a picture everyone can see.',
+  },
+  {
+    id: 'prototype',
+    step: 'Prototype',
+    place: 'Hive sessions',
+    main: 'gallery/hive-prototype.jpg',
+    extras: ['gallery/hive-breakout.jpg', 'gallery/hive-energizer.jpg'],
+    line: 'Ideas get built fast and tested on real people, the same day.',
+  },
+  {
+    id: 'build',
+    step: 'Build the room',
+    place: 'IRL Productions',
+    main: 'portal/irl-production-stage-rigging-2.jpg',
+    extras: ['portal/irl-production-stage-rigging-1.jpg', 'irl-1.jpg'],
+    line: 'Hands on the floor, rigging the space so the experience matches the message.',
+  },
+  {
+    id: 'stage',
+    step: 'Take the stage',
+    place: 'COP22, Marrakech',
+    main: 'portal/stage-cop22-marrakech-podium.jpg',
+    extras: ['stage-panel.jpg', 'hero-stage.jpg'],
+    line: 'From the United Nations to Harvard: carrying the picture to the people who decide.',
+  },
+  {
+    id: 'global',
+    step: 'Go global',
+    place: 'World Humanitarian Summit, Istanbul',
+    main: 'summit-session.jpg',
+    extras: ['portal/world-humanitarian-summit-istanbul-2016.jpg'],
+    line: 'The same method, working across borders, sectors and crises.',
+  },
+  {
+    id: 'community',
+    step: 'Build community',
+    place: 'Assembly of Black Possibilities, Chicago',
+    main: 'portal/assembly-of-black-possibilities-chicago.jpg',
+    extras: ['portal/peacemaker-awards-group.jpg', 'gallery/hive-group.jpg'],
+    line: 'Where it all lands: people who keep building together long after the session ends.',
+  },
+];
