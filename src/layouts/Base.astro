@@ -42,6 +42,11 @@ const person = {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <script type="application/ld+json" set:html={JSON.stringify(person)} />
+  <script is:inline>
+    // Teleport between pages: remember where the visitor clicked, and open the next page from that spot.
+    addEventListener('click', function (e) { try { sessionStorage.setItem('tp', JSON.stringify([e.clientX / innerWidth * 100, e.clientY / innerHeight * 100])); } catch (_) {} }, true);
+    addEventListener('pagereveal', function () { try { var p = JSON.parse(sessionStorage.getItem('tp') || '[50,50]'); document.documentElement.style.setProperty('--tx', p[0] + '%'); document.documentElement.style.setProperty('--ty', p[1] + '%'); } catch (_) {} });
+  </script>
 </head>
 <body>
   {!bare && <div class="thread" aria-hidden="true"><span id="thread-fill"></span></div>}

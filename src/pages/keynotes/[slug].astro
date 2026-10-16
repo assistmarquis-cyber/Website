@@ -1,4 +1,5 @@
 ---
+import NeuralCanvas from '../../components/NeuralCanvas.astro';
 import Base from '../../layouts/Base.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { purpose } from '../../data/gallery';
@@ -8,7 +9,7 @@ const { k } = Astro.props;
 const others = keynotes.filter((x) => x.slug !== k.slug);
 ---
 <Base title={`${k.seo} | Marquis Harmon`} description={`${k.summary} A keynote by Marquis Harmon, The Big Picture Arkitect.`}>
-  <section class="section">
+  <section class="section mind"><NeuralCanvas />
     <div class="wrap split even">
       <div class="stack g22">
         <p class="crumbs"><a href="/keynotes/">Keynotes</a> / {k.topic}</p>

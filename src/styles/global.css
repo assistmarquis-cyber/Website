@@ -196,3 +196,21 @@ input:focus,select:focus,textarea:focus,.btn:focus-visible,a:focus-visible{outli
 .legal ul{margin:0;padding-left:1.2em;display:grid;gap:8px}
 .site-footer .legal-line{display:flex;flex-direction:column;gap:4px}
 .price-link{margin-top:auto;font-weight:600;color:var(--primary)}
+/* teleport page transitions (browsers without view transitions just load the page) */
+@view-transition{navigation:auto}
+.site-header{view-transition-name:site-header}
+::view-transition-old(root){animation:tp-out .75s cubic-bezier(.7,0,.2,1) both}
+::view-transition-new(root){animation:tp-in .75s cubic-bezier(.7,0,.2,1) both}
+@keyframes tp-out{to{transform:scale(1.12);filter:blur(8px) brightness(.55)}}
+@keyframes tp-in{from{clip-path:circle(0 at var(--tx,50%) var(--ty,50%));filter:brightness(2.2) saturate(1.5)}to{clip-path:circle(150% at var(--tx,50%) var(--ty,50%));filter:none}}
+@media(prefers-reduced-motion:reduce){@view-transition{navigation:none}}
+/* portal openings: every page starts inside the neural field */
+.mind p{color:#CDE7E4}.mind a:not(.btn){color:#8FD0C9}
+.mind .card{color:var(--body)}.mind .card h2,.mind .card h3{color:var(--text)}.mind .card p{color:var(--body)}.mind .card a:not(.btn){color:var(--primary)}
+.mind .card .eyebrow{color:var(--primary)}
+.mind.section .wrap{position:relative}
+.mind h2:not(.card *),.mind h3:not(.card *){color:#fff}
+.mind .ideal{color:#B8D9D5!important}
+.mind .chips span{color:#E4F2F0;border-color:rgba(143,208,201,.5)}
+.mind p[style*="--primary"]{color:#FFB4A8!important}
+.mind p[style*="--muted"]{color:#B8D9D5!important}
