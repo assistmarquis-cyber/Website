@@ -1,12 +1,14 @@
 ---
 import { Image } from 'astro:assets';
-import { photos } from '../data/gallery';
-interface Props { eyebrow?: string; title?: string; text?: string; id?: string }
+import type { ImageMetadata } from 'astro';
+import { photos as defaultPhotos } from '../data/gallery';
+interface Props { eyebrow?: string; title?: string; text?: string; id?: string; photos?: { src: ImageMetadata; alt: string; fn: string }[] }
 const {
   eyebrow = 'Memory bank',
   title = 'Rooms where the thinking gets practiced.',
   text = 'Every cognitive function is a muscle. These are the rooms where people flex them together: questioning, building, listening and leading out loud.',
   id = 'gallery',
+  photos = defaultPhotos,
 } = Astro.props;
 ---
 <section class="section" id={id} aria-label="Photo gallery" style="padding-bottom:48px">
