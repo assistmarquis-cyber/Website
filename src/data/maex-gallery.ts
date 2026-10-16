@@ -44,7 +44,7 @@ export const stops = [
   {
     id: 'global',
     step: 'Go global',
-    place: 'World Humanitarian Summit, Istanbul',
+    place: 'Speaking at the World Humanitarian Summit, Istanbul',
     main: 'summit-session.jpg',
     extras: ['portal/world-humanitarian-summit-istanbul-2016.jpg'],
     line: 'The same method, working across borders, sectors and crises.',

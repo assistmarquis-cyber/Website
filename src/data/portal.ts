@@ -71,10 +71,10 @@ export const reel = [
   { src: 'portal/stage-cop22-marrakech-podium.jpg', cap: 'Marquis delivering his keynote at COP22, Marrakech' },
   { src: 'portal/workshop-room-chicago.jpg', cap: 'Marquis in a full workshop room, Chicago' },
   { src: 'portal/presentation-the-rhythm-slide.jpg', cap: 'The Rhythm, a concept Marquis is developing' },
-  { src: 'portal/irl-production-stage-rigging-2.jpg', cap: 'IRL Productions, rigging the stage' },
+  { src: 'portal/irl-production-stage-rigging-2.jpg', cap: 'Marquis rigging the stage, IRL Productions' },
   { src: 'portal/assembly-of-black-possibilities-chicago.jpg', cap: 'Marquis at the Assembly of Black Possibilities, Chicago' },
   { src: 'gallery/hive-roundtable.jpg', cap: 'Marquis facilitating a small-group roundtable at Hive' },
   { src: 'gallery/hive-energizer.jpg', cap: 'An energizer at Hive' },
-  { src: 'summit-session.jpg', cap: 'A session at the World Humanitarian Summit, Istanbul' },
+  { src: 'summit-session.jpg', cap: 'Marquis on a panel at the World Humanitarian Summit, Istanbul' },
   { src: 'stage-panel.jpg', cap: 'Marquis speaking at the podium, COP22 Marrakech' },
 ];
