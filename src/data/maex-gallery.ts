@@ -28,10 +28,10 @@ export const stops = [
   {
     id: 'build',
     step: 'Build the room',
-    place: 'Rigging the room with IRL Productions',
+    place: 'My IRL Productions team rigging the room',
     main: 'portal/irl-production-stage-rigging-2.jpg',
     extras: ['portal/irl-production-stage-rigging-1.jpg', 'irl-1.jpg'],
-    line: 'Hands on the floor, rigging the space so the experience matches the message.',
+    line: 'My team on the floor, rigging the space so the experience matches the message.',
   },
   {
     id: 'stage',
