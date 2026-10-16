@@ -142,6 +142,7 @@ export const affiliations = [
 
 // G.O.D. Coach: a Claude coaching prompt Marquis sets up for buyers.
 // payUrl: paste a payment link (Stripe, PayPal, Square) here and the buy button goes straight to it.
+// After payment, Stripe should redirect to /god-coach/thanks/; netlify/functions/stripe-webhook.mjs emails the prompt.
 // Left empty, the button scrolls to the request form and Marquis emails a payment link.
 export const godCoach = {
   price: '$88',
