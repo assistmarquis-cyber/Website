@@ -3,12 +3,17 @@ import NeuralCanvas from '../components/NeuralCanvas.astro';
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { godCoach } from '../data/site';
-import god from '../assets/god-framework.jpg';
+import portrait from '../assets/portrait.jpg';
+import brain from '../assets/portal/maex-labs-monetize-your-mind.jpg';
+import room from '../assets/portal/workshop-room-chicago.jpg';
+import boards from '../assets/gallery/concept-boards.jpg';
+import proto from '../assets/gallery/hive-prototype.jpg';
+import studio from '../assets/studio-planning.jpg';
 const buy = godCoach.payUrl || '#get';
 const roles = [
-  ['Generator', 'Creates', 'Pulls ideas, options and angles out of you faster than you can on your own.'],
-  ['Operator', 'Executes', 'Turns the best idea into concrete next steps you can act on today.'],
-  ['Destroyer', 'Eliminates', 'Calls out what is in the way: the habit, the task or the assumption to cut.'],
+  ['Generator', 'Creates', 'Pulls ideas, options and angles out of you faster than you can on your own.', boards, 'Marquis mapping ideas on concept boards with a client team', '#c0531a'],
+  ['Operator', 'Executes', 'Turns the best idea into concrete next steps you can act on today.', proto, 'A team building a rapid prototype on the floor during a Hive session', '#2c6a3d'],
+  ['Destroyer', 'Eliminates', 'Calls out what is in the way: the habit, the task or the assumption to cut.', studio, 'Marquis at a chalk wall in the studio, clearing the plan down to what matters', '#981c24'],
 ];
 const steps = godCoach.payUrl ? [
   ['Pay the ' + godCoach.price + ' setup', 'Check out securely through Stripe. It takes about a minute.'],
@@ -26,18 +31,22 @@ const steps = godCoach.payUrl ? [
       <div class="stack g22">
         <span class="eyebrow">G.O.D. Coach · built on Claude</span>
         <h1 style="font-size:clamp(2.3rem,5.4vw,4rem)">Your own G.O.D. Framework coach, ready when you are.</h1>
-        <p class="lede">The coaching prompt I built on Claude to think the way I teach: generate the ideas, operate on the best one, and destroy what's in the way. I set it up in your Claude account so it's ready the moment we're done.</p>
+        <p class="lede">The coaching prompt I built on Claude to think the way I teach: generate the ideas, operate on the best one, and destroy what's in the way. It lands in your inbox the moment you pay, and I help you get it running.</p>
         <div class="price-row"><span class="price">{godCoach.price}</span><span class="price-note">one-time setup</span></div>
         <div class="btn-row"><a class="btn btn-primary" href={buy} {...(godCoach.payUrl ? { target: '_blank', rel: 'noopener' } : {})}>Get set up for {godCoach.price}</a><a class="btn btn-secondary" href="#how">How it works</a></div>
       </div>
-      <div class="photo wide"><Image src={god} alt="The G.O.D. Framework diagram: Generator, Operator, Destroyer, with mind mastery at the center" widths={[480, 800, 1000]} sizes="(min-width:900px) 45vw, 100vw" loading="eager" /></div>
+      <div class="stack-photos" aria-label="Marquis Harmon at work">
+        <figure class="sp main"><Image src={portrait} alt="Marquis Harmon, seated, in a thoughtful pose" widths={[480, 800]} sizes="(min-width:900px) 32vw, 70vw" loading="eager" /></figure>
+        <figure class="sp a"><Image src={brain} alt="Monetize Your Mind, a MAEx Labs visual" widths={[400, 700]} sizes="(min-width:900px) 22vw, 50vw" loading="eager" /></figure>
+        <figure class="sp b"><Image src={room} alt="Marquis Harmon in a full workshop room in Chicago" widths={[300, 600]} sizes="(min-width:900px) 16vw, 40vw" loading="eager" /></figure>
+      </div>
     </div>
   </section>
 
   <section class="section mint"><div class="wrap">
     <div class="head"><span class="eyebrow">Three voices, one coach</span><h2>It thinks with you in three modes.</h2></div>
     <div class="grid c3">
-      {roles.map(([n, v, d]) => <div class="card"><span class="eyebrow">{v}</span><h3>{n}</h3><p>{d}</p></div>)}
+      {roles.map(([n, v, d, im, alt, c]) => <div class="card mode" style={`--c:${c}`}><div class="mode-img"><Image src={im} alt={alt} widths={[400, 700]} sizes="(min-width:900px) 30vw, 100vw" /></div><span class="eyebrow">{v}</span><h3>{n}</h3><p>{d}</p></div>)}
     </div>
     <p style="margin-top:24px;max-width:60ch">At the center is mind mastery: knowing which mode you need right now. The coach helps you practice that every time you use it.</p>
   </div></section>
@@ -76,6 +85,23 @@ const steps = godCoach.payUrl ? [
 </Base>
 
 <style>
+  .stack-photos{position:relative;aspect-ratio:1/1;max-width:560px;width:100%;justify-self:center}
+  .sp{position:absolute;margin:0;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.45);border:1px solid rgba(143,208,201,.35);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+  .sp img{width:100%;height:100%;object-fit:cover;display:block}
+  .sp.main{inset:4% 14% 6% 14%;z-index:2;animation:float 9s ease-in-out infinite}
+  .sp.a{width:52%;aspect-ratio:16/10;left:-4%;top:-2%;z-index:3;transform:rotate(-6deg);animation:float 11s ease-in-out -3s infinite}
+  .sp.b{width:34%;aspect-ratio:3/4;right:-2%;bottom:0;z-index:3;transform:rotate(5deg);animation:float 10s ease-in-out -6s infinite}
+  .stack-photos:hover .sp.a{transform:rotate(-2deg) translate(-8px,-8px)}
+  .stack-photos:hover .sp.b{transform:rotate(2deg) translate(8px,8px)}
+  @keyframes float{50%{translate:0 -10px}}
+  .mode{padding:0;overflow:hidden;border-top:4px solid var(--c)}
+  .mode>:not(.mode-img){margin-left:24px;margin-right:24px}
+  .mode>:last-child{margin-bottom:24px}
+  .mode-img{aspect-ratio:16/10;overflow:hidden}
+  .mode-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s}
+  .mode:hover .mode-img img{transform:scale(1.06)}
+  .mode .eyebrow{color:var(--c)}
+  @media(prefers-reduced-motion:reduce){.sp{animation:none}}
   .price-row{display:flex;align-items:baseline;gap:12px}
   .price{font:500 3rem var(--serif);color:#FFB4A8;line-height:1}
   .price-note{color:#CDE7E4;font-size:15px;letter-spacing:.04em}
