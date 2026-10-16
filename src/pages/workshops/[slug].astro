@@ -11,7 +11,7 @@ import { roundtable, prototype, energizer } from '../../data/gallery';
 export function getStaticPaths() { return workshops.map((w) => ({ params: { slug: w.slug }, props: { w } })); }
 const { w } = Astro.props;
 const img = w.slug === 'ai-adoption-god-framework' ? god : w.slug === 'creative-cornerstore' ? roundtable : prototype;
-const alt = w.slug === 'ai-adoption-god-framework' ? 'The G.O.D. Framework diagram: Generator, Operator, Destroyer' : w.slug === 'creative-cornerstore' ? 'A facilitator leads a roundtable discussion during a Creative CornerStore-style session' : 'A team builds a rapid prototype on the floor during a hackathon';
+const alt = w.slug === 'ai-adoption-god-framework' ? 'The G.O.D. Framework diagram: Generator, Operator, Destroyer' : w.slug === 'creative-cornerstore' ? 'Marquis Harmon facilitating a small-group roundtable discussion' : 'A team builds a rapid prototype on the floor during a hackathon';
 const model = [
   ['Discover', 'Stakeholder briefing on audience, objectives and business context.'],
   ['Design', 'Exercises and stories shaped around your strategy, reviewed with your team.'],
