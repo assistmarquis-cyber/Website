@@ -1,0 +1,266 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Base from '../../layouts/Base.astro';
+import NeuralCanvas from '../../components/NeuralCanvas.astro';
+import Gallery from '../../components/Gallery.astro';
+import { themes, concepts, compass, reel } from '../../data/portal';
+
+const imgs = import.meta.glob<{ default: ImageMetadata }>('../../assets/**/*.jpg', { eager: true });
+const img = (p: string) => imgs[`../../assets/${p}`].default;
+const reelPhotos = reel.map((r) => ({ src: img(r.src), alt: r.cap, fn: r.cap }));
+const themeName = (id: string) => themes.find((t) => t.id === id)!.name;
+const reactions = [
+  ['in', "I'm in"],
+  ['idea', 'I have an idea'],
+  ['build', "Let's build this"],
+];
+---
+<Base title="Client Portal | Marquis Harmon" description="What Marquis is building right now, for clients." noindex>
+  <section class="mind portal-hero">
+    <NeuralCanvas />
+    <div class="wrap stack g22">
+      <span class="eyebrow">Client portal · private</span>
+      <h1>Step inside what I'm building.</h1>
+      <p class="lede">These are the concepts I'm deep in before they go public. Explore them, react, and tell me where you want in. Every reaction comes straight to me.</p>
+      <div class="orbs" role="tablist" aria-label="Themes">
+        {themes.map((t, i) => (
+          <button class="orb" role="tab" data-theme={t.id} aria-selected={i === 0 ? 'true' : 'false'} style={`--d:${i * 120}ms`}>
+            <b>{t.name}</b><span>{t.line}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section worlds" id="worlds">
+    <div class="wrap">
+      <div class="head reveal"><span class="eyebrow">The worlds</span><h2 id="theme-title">{themes[0].name}</h2></div>
+      <div class="world-grid">
+        {concepts.map((c) => (
+          <article class="world" data-theme={c.theme} id={c.id} hidden={c.theme !== themes[0].id}>
+            <div class="world-bg"><Image src={img(c.img)} alt="" widths={[600, 1000]} sizes="(min-width:900px) 50vw, 100vw" /></div>
+            <div class="world-in">
+              <div class="meta"><span class="pill">{c.status}</span><span class="theme-tag">{themeName(c.theme)}</span></div>
+              <h3>{c.title}</h3>
+              <p>{c.summary}</p>
+              <div class="meter" role="img" aria-label={`${c.progress}% of the way there`}><span style={`--p:${c.progress}%`}></span><em>{c.progress}% built</em></div>
+              <button class="deeper" aria-expanded="false">Go deeper <i aria-hidden="true">+</i></button>
+              <div class="depth" hidden>
+                <p>{c.detail}</p>
+                <strong>Bring to our next session</strong>
+                <ul>{c.questions.map((q) => <li>{q}</li>)}</ul>
+                <div class="thumbs">
+                  {c.photos.map((ph) => <button type="button" class="thumb" aria-label="Enlarge photo"><Image src={img(ph)} alt={`${c.title}: behind the work`} widths={[300, 1200]} sizes="140px" loading="lazy" /></button>)}
+                </div>
+              </div>
+              <div class="react" aria-label="React to this concept">
+                {reactions.map(([k, label]) => <button class="rx" data-concept={c.title} data-reaction={label} data-k={k}>{label}</button>)}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Gallery id="in-the-room" eyebrow="In the room" title="Where these ideas get tested." text="Stages, studios and workshop rooms where the concepts above meet real people. Drag, swipe or tap a photo to step inside." photos={reelPhotos} />
+  <div class="wrap" style="padding-bottom:48px"><a class="btn btn-secondary" href="/maex-gallery/">Teleport through the MAEx Gallery →</a></div>
+
+  <section class="section mint compass">
+    <div class="wrap split even">
+      <div class="stack g16 reveal">
+        <span class="eyebrow">Find your entry point</span>
+        <h2>Where should we start?</h2>
+        <p>Slide each one to where you are today. The portal will point you to the concept that fits you best right now.</p>
+        <div class="result" aria-live="polite"><span>Your entry point</span><b id="pick">Move the sliders</b><a id="pick-go" href="#worlds" hidden>Open it</a></div>
+      </div>
+      <div class="stack g28 reveal">
+        {compass.map((c) => (
+          <label class="slide">
+            <span>{c.ask}</span>
+            <input type="range" min="0" max="10" value="5" data-theme={c.theme} />
+            <small><em>{c.low}</em><em>{c.high}</em></small>
+          </label>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split even">
+      <div class="stack g16 reveal">
+        <span class="eyebrow">Drop an idea</span>
+        <h2>Tell me what caught you.</h2>
+        <p>A question, a hunch, a project you want to build together. It lands in my inbox, and I'll bring it to our next session.</p>
+      </div>
+      <form class="form card reveal" name="portal-pulse" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="pulse-form">
+        <input type="hidden" name="form-name" value="portal-pulse" />
+        <p hidden><label>Don't fill this out: <input name="bot-field" /></label></p>
+        <input type="hidden" name="reaction" value="Idea" />
+        <label>Concept
+          <select name="concept">
+            <option>Anything</option>
+            {concepts.map((c) => <option>{c.title}</option>)}
+          </select>
+        </label>
+        <label>Your name<input name="name" autocomplete="name" required /></label>
+        <label>Your message<textarea name="message" rows="4" required></textarea></label>
+        <button class="btn btn-primary" type="submit">Send to Marquis</button>
+        <p class="sent" hidden aria-live="polite">Got it. Thank you. I'll bring this to our next session.</p>
+      </form>
+    </div>
+  </section>
+
+  <dialog class="lightbox" id="thumb-box" aria-label="Enlarged photo">
+    <button class="x" type="button" aria-label="Close">×</button>
+    <img alt="" />
+  </dialog>
+
+  <dialog class="rx-dialog" id="rx-dialog">
+    <form method="dialog" class="stack g16" id="rx-form">
+      <b id="rx-title"></b>
+      <label>Your name<input name="name" autocomplete="name" required /></label>
+      <label>Anything to add? (optional)<textarea name="message" rows="3"></textarea></label>
+      <div class="btn-row"><button class="btn btn-primary" value="send">Send</button><button class="btn btn-secondary" value="cancel" formnovalidate>Cancel</button></div>
+    </form>
+  </dialog>
+</Base>
+
+<style is:global>
+  .portal-hero ~ * [hidden],.portal-hero [hidden]{display:none!important}
+  .portal-hero .wrap{padding-top:96px;padding-bottom:96px;max-width:1440px}
+  .portal-hero h1{max-width:14ch}
+  .orbs{display:grid;gap:14px;margin-top:18px}
+  @media(min-width:760px){.orbs{grid-template-columns:repeat(3,1fr)}}
+  .orb{text-align:left;border:1px solid rgba(143,208,201,.45);background:rgba(15,46,45,.55);backdrop-filter:blur(8px);color:#E4F2F0;border-radius:16px;padding:20px 22px;cursor:pointer;display:flex;flex-direction:column;gap:6px;font:inherit;transition:transform .35s,border-color .35s,background .35s;animation:rise .9s cubic-bezier(.2,.7,.2,1) var(--d) both}
+  .orb b{font:500 1.4rem var(--serif);color:#fff}.orb span{font-size:14px;color:#CDE7E4}
+  .orb:hover{transform:translateY(-4px);border-color:#8FD0C9}
+  .orb[aria-selected=true]{background:rgba(143,208,201,.18);border-color:#FFB4A8;box-shadow:0 0 0 1px #FFB4A8,0 20px 50px -25px rgba(255,180,168,.6)}
+  .world-grid{display:grid;gap:24px}
+  @media(min-width:900px){.world-grid{grid-template-columns:repeat(2,1fr)}}
+  .world{position:relative;border-radius:18px;overflow:hidden;min-height:440px;color:#fff;background:#0F2E2D;isolation:isolate;animation:rise .7s cubic-bezier(.2,.7,.2,1) both;transform-style:preserve-3d;transition:transform .2s}
+  .world-bg{position:absolute;inset:0;z-index:-1}
+  .world-bg img{width:100%;height:100%;object-fit:cover;opacity:.45;transform:scale(1.04);transition:transform 1.4s cubic-bezier(.2,.7,.2,1)}
+  .world:hover .world-bg img{transform:scale(1.12)}
+  .world::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(15,46,45,.2),rgba(15,46,45,.95) 65%)}
+  .world-in{display:flex;flex-direction:column;justify-content:flex-end;gap:12px;min-height:440px;padding:30px}
+  .world h3{color:#fff;font-size:1.9rem}.world p{color:#E4F2F0}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .pill{background:#FFB4A8;color:#2A1D14;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
+  .theme-tag{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#8FD0C9}
+  .meter{position:relative;height:6px;border-radius:6px;background:rgba(255,255,255,.15);margin:6px 0 14px}
+  .meter span{position:absolute;inset:0 auto 0 0;width:var(--p);border-radius:6px;background:linear-gradient(90deg,#8FD0C9,#FFB4A8);transform-origin:0 50%;animation:grow 1.6s cubic-bezier(.2,.7,.2,1) .3s both}
+  .meter em{position:absolute;right:0;top:10px;font-size:12px;font-style:normal;color:#CDE7E4}
+  @keyframes grow{from{transform:scaleX(0)}}
+  .deeper{align-self:flex-start;background:none;border:0;color:#8FD0C9;font:600 14px var(--sans);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;padding:4px 0;display:flex;gap:8px;align-items:center}
+  .deeper i{font-style:normal;font-size:18px;transition:transform .3s}.deeper[aria-expanded=true] i{transform:rotate(45deg)}
+  .depth{display:grid;gap:10px;animation:rise .5s both}
+  .depth strong{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#FFB4A8}
+  .thumbs{display:flex;gap:10px;margin-top:6px;overflow-x:auto}
+  .thumb{flex:0 0 auto;width:120px;height:84px;padding:0;border:2px solid rgba(255,255,255,.25);border-radius:10px;overflow:hidden;cursor:zoom-in;background:none;transition:transform .25s,border-color .25s}
+  .thumb:hover{transform:translateY(-3px) scale(1.04);border-color:#FFB4A8}
+  .thumb img{width:100%;height:100%;object-fit:cover}
+  .depth ul{margin:0;padding-left:1.1em;display:grid;gap:6px;color:#E4F2F0}
+  .react{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .rx{border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.06);color:#fff;border-radius:999px;padding:9px 14px;font:500 14px var(--sans);cursor:pointer;transition:background .25s,transform .25s,border-color .25s}
+  .rx:hover{background:rgba(255,255,255,.16);transform:translateY(-2px)}
+  .rx.on{background:#FFB4A8;border-color:#FFB4A8;color:#2A1D14}
+  .compass .slide{display:grid;gap:10px;font-weight:500;color:var(--text)}
+  .compass input[type=range]{width:100%;accent-color:var(--primary);height:28px}
+  .compass small{display:flex;justify-content:space-between;color:var(--muted)}.compass small em{font-style:normal}
+  .result{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px 22px;display:grid;gap:6px;margin-top:8px}
+  .result span{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .result b{font:500 1.5rem var(--serif);color:var(--primary)}
+  .result a{font-weight:600}
+  .form label{display:flex;flex-direction:column;gap:6px;font-weight:500}
+  .form input,.form select,.form textarea{font:inherit;padding:12px;border:1px solid var(--border);border-radius:8px;background:#fff}
+  .sent{color:var(--primary);font-weight:600}
+  .rx-dialog{border:0;border-radius:16px;padding:28px;width:min(92vw,460px)}
+  .rx-dialog::backdrop{background:rgba(10,22,22,.7);backdrop-filter:blur(3px)}
+  .rx-dialog label{display:flex;flex-direction:column;gap:6px;font-weight:500}
+  .rx-dialog input,.rx-dialog textarea{font:inherit;padding:12px;border:1px solid var(--border);border-radius:8px}
+  .rx-dialog b{font:500 1.3rem var(--serif);color:var(--text)}
+</style>
+
+<script>
+  const $ = <T extends Element>(s: string, r: ParentNode = document) => r.querySelector(s) as T;
+  const $$ = <T extends Element>(s: string, r: ParentNode = document) => [...r.querySelectorAll(s)] as T[];
+  const names: Record<string, string> = {};
+  $$<HTMLButtonElement>('.orb').forEach((o) => (names[o.dataset.theme!] = o.querySelector('b')!.textContent!));
+
+  // Themes: switch which worlds are visible.
+  const show = (theme: string, scroll = true) => {
+    $$<HTMLButtonElement>('.orb').forEach((o) => o.setAttribute('aria-selected', String(o.dataset.theme === theme)));
+    $$<HTMLElement>('.world').forEach((w) => (w.hidden = w.dataset.theme !== theme));
+    $('#theme-title').textContent = names[theme];
+    if (scroll) $('#worlds').scrollIntoView({ behavior: 'smooth' });
+  };
+  $$<HTMLButtonElement>('.orb').forEach((o) => o.addEventListener('click', () => show(o.dataset.theme!)));
+
+  // Worlds: tilt toward the cursor, and expand on "Go deeper".
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  $$<HTMLElement>('.world').forEach((w) => {
+    if (!reduce && matchMedia('(hover: hover)').matches) {
+      w.addEventListener('pointermove', (e) => {
+        const r = w.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        w.style.transform = `perspective(900px) rotateY(${x * 5}deg) rotateX(${-y * 5}deg)`;
+      });
+      w.addEventListener('pointerleave', () => (w.style.transform = ''));
+    }
+    const btn = $<HTMLButtonElement>('.deeper', w), depth = $<HTMLElement>('.depth', w);
+    btn.addEventListener('click', () => { depth.hidden = !depth.hidden; btn.setAttribute('aria-expanded', String(!depth.hidden)); });
+  });
+
+  // Concept photos: open larger.
+  const tb = $<HTMLDialogElement>('#thumb-box'), tbImg = $<HTMLImageElement>('img', tb);
+  $$<HTMLButtonElement>('.thumb').forEach((b) => b.addEventListener('click', () => {
+    const i = $<HTMLImageElement>('img', b); tbImg.src = i.currentSrc || i.src; tbImg.alt = i.alt; tb.showModal();
+  }));
+  $('.x', tb).addEventListener('click', () => tb.close());
+  tb.addEventListener('click', (e) => { if (e.target === tb) tb.close(); });
+
+  // Sends a submission to the Netlify form "portal-pulse".
+  const send = (data: Record<string, string>) =>
+    fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ 'form-name': 'portal-pulse', ...data }).toString() });
+
+  // Reactions: ask for a name, then send.
+  const dlg = $<HTMLDialogElement>('#rx-dialog'), rxForm = $<HTMLFormElement>('#rx-form');
+  let pending: HTMLButtonElement | null = null;
+  $$<HTMLButtonElement>('.rx').forEach((b) => b.addEventListener('click', () => {
+    pending = b;
+    $('#rx-title').textContent = `${b.dataset.reaction}: ${b.dataset.concept}`;
+    dlg.showModal();
+  }));
+  dlg.addEventListener('close', async () => {
+    if (dlg.returnValue !== 'send' || !pending) return;
+    const fd = new FormData(rxForm);
+    await send({ concept: pending.dataset.concept!, reaction: pending.dataset.reaction!, name: String(fd.get('name')), message: String(fd.get('message') || '') }).catch(() => {});
+    pending.classList.add('on');
+    pending.textContent = `${pending.dataset.reaction} ✓`;
+    rxForm.reset();
+  });
+
+  // Compass: the highest slider picks the entry point.
+  const sliders = $$<HTMLInputElement>('.compass input[type=range]');
+  const pick = () => {
+    const top = sliders.reduce((a, b) => (+b.value > +a.value ? b : a));
+    const allSame = sliders.every((s) => s.value === top.value);
+    const go = $<HTMLAnchorElement>('#pick-go');
+    if (allSame) { $('#pick').textContent = 'Move the sliders'; go.hidden = true; return; }
+    $('#pick').textContent = names[top.dataset.theme!];
+    go.hidden = false;
+    go.onclick = (e) => { e.preventDefault(); show(top.dataset.theme!); };
+  };
+  sliders.forEach((s) => s.addEventListener('input', pick));
+
+  // Idea form: send without leaving the page.
+  const pf = $<HTMLFormElement>('#pulse-form');
+  pf.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(pf);
+    await send(Object.fromEntries([...fd].filter(([k]) => k !== 'form-name').map(([k, v]) => [k, String(v)])));
+    pf.reset();
+    $<HTMLElement>('.sent', pf).hidden = false;
+  });
+</script>

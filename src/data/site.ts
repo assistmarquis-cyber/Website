@@ -5,13 +5,18 @@ export const site = {
   legal: 'Marquis Alan Experience LLC',
   oneSheet: '/marquis-harmon-speaker-one-sheet.pdf',
   bookUrl: 'https://a.co/d/07B1V4Js',
+  email: 'book@bigpicturearchitect.com',
+  phone: '',
+  responseTime: '48 hours',
 };
 
 export const nav = [
   { href: '/keynotes/', label: 'Keynotes' },
   { href: '/workshops/', label: 'Enterprise Workshops' },
   { href: '/executive-coaching/', label: 'Executive Coaching' },
+  { href: '/mindset-coaching/', label: 'Mindset Coaching' },
   { href: '/irl-productions/', label: 'IRL Productions' },
+  { href: '/maex-gallery/', label: 'MAEx Gallery' },
   { href: '/about/', label: 'About' },
 ];
 
@@ -66,7 +71,11 @@ export const workshops = [
     short: 'Workshop',
     tagline: 'Leadership and AI thought training.',
     summary: 'Leadership and AI thought training. Mind mapping and strategic planning sessions that help leaders think through where AI fits before they build.',
-    outcomes: [['Map where AI fits in your strategy before you build', ''], ['Align leaders on a shared view of priorities and risks', ''], ['Leave with a clear plan for next steps', '']],
+    outcomes: [
+      ['Proven thought patterns', 'Practiced, repeatable ways of thinking that hold up under pressure and keep decisions clear.'],
+      ['Confident with AI tools', 'Thought patterns built for working alongside AI, so leaders know what to ask, what to trust and what to build.'],
+      ['Fluent in web3', 'A grounded understanding of web3 tools and where they create real value for your organization.'],
+    ],
     seo: 'Creative CornerStore: Leadership & AI Thought Training Workshop',
   },
   {
@@ -75,7 +84,7 @@ export const workshops = [
     short: 'Workshop',
     tagline: 'From idea to working prototype in a single session.',
     summary: 'A rapid prototyping and design workshop. Teams go from idea to working prototype in a single session.',
-    outcomes: [['Go from idea to working prototype in a single session', ''], ['Align cross-functional teams around a shared problem', ''], ['Leave with a prototype and a plan to take it forward', '']],
+    outcomes: [] as string[][],
     seo: 'MAEx Hackathon: Rapid Prototyping & Design Workshop',
   },
 ];
@@ -96,3 +105,21 @@ export const engagement = [
   ['Deliver', 'On-site or virtual, for rooms of a dozen executives or a full company audience.'],
   ['Measure', 'Agreed success measures and a post-engagement summary.'],
 ];
+
+export const testimonials = {
+  tunefm: {
+    result: 'Philly Tech Week 2026',
+    quote: 'We wanted to create an environment where artists could collab, create and connect with each other, and Marquis designed and built a great event in Frequency for Philly Tech Week 2026 for us.',
+    who: 'Andrew Antar, Founder & CEO, Tune.FM',
+  },
+  maryland: {
+    result: '12 years of research, organized',
+    quote: 'Marquis helped guide me through the process of not just learning about AI but how to build an AI tool stack that would help me organize 12 years of research and data, manage internal operations, procurement processes, and vendor and key stakeholder relationships. This freed up so much office clutter and mental bandwidth, allowing me to concentrate on critical areas of my work.',
+    who: 'Amber Lace Moore, Corporate Workplace Wellness Manager, State of Maryland Parks Department',
+  },
+  coaching: {
+    result: 'Courage to step up',
+    quote: 'Working with Marquis was a process that challenged me to step into parts of myself that quite frankly I lacked the courage to. He was patient but surgical on identifying points for improvement.',
+    who: 'Mark W., Executive Director',
+  },
+};

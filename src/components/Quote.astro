@@ -1,0 +1,10 @@
+---
+import { ph } from '../data/ph';
+interface Props { result?: string; quote: string; who?: string }
+const { result, quote, who } = Astro.props;
+---
+<figure class="quote">
+  {result && <span class="res" set:html={ph(result)} />}
+  <blockquote set:html={`“${ph(quote)}”`} />
+  {who && <figcaption set:html={ph(who)} />}
+</figure>
