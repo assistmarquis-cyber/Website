@@ -12,8 +12,8 @@ const roles = [
 ];
 const steps = godCoach.payUrl ? [
   ['Pay the ' + godCoach.price + ' setup', 'Check out securely through Stripe. It takes about a minute.'],
-  ['Tell me your goal', 'Fill in the short form below so your setup fits what you want the coach to help with.'],
-  ['Start coaching', 'I set the G.O.D. Coach up in your own Claude account and show you how to get the most from it.'],
+  ['Get your prompt instantly', 'Your G.O.D. Coach prompt and setup steps land in your inbox right after payment.'],
+  ['Get set up with me', 'Reply with your goal and I help you get the coach running in your own Claude account.'],
 ] : [
   ['Request your setup', 'Tell me a little about what you want the coach to help with.'],
   ['Pay the ' + godCoach.price + ' setup', 'I email you a secure payment link, usually within 24 to 48 hours.'],
@@ -54,7 +54,7 @@ const steps = godCoach.payUrl ? [
     <div class="stack g16">
       <span class="eyebrow">Get the G.O.D. Coach</span>
       <h2>{godCoach.payUrl ? 'Pay, then tell me your goal.' : `Request your ${godCoach.price} setup.`}</h2>
-      <p>{godCoach.payUrl ? 'Checkout is secure through Stripe. Then use the form to tell me what you want the coach for, and I\'ll reach out within 24 to 48 hours to set it up.' : 'Tell me what you want to use it for. I\'ll reply with next steps and a secure payment link within 24 to 48 hours.'}</p>
+      <p>{godCoach.payUrl ? 'Checkout is secure through Stripe, and your prompt arrives by email within minutes. Use the form to tell me what you want the coach for, and I\'ll follow up within 24 to 48 hours to help you set it up.' : 'Tell me what you want to use it for. I\'ll reply with next steps and a secure payment link within 24 to 48 hours.'}</p>
       {godCoach.payUrl && <div><a class="btn btn-primary" href={godCoach.payUrl} target="_blank" rel="noopener">Pay {godCoach.price} now ↗</a></div>}
     </div>
     <form class="form card" name="god-coach" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="bot-field">
