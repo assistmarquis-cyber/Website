@@ -1,0 +1,84 @@
+---
+import NeuralCanvas from '../components/NeuralCanvas.astro';
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { godCoach } from '../data/site';
+import god from '../assets/god-framework.jpg';
+const buy = godCoach.payUrl || '#get';
+const roles = [
+  ['Generator', 'Creates', 'Pulls ideas, options and angles out of you faster than you can on your own.'],
+  ['Operator', 'Executes', 'Turns the best idea into concrete next steps you can act on today.'],
+  ['Destroyer', 'Eliminates', 'Calls out what is in the way: the habit, the task or the assumption to cut.'],
+];
+const steps = godCoach.payUrl ? [
+  ['Pay the ' + godCoach.price + ' setup', 'Check out securely through Stripe. It takes about a minute.'],
+  ['Tell me your goal', 'Fill in the short form below so your setup fits what you want the coach to help with.'],
+  ['Start coaching', 'I set the G.O.D. Coach up in your own Claude account and show you how to get the most from it.'],
+] : [
+  ['Request your setup', 'Tell me a little about what you want the coach to help with.'],
+  ['Pay the ' + godCoach.price + ' setup', 'I email you a secure payment link, usually within 24 to 48 hours.'],
+  ['Start coaching', 'I set the G.O.D. Coach up in your own Claude account and show you how to get the most from it.'],
+];
+---
+<Base title="G.O.D. Coach: Your AI Thinking Partner on Claude | Marquis Harmon" description={`The G.O.D. Coach is a Claude coaching prompt built by Marquis Harmon on his G.O.D. Framework: Generator, Operator, Destroyer. ${godCoach.price} one-time setup in your own Claude account.`}>
+  <section class="section mind"><NeuralCanvas />
+    <div class="wrap split even">
+      <div class="stack g22">
+        <span class="eyebrow">G.O.D. Coach · built on Claude</span>
+        <h1 style="font-size:clamp(2.3rem,5.4vw,4rem)">Your own G.O.D. Framework coach, ready when you are.</h1>
+        <p class="lede">The coaching prompt I built on Claude to think the way I teach: generate the ideas, operate on the best one, and destroy what's in the way. I set it up in your Claude account so it's ready the moment we're done.</p>
+        <div class="price-row"><span class="price">{godCoach.price}</span><span class="price-note">one-time setup</span></div>
+        <div class="btn-row"><a class="btn btn-primary" href={buy} {...(godCoach.payUrl ? { target: '_blank', rel: 'noopener' } : {})}>Get set up for {godCoach.price}</a><a class="btn btn-secondary" href="#how">How it works</a></div>
+      </div>
+      <div class="photo wide"><Image src={god} alt="The G.O.D. Framework diagram: Generator, Operator, Destroyer, with mind mastery at the center" widths={[480, 800, 1000]} sizes="(min-width:900px) 45vw, 100vw" loading="eager" /></div>
+    </div>
+  </section>
+
+  <section class="section mint"><div class="wrap">
+    <div class="head"><span class="eyebrow">Three voices, one coach</span><h2>It thinks with you in three modes.</h2></div>
+    <div class="grid c3">
+      {roles.map(([n, v, d]) => <div class="card"><span class="eyebrow">{v}</span><h3>{n}</h3><p>{d}</p></div>)}
+    </div>
+    <p style="margin-top:24px;max-width:60ch">At the center is mind mastery: knowing which mode you need right now. The coach helps you practice that every time you use it.</p>
+  </div></section>
+
+  <section class="section" id="how"><div class="wrap">
+    <div class="head"><span class="eyebrow">How it works</span><h2>Three steps and you're coaching.</h2></div>
+    <ol class="grid c3 steps">
+      {steps.map(([t, d], i) => <li class="card"><span class="num">{i + 1}</span><h3>{t}</h3><p>{d}</p></li>)}
+    </ol>
+    <p class="small" style="margin-top:20px;color:var(--muted)">You'll need your own Claude account. Any Claude plan you choose is billed by Anthropic, separately from the {godCoach.price} setup. The G.O.D. Coach is a thinking tool, not therapy, medical, legal or financial advice.</p>
+  </div></section>
+
+  <section class="section mint" id="get"><div class="wrap split even">
+    <div class="stack g16">
+      <span class="eyebrow">Get the G.O.D. Coach</span>
+      <h2>{godCoach.payUrl ? 'Pay, then tell me your goal.' : `Request your ${godCoach.price} setup.`}</h2>
+      <p>{godCoach.payUrl ? 'Checkout is secure through Stripe. Then use the form to tell me what you want the coach for, and I\'ll reach out within 24 to 48 hours to set it up.' : 'Tell me what you want to use it for. I\'ll reply with next steps and a secure payment link within 24 to 48 hours.'}</p>
+      {godCoach.payUrl && <div><a class="btn btn-primary" href={godCoach.payUrl} target="_blank" rel="noopener">Pay {godCoach.price} now ↗</a></div>}
+    </div>
+    <form class="form card" name="god-coach" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="god-coach" />
+      <p class="hp"><label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+      <div class="row">
+        <label>Full name<input type="text" name="name" required autocomplete="name" /></label>
+        <label>Email<input type="email" name="email" required autocomplete="email" /></label>
+      </div>
+      <label>Do you already have a Claude account?
+        <select name="has-claude"><option>Yes</option><option>No, help me set one up</option><option>Not sure</option></select>
+      </label>
+      <label>What do you want the coach to help you with?<textarea name="goal" rows="4"></textarea></label>
+      <label class="check"><input type="checkbox" name="consent" value="yes" required /><span>I agree to be contacted by email about my G.O.D. Coach setup and understand I can opt out any time.</span></label>
+      <div><button class={godCoach.payUrl ? 'btn btn-secondary' : 'btn btn-primary'} type="submit">{godCoach.payUrl ? 'Send my goal' : 'Request my setup'}</button></div>
+      <p class="small"><a href="/privacy/">Privacy policy</a> &nbsp;·&nbsp; <a href="/terms/">Terms</a></p>
+    </form>
+  </div></section>
+</Base>
+
+<style>
+  .price-row{display:flex;align-items:baseline;gap:12px}
+  .price{font:500 3rem var(--serif);color:#FFB4A8;line-height:1}
+  .price-note{color:#CDE7E4;font-size:15px;letter-spacing:.04em}
+  .steps{list-style:none;padding:0;margin:0}
+  .steps .num{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--primary);color:#fff;font-weight:600}
+</style>

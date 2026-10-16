@@ -28,7 +28,7 @@ const model = [
         <h1 style="font-size:clamp(2.2rem,5vw,3.6rem)">{w.title}</h1>
         <p style="font:500 1.3rem var(--serif);color:var(--primary)">{w.tagline}</p>
         <p class="lede">{w.summary}</p>
-        <div class="btn-row"><a class="btn btn-primary" href="/contact/">Request program details</a></div>
+        <div class="btn-row"><a class="btn btn-primary" href="/contact/">Request program details</a>{w.slug === 'ai-adoption-god-framework' && <a class="btn btn-secondary" href="/god-coach/">Try the G.O.D. Coach</a>}</div>
       </div>
       <div class="photo wide"><Image src={img} alt={alt} widths={[480, 800, 1000]} sizes="(min-width:900px) 45vw, 100vw" /></div>
     </div>

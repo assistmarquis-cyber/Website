@@ -139,3 +139,11 @@ export const affiliations = [
   { name: 'Just Economy Institute', role: 'Fellow, Cohort 4 (2020 to 2021)', url: 'https://justeconomyinstitute.org/all_fellows/marquis-harmon/', cta: 'View fellow profile' },
   { name: 'Tune.FM', role: 'Production partner, Philly Tech Week 2026', url: 'https://tune.fm/', cta: 'Visit Tune.FM' },
 ];
+
+// G.O.D. Coach: a Claude coaching prompt Marquis sets up for buyers.
+// payUrl: paste a payment link (Stripe, PayPal, Square) here and the buy button goes straight to it.
+// Left empty, the button scrolls to the request form and Marquis emails a payment link.
+export const godCoach = {
+  price: '$88',
+  payUrl: 'https://buy.stripe.com/4gMcN53ek9BY3DQ4jDaZi04',
+};
