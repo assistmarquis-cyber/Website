@@ -1,0 +1,137 @@
+---
+import NeuralCanvas from '../../components/NeuralCanvas.astro';
+import Base from '../../layouts/Base.astro';
+const steps = [
+  ['Apply', 'Five quick questions about your work and the tasks eating your week.'],
+  ['Fit call', 'Twenty minutes. We pick the three real tasks you want Claude to take on.'],
+  ['Claude Audit', 'A short questionnaire on your time, tools, voice and goals, so our first session is spent building, not explaining.'],
+  ['First win', 'Ninety minutes in your own Claude account. We set it up to sound like you and finish one real task live.'],
+  ['Daily reps', 'Ten minutes a day on real work for two weeks, with check-ins from me when you win or get stuck.'],
+  ['Build and graduate', 'We build one workflow that saves you hours every week, measure the time you got back, and hand you your playbook.'],
+];
+const god = [
+  ['Generator', 'Draft, brainstorm and research with Claude, in your voice, not a generic one.'],
+  ['Operator', 'Turn wins into systems: projects with your context, saved prompts, a weekly workflow.'],
+  ['Destroyer', 'Cut the tasks you should not be doing, and set the rules: what never goes into AI, check every fact, a human signs off.'],
+];
+const offers = [
+  ['Claude Audit', 'One 60 minute session on your real work plus a written action map of what to hand to Claude next.'],
+  ['Claude Sprint', 'Two sessions plus two weeks of daily reps and check-ins. You leave with a workflow that saves hours every week.'],
+  ['Team Workshop', 'The G.O.D. Framework for your whole team, built on your real tasks, then one on one coaching for two or three leads.'],
+];
+const faq = [
+  ['Who is this for?', 'Executives, founders, nonprofit and impact teams, and everyday people who want AI to give them time back without losing their own voice.'],
+  ['Do I need to be technical?', 'No. If you can write an email, you can do this. We work on the tasks you already do.'],
+  ['Which plan do I need?', 'A paid Claude plan works best. We set it up together in your own account. I never ask for your passwords.'],
+  ['What about private data?', 'Before we start, we agree on what never goes into AI, like donor, client, health or HR data, and follow your organization\'s rules.'],
+  ['What happens after I apply?', 'I review every application personally and reply within 24 to 48 hours to set up your fit call.'],
+  ['Do you guarantee hours saved?', 'No. We measure the real number together at the end. Results depend on the reps you put in.'],
+];
+---
+<Base title="Claude Coaching | Marquis Harmon" description="Learn to use Claude effectively on your real work. AI brings general intelligence. You bring specific intelligence. One on one coaching and team workshops.">
+  <section class="section mind"><NeuralCanvas />
+    <div class="wrap stack g22" style="max-width:820px">
+      <span class="eyebrow">Claude coaching</span>
+      <h1 style="color:#fff;font-size:clamp(2.4rem,5.5vw,4rem)">AI brings general intelligence. You bring specific intelligence.</h1>
+      <p class="lede" style="color:#DCCFBF">I teach you to make Claude work like you, on your real work. You leave our first session with one real task done.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#apply">Apply for a Claude Audit</a>
+        <a class="btn btn-secondary" href="#how">See how it works</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-label="The challenge">
+    <div class="wrap split">
+      <div class="stack g16"><span class="eyebrow">The challenge</span><h2>You have the tool. It still doesn't feel like yours.</h2></div>
+      <div class="pain">
+        <div><span class="n">01</span><div><h3>Generic in, generic out</h3><p>Without your context and voice, AI writes like everyone else.</p></div></div>
+        <div><span class="n">02</span><div><h3>Tips don't stick</h3><p>Videos and prompt lists fade. Reps on your own work are what build the habit.</p></div></div>
+        <div><span class="n">03</span><div><h3>No rules, no trust</h3><p>Without clear lines on privacy and fact checking, people stop using it, or use it carelessly.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section mint" id="how">
+    <div class="wrap">
+      <div class="head"><h2>How it works</h2></div>
+      <div class="grid c3 model">
+        {steps.map(([h, p], i) => <div><span class="n">0{i + 1}</span><h3>{h}</h3><p>{p}</p></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head"><h2>The curriculum: the G.O.D. Framework</h2></div>
+      <div class="grid c3">
+        {god.map(([t, d]) => <article class="card"><h3>{t}</h3><p>{d}</p></article>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section dark">
+    <div class="wrap split">
+      <div class="stack g16"><h2>Built for brains that move fast</h2></div>
+      <p>I was diagnosed with ADHD at 8. Getting me to sit down was impossible. Now I build systems that move at my speed, and I teach the same way: short sessions, real tasks, one rep a day, and an accountability partner who checks in. No theory weeks.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head"><h2>Ways to work together</h2></div>
+      <div class="grid c3">
+        {offers.map(([t, d]) => <article class="card"><h3>{t}</h3><p>{d}</p><a class="price-link" href="#apply">Inquire for pricing →</a></article>)}
+      </div>
+      <p style="margin-top:28px">Bringing AI to a whole organization? See <a href="/workshops/ai-adoption-god-framework/">AI Adoption with the G.O.D. Framework</a>.</p>
+    </div>
+  </section>
+
+  <section class="section mint">
+    <div class="wrap">
+      <div class="head"><h2>FAQ</h2></div>
+      <div class="grid c2">
+        {faq.map(([q, a]) => <div class="card"><h3>{q}</h3><p>{a}</p></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="apply">
+    <div class="wrap split">
+      <div class="stack g22">
+        <h2>Ready to make Claude work like you?</h2>
+        <p>Apply for a Claude Audit. It takes five minutes.</p>
+      </div>
+      <div class="card">
+        <form class="form" name="claude-application" method="POST" action="/claude-coaching/thanks/" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="claude-application" />
+          <p class="hp"><label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+          <div class="row">
+            <label>Full name<input type="text" name="name" required autocomplete="name" /></label>
+            <label>Email<input type="email" name="email" required autocomplete="email" /></label>
+          </div>
+          <label>What is your role, and who do you serve?<input type="text" name="role" required /></label>
+          <label>What 3 tasks eat most of your week?<textarea name="tasks" rows="4" required></textarea></label>
+          <div class="row">
+            <label>How do you use AI today?
+              <select name="ai_use" required><option value="">Choose one</option><option>Never</option><option>A little</option><option>Daily</option></select>
+            </label>
+            <label>How do you learn best?
+              <select name="learn" required><option value="">Choose one</option><option>Show me</option><option>Let me try</option><option>Give me a checklist</option><option>All three</option></select>
+            </label>
+          </div>
+          <label>What would 5 hours back each week let you do?<textarea name="five_hours" rows="3" required></textarea></label>
+          <div class="row">
+            <label>Is this for you or a team?
+              <select name="for" required><option value="">Choose one</option><option>Just me</option><option>My team</option></select>
+            </label>
+            <label>How did you hear about me?<input type="text" name="referral" /></label>
+          </div>
+          <label class="check"><input type="checkbox" name="consent" value="yes" required /><span>I agree to be contacted by email about my application and understand I can opt out any time.</span></label>
+          <div><button class="btn btn-primary" type="submit">Submit application</button></div>
+          <p class="small"><a href="/privacy/">Privacy policy</a> &nbsp;·&nbsp; <a href="/terms/">Terms</a></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</Base>

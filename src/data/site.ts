@@ -15,6 +15,7 @@ export const nav = [
   { href: '/workshops/', label: 'Enterprise Workshops' },
   { href: '/executive-coaching/', label: 'Executive Coaching' },
   { href: '/mindset-coaching/', label: 'Mindset Coaching' },
+  { href: '/claude-coaching/', label: 'Claude Coaching' },
   { href: '/irl-productions/', label: 'IRL Productions' },
   { href: '/maex-gallery/', label: 'MAEx Gallery' },
   { href: '/about/', label: 'About' },
