@@ -1,5 +1,5 @@
 // Netlify runs this automatically after every verified form submission.
-// It sends the "Got your application" auto-reply for Mindset Coaching applications
+// It sends the "Got your application" auto-reply for Mindset and Claude Coaching applications
 // from book@bigpicturearchitect.com through Hostinger's mail server.
 //
 // Needs these Netlify environment variables, set in the Netlify UI (never in code):
@@ -8,16 +8,14 @@
 import nodemailer from 'nodemailer';
 
 const FROM = process.env.SMTP_USER || 'book@bigpicturearchitect.com';
-const FORMS = ['mindset-application'];
+const FORMS = ['mindset-application', 'claude-application'];
 // Postal address for the email footer (CAN-SPAM). Kept out of the public repo.
 const ADDRESS = process.env.MAILING_ADDRESS || '';
 
 const firstName = (name = '') => name.trim().split(/\s+/)[0] || 'there';
 
-const body = (name) => `Hi ${firstName(name)}, thanks for applying. I read every application myself and will reply within 24 to 48 hours with next steps. In the meantime, there is nothing you need to do.
-
-If you ever need urgent help, call or text 988 or call 911.
-
+const body = (name, form) => `Hi ${firstName(name)}, thanks for applying. I read every application myself and will reply within 24 to 48 hours with next steps. In the meantime, there is nothing you need to do.
+${form === 'mindset-application' ? '\nIf you ever need urgent help, call or text 988 or call 911.\n' : ''}
 Marquis
 
 Marquis Alan Experience LLC${ADDRESS ? `, ${ADDRESS}` : ''}. You received this because you submitted an application at bigpicturearchitect.com. To stop receiving emails, reply "unsubscribe."`;
@@ -44,7 +42,7 @@ export const handler = async (event) => {
       from: `Marquis Harmon <${FROM}>`,
       to: email,
       subject: 'Got your application',
-      text: body(name),
+      text: body(name, payload.form_name),
     });
   } catch (err) {
     // Never fail the submission because the auto-reply couldn't send.

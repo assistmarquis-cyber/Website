@@ -1,0 +1,103 @@
+---
+import Base from '../../layouts/Base.astro';
+// Detailed intake, sent to paid clients in the welcome email. Not linked from the nav.
+type Q = { name: string; label: string; type?: 'text' | 'area' | 'select'; options?: string[]; required?: boolean };
+const sections: { title: string; note?: string; qs: Q[] }[] = [
+  { title: 'A. You and your work', qs: [
+    { name: 'organization', label: 'Your role and organization', required: true },
+    { name: 'serve', label: 'Who do you serve, and what does a great week look like for them?', type: 'area' },
+    { name: 'measured_on', label: 'What are you measured on? (revenue, donors raised, programs delivered, team output)' },
+    { name: 'reporting', label: 'Who do you report to, and who reports to you?' },
+  ]},
+  { title: 'B. Time audit', note: 'Where the hours go.', qs: [
+    { name: 'top_tasks', label: 'List the 5 tasks that take the most time each week, with rough hours for each.', type: 'area', required: true },
+    { name: 'dread', label: 'Which of those do you dread or keep putting off?', type: 'area' },
+    { name: 'relief', label: 'Which task, if it vanished tomorrow, would give you the most relief?' },
+    { name: 'write_most', label: 'What do you write most? (emails, reports, proposals, grants, posts, board updates)' },
+    { name: 'read_most', label: 'What do you read most? (contracts, research, inbox, data, applications)' },
+    { name: 'repeat', label: 'What do you repeat every week that follows the same steps?', type: 'area' },
+  ]},
+  { title: 'C. Your AI starting point', qs: [
+    { name: 'tools_tried', label: 'Which AI tools have you tried? (Claude, ChatGPT, Copilot, Gemini, none)' },
+    { name: 'frequency', label: 'How often do you use them?', type: 'select', options: ['Never', 'Monthly', 'Weekly', 'Daily'] },
+    { name: 'helped_failed', label: 'One time AI helped you. One time it let you down.', type: 'area' },
+    { name: 'confidence', label: 'How confident are you using AI today?', type: 'select', options: ['1 (not at all)', '2', '3', '4', '5 (very)'] },
+    { name: 'worries', label: 'What worries you about AI? (accuracy, privacy, losing your voice, job impact, cost)', type: 'area' },
+  ]},
+  { title: 'D. Your tools and setup', qs: [
+    { name: 'daily_tools', label: 'Which tools run your day? (Gmail or Outlook, Google Drive or OneDrive, Slack or Teams, a CRM, Notion, Canva)' },
+    { name: 'claude_plan', label: 'Do you have a paid Claude plan?', type: 'select', options: ['Not yet', 'Yes, personal', 'Yes, through work'] },
+    { name: 'org_rules', label: 'Does your organization have rules about AI use? Who approves it?', type: 'area' },
+    { name: 'never_ai', label: 'What must never go into AI? (donor or client data, health info, HR, legal, financial)', type: 'area', required: true },
+  ]},
+  { title: 'E. Your voice', qs: [
+    { name: 'samples', label: 'Paste 2 to 3 things you wrote that sound most like you, or links to them. Leave out anything private.', type: 'area' },
+    { name: 'three_words', label: 'Three words people use to describe how you communicate' },
+    { name: 'never_words', label: 'Words or phrases you never want to see in your writing' },
+  ]},
+  { title: 'F. How you work best', qs: [
+    { name: 'learn', label: 'How do you learn best?', type: 'select', options: ['Show me', 'Let me try', 'Give me a checklist', 'All three'] },
+    { name: 'focus', label: 'When in the day is your focus sharpest?' },
+    { name: 'stops_you', label: 'What usually stops you from finishing something you started?', type: 'area' },
+    { name: 'brain', label: 'Anything about how your brain works that helps me coach you better? (optional, share only what you want, no medical details needed)', type: 'area' },
+  ]},
+  { title: 'G. Goals and proof', qs: [
+    { name: 'thirty_days', label: 'If this works, what is different in 30 days?', type: 'area', required: true },
+    { name: 'hours_back', label: 'How many hours a week do you want back, and what will you do with them?' },
+    { name: 'session_one_task', label: 'The one task you want done live in Session 1', type: 'area', required: true },
+    { name: 'worth_it', label: 'How will you know this was worth it? (a number, a feeling, a result)' },
+  ]},
+];
+const team: Q[] = [
+  { name: 'team_size', label: 'How many people will use Claude, and in which roles?' },
+  { name: 'team_tasks', label: 'Which team tasks repeat the most? (grant drafts, donor updates, volunteer emails, board reports, reports to funders)', type: 'area' },
+  { name: 'rollout_owner', label: 'Who owns the rollout after the workshop?' },
+  { name: 'board_yes', label: 'What would make your ED or board say yes to AI?', type: 'area' },
+];
+---
+<Base title="Claude Audit | Marquis Harmon" description="Your Claude Audit: a short intake so our first session is spent building." noindex>
+  <section class="section">
+    <div class="wrap stack g22" style="max-width:820px">
+      <span class="eyebrow">Claude Audit</span>
+      <h1 style="font-size:clamp(2.2rem,5vw,3.4rem)">Let's find your first win.</h1>
+      <p class="lede">This takes 20 to 30 minutes. Please send it at least 48 hours before Session 1. I read every answer before we meet, so we spend our time building, not explaining. Short answers are fine. Skip anything you are not sure about.</p>
+      <form class="form card" name="claude-audit" method="POST" action="/claude-coaching/audit-thanks/" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="claude-audit" />
+        <p class="hp"><label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+        <div class="row">
+          <label>Full name<input type="text" name="name" required autocomplete="name" /></label>
+          <label>Email<input type="email" name="email" required autocomplete="email" /></label>
+        </div>
+        {sections.map((s) => (
+          <fieldset class="audit-part">
+            <legend><h2>{s.title}</h2>{s.note && <span class="small">{s.note}</span>}</legend>
+            {s.qs.map((q) => (
+              <label>{q.label}{q.required && ' *'}
+                {q.type === 'area' ? <textarea name={q.name} rows="3" required={q.required} /> :
+                 q.type === 'select' ? <select name={q.name} required={q.required}><option value="">Choose one</option>{q.options!.map((o) => <option>{o}</option>)}</select> :
+                 <input type="text" name={q.name} required={q.required} />}
+              </label>
+            ))}
+          </fieldset>
+        ))}
+        <details class="audit-part">
+          <summary><h2 style="display:inline">For teams</h2> <span class="small">Open if you are bringing Claude to a team.</span></summary>
+          {team.map((q) => (
+            <label>{q.label}{q.type === 'area' ? <textarea name={q.name} rows="3" /> : <input type="text" name={q.name} />}</label>
+          ))}
+        </details>
+        <label class="check"><input type="checkbox" name="consent" value="yes" required /><span>I agree that Marquis may use these answers to prepare my coaching sessions. I left out anything confidential.</span></label>
+        <div><button class="btn btn-primary" type="submit">Send my Claude Audit</button></div>
+        <p class="small">* Required. <a href="/privacy/">Privacy policy</a> &nbsp;·&nbsp; <a href="/terms/">Terms</a></p>
+      </form>
+    </div>
+  </section>
+</Base>
+<style>
+  .audit-part { border: 0; padding: 0; margin: 12px 0 0; display: grid; gap: 16px; }
+  .audit-part legend, .audit-part summary { margin-bottom: 8px; }
+  .audit-part h2 { font-size: 1.4rem; margin: 0; }
+  .audit-part summary { cursor: pointer; }
+  .audit-part[open] summary { margin-bottom: 16px; }
+  details.audit-part > label { display: grid; margin-top: 16px; }
+</style>
