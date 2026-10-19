@@ -2,6 +2,9 @@
 import NeuralCanvas from '../../components/NeuralCanvas.astro';
 import Base from '../../layouts/Base.astro';
 import { ph } from '../../data/ph';
+import { patternAudit, patternAuditHref } from '../../data/site';
+import Snapshot from '../../components/Snapshot.astro';
+import portrait from '../../assets/portrait.jpg';
 const steps = [
   ['Listen', 'We start with what is hardest right now, in your business, money, family, or thinking. You get a space you trust to say it out loud.'],
   ['Name the patterns', 'We identify the impulses and instincts running your decisions and assess which ones serve you.'],
@@ -15,6 +18,7 @@ const offers = [
 ];
 const faq = [
   ['Who is this for?', 'Founders, executives, and creators who are under pressure and want to act with more clarity and speed.'],
+  ['How does the Pattern Audit work?', `You pay ${patternAudit.price} to book. I email you within 24-48 hours to set the time, then we meet for 60 to 90 minutes and you leave with a written action map.`],
   ['What happens after I apply?', 'I review every application personally and reply within 24-48 hours to schedule your paid discovery call or Pattern Audit.'],
   ['Is it confidential?', 'Yes, within the limits described in the coaching agreement, which you will see before we begin.'],
   ['Do you guarantee results?', 'No. I commit to showing up fully and holding you accountable. Results depend on the action you take.'],
@@ -27,7 +31,7 @@ const faq = [
       <h1 style="color:#fff;font-size:clamp(2.4rem,5.5vw,4rem)">Know your voice. Trust your instinct. Act fast.</h1>
       <p class="lede" style="color:#DCCFBF">Mindset coaching and accountability for people carrying real pressure in business, money, and family.</p>
       <div class="btn-row">
-        <a class="btn btn-primary" href="#apply">Apply for a Pattern Audit</a>
+        <a class="btn btn-primary" href={patternAuditHref}>Book a Pattern Audit, {patternAudit.price}</a>
         <a class="btn btn-secondary" href="#how">See how it works</a>
       </div>
     </div>
@@ -57,7 +61,9 @@ const faq = [
     <div class="wrap">
       <div class="head"><h2>Ways to work together</h2></div>
       <div class="grid c3">
-        {offers.map(([t, d]) => <article class="card"><h3>{t}</h3><p>{d}</p><a class="price-link" href="#apply">Inquire for pricing →</a></article>)}
+        {offers.map(([t, d], i) => i === 0
+          ? <article class="card"><h3>{t}</h3><p class="offer-price">{patternAudit.price}</p><p>{d}</p><a class="price-link" href={patternAuditHref}>Book it for {patternAudit.price} →</a></article>
+          : <article class="card"><h3>{t}</h3><p>{d}</p><a class="price-link" href="#apply">Inquire for pricing →</a></article>)}
       </div>
       <p style="margin-top:28px">Looking for a deeper, ground-up engagement for senior leaders? See the <a href="/executive-coaching/">7 Layer Strategy</a>.</p>
     </div>
@@ -90,7 +96,9 @@ const faq = [
     <div class="wrap split">
       <div class="stack g22">
         <h2>Ready to act on what you already know?</h2>
-        <p>Apply for a Pattern Audit.</p>
+        <p>Start with a {patternAudit.price} Pattern Audit, or apply below and tell me where you are.</p>
+        {patternAudit.payUrl && <div><a class="btn btn-primary" href={patternAuditHref}>Book a Pattern Audit, {patternAudit.price}</a></div>}
+        <Snapshot src={portrait} alt="Marquis Harmon seated, chin in hand, listening" cap="This is how I listen. Tell me what's in the way." pos="center 35%" />
       </div>
       <div class="card">
         <p class="notice" role="note"><b>If you are in crisis or thinking about harming yourself, call or text 988 or call 911. This form is not monitored in real time.</b></p>

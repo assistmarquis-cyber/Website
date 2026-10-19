@@ -1,6 +1,8 @@
 // Stripe calls this after a successful checkout. For a G.O.D. Coach purchase it
 // emails the buyer their prompt link and sends Marquis a sale notice, from
-// book@bigpicturearchitect.com through Hostinger's mail server.
+// book@bigpicturearchitect.com through Hostinger's mail server. A Pattern Audit
+// costs the same $88, so its buttons tag the checkout with
+// client_reference_id=pattern_audit; those get a booking email instead.
 //
 // Webhook URL to add in Stripe (event: checkout.session.completed):
 //   https://bigpicturearchitect.com/.netlify/functions/stripe-webhook
@@ -37,6 +39,17 @@ export const verify = (raw, header = '', secret = '', now = Date.now() / 1000) =
 
 const firstName = (name = '') => name.trim().split(/\s+/)[0] || 'there';
 
+const auditEmail = (name) => `Hi ${firstName(name)}, thank you for booking your Pattern Audit.
+
+I'll email you within 24 to 48 hours to set our time. To speed that up, reply with two or three times that work for you this week.
+
+Before we meet, think about the one pressure you most want to move. We will spend 60 to 90 minutes on it, and you will leave with a written action map.
+
+Marquis
+
+Mindset coaching is accountability and action-focused work. It is not therapy, counseling, or medical care. If you are in crisis, call or text 988 or call 911.
+Marquis Alan Experience LLC${ADDRESS ? `, ${ADDRESS}` : ''}. You received this because you booked a Pattern Audit at bigpicturearchitect.com.`;
+
 const buyerEmail = (name, url) => `Hi ${firstName(name)}, thank you for getting the G.O.D. Coach.
 
 Open your coach here:
@@ -56,6 +69,33 @@ Marquis
 The G.O.D. Coach is a thinking tool, not therapy, medical, legal or financial advice. Any Claude plan is billed by Anthropic separately.
 Marquis Alan Experience LLC${ADDRESS ? `, ${ADDRESS}` : ''}. You received this because you purchased the G.O.D. Coach at bigpicturearchitect.com.`;
 
+const mailer = () => nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.hostinger.com',
+  port: 465,
+  secure: true,
+  auth: { user: FROM, pass: process.env.SMTP_PASSWORD },
+});
+
+const sendAudit = async (s, email, name) => {
+  if (!email || !process.env.SMTP_PASSWORD) {
+    console.error('Pattern Audit email skipped:', !email ? 'no buyer email' : 'SMTP_PASSWORD not set');
+    return { statusCode: 500, body: 'Not configured' };
+  }
+  const transport = mailer();
+  try {
+    await transport.sendMail({ from: `Marquis Harmon <${FROM}>`, to: email, replyTo: FROM, subject: 'Your Pattern Audit is booked', text: auditEmail(name) });
+  } catch (err) {
+    console.error('Pattern Audit email failed:', err.message);
+    return { statusCode: 500, body: 'Email failed' }; // Stripe retries
+  }
+  try {
+    await transport.sendMail({ from: `Pattern Audit bookings <${FROM}>`, to: FROM, subject: `New Pattern Audit booking: ${name || email}`, text: `${name || 'A buyer'} (${email}) paid $${(s.amount_total / 100).toFixed(2)} for a Pattern Audit. Their booking email has been sent. Email them within 24-48 hours to set a time.\n\nStripe checkout session: ${s.id}` });
+  } catch (err) {
+    console.error('Audit notice failed:', err.message);
+  }
+  return { statusCode: 200, body: 'audit sent' };
+};
+
 export const handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method not allowed' };
   const raw = event.isBase64Encoded ? Buffer.from(event.body || '', 'base64').toString('utf8') : event.body || '';
@@ -73,6 +113,7 @@ export const handler = async (event) => {
 
   const email = s.customer_details?.email;
   const name = s.customer_details?.name || '';
+  if (s.client_reference_id === 'pattern_audit') return sendAudit(s, email, name);
   const url = process.env.GOD_COACH_URL;
   if (!email || !url || !process.env.SMTP_PASSWORD) {
     console.error('G.O.D. Coach email skipped:', !email ? 'no buyer email' : !url ? 'GOD_COACH_URL not set' : 'SMTP_PASSWORD not set');
@@ -80,12 +121,7 @@ export const handler = async (event) => {
     return { statusCode: 500, body: 'Not configured' };
   }
 
-  const transport = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.hostinger.com',
-    port: 465,
-    secure: true,
-    auth: { user: FROM, pass: process.env.SMTP_PASSWORD },
-  });
+  const transport = mailer();
 
   try {
     await transport.sendMail({ from: `Marquis Harmon <${FROM}>`, to: email, replyTo: FROM, subject: 'Your G.O.D. Coach is ready', text: buyerEmail(name, url) });

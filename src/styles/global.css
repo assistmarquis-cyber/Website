@@ -196,6 +196,7 @@ input:focus,select:focus,textarea:focus,.btn:focus-visible,a:focus-visible{outli
 .legal ul{margin:0;padding-left:1.2em;display:grid;gap:8px}
 .site-footer .legal-line{display:flex;flex-direction:column;gap:4px}
 .price-link{margin-top:auto;font-weight:600;color:var(--primary)}
+.offer-price{font-family:var(--serif);font-size:1.8rem;font-weight:500;color:var(--primary);margin:0}
 /* teleport page transitions (browsers without view transitions just load the page) */
 @view-transition{navigation:auto}
 .site-header{view-transition-name:site-header}
