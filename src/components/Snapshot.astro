@@ -3,10 +3,10 @@
 // Used on the coaching funnel pages to keep things personal, not polished.
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-interface Props { src: ImageMetadata; alt: string; cap?: string; tilt?: number; eager?: boolean; sizes?: string }
-const { src, alt, cap, tilt = -2, eager = false, sizes = '(min-width:900px) 30vw, 80vw' } = Astro.props;
+interface Props { src: ImageMetadata; alt: string; cap?: string; tilt?: number; eager?: boolean; sizes?: string; pos?: string }
+const { src, alt, cap, tilt = -2, eager = false, sizes = '(min-width:900px) 30vw, 80vw', pos } = Astro.props;
 ---
 <figure class="snap" style={`--tilt:${tilt}deg`}>
-  <Image src={src} alt={alt} widths={[360, 640, 900]} sizes={sizes} loading={eager ? 'eager' : 'lazy'} />
+  <Image src={src} alt={alt} widths={[360, 640, 900]} sizes={sizes} loading={eager ? 'eager' : 'lazy'} style={pos ? `object-position:${pos}` : undefined} />
   {cap && <figcaption>{cap}</figcaption>}
 </figure>

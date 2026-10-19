@@ -3,6 +3,8 @@ import NeuralCanvas from '../../components/NeuralCanvas.astro';
 import Base from '../../layouts/Base.astro';
 import { ph } from '../../data/ph';
 import { patternAudit, patternAuditHref } from '../../data/site';
+import Snapshot from '../../components/Snapshot.astro';
+import portrait from '../../assets/portrait.jpg';
 const steps = [
   ['Listen', 'We start with what is hardest right now, in your business, money, family, or thinking. You get a space you trust to say it out loud.'],
   ['Name the patterns', 'We identify the impulses and instincts running your decisions and assess which ones serve you.'],
@@ -96,6 +98,7 @@ const faq = [
         <h2>Ready to act on what you already know?</h2>
         <p>Start with a {patternAudit.price} Pattern Audit, or apply below and tell me where you are.</p>
         {patternAudit.payUrl && <div><a class="btn btn-primary" href={patternAuditHref}>Book a Pattern Audit, {patternAudit.price}</a></div>}
+        <Snapshot src={portrait} alt="Marquis Harmon seated, chin in hand, listening" cap="This is how I listen. Tell me what's in the way." pos="center 35%" />
       </div>
       <div class="card">
         <p class="notice" role="note"><b>If you are in crisis or thinking about harming yourself, call or text 988 or call 911. This form is not monitored in real time.</b></p>
