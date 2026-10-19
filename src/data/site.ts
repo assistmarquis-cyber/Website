@@ -145,6 +145,17 @@ export const affiliations = [
 // payUrl: paste a payment link (Stripe, PayPal, Square) here and the buy button goes straight to it.
 // After payment, Stripe should redirect to /god-coach/thanks/; netlify/functions/stripe-webhook.mjs emails the prompt.
 // Left empty, the button scrolls to the request form and Marquis emails a payment link.
+// Pattern Audit: the $88 entry offer on /mindset-coaching/.
+// payUrl: paste the Stripe payment link here. The buttons add ?client_reference_id=pattern_audit
+// so netlify/functions/stripe-webhook.mjs knows it is an audit, not a G.O.D. Coach sale (same price).
+// In Stripe, set the link's after-payment redirect to /mindset-coaching/booked/.
+// Left empty, the buttons scroll to the application form instead.
+export const patternAudit = {
+  price: '$88',
+  payUrl: '',
+};
+export const patternAuditHref = patternAudit.payUrl ? `${patternAudit.payUrl}?client_reference_id=pattern_audit` : '#apply';
+
 export const godCoach = {
   price: '$88',
   payUrl: 'https://buy.stripe.com/4gMcN53ek9BY3DQ4jDaZi04',
