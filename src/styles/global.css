@@ -214,3 +214,10 @@ input:focus,select:focus,textarea:focus,.btn:focus-visible,a:focus-visible{outli
 .mind .chips span{color:#E4F2F0;border-color:rgba(143,208,201,.5)}
 .mind p[style*="--primary"]{color:#FFB4A8!important}
 .mind p[style*="--muted"]{color:#B8D9D5!important}
+/* snapshots: casual tilted photos on the coaching funnel */
+.snap{background:#fff;padding:10px 10px 14px;border-radius:6px;box-shadow:0 14px 34px rgba(15,46,45,.18);transform:rotate(var(--tilt,-2deg));transition:transform .5s cubic-bezier(.2,.7,.2,1);max-width:440px;width:100%;justify-self:center}
+.snap:hover{transform:rotate(0) scale(1.02)}
+.snap img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:3px}
+.snap figcaption{font-family:"Segoe Print","Bradley Hand","Comic Sans MS",cursive;font-size:15px;color:#2B2B2B;margin-top:10px;line-height:1.35;text-align:center}
+.snaps{display:grid;gap:34px;align-items:start}
+@media(min-width:760px){.snaps{grid-template-columns:repeat(3,1fr)}.snaps .snap:nth-child(2){margin-top:34px}}

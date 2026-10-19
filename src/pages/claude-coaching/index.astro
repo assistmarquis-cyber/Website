@@ -1,6 +1,13 @@
 ---
 import NeuralCanvas from '../../components/NeuralCanvas.astro';
 import Base from '../../layouts/Base.astro';
+import Snapshot from '../../components/Snapshot.astro';
+import purpose from '../../assets/gallery/hive-purpose.jpg';
+import sfDay2 from '../../assets/gallery/hive-sf-day2.jpg';
+import welcome from '../../assets/gallery/hive-welcome.jpg';
+import roundtable from '../../assets/gallery/hive-roundtable.jpg';
+import rigging from '../../assets/irl-1.jpg';
+import studio from '../../assets/studio-planning.jpg';
 const steps = [
   ['Apply', 'Five quick questions about your work and the tasks eating your week.'],
   ['Fit call', 'Twenty minutes. We pick the three real tasks you want Claude to take on.'],
@@ -30,7 +37,8 @@ const faq = [
 ---
 <Base title="Claude Coaching | Marquis Harmon" description="Learn to use Claude effectively on your real work. AI brings general intelligence. You bring specific intelligence. One on one coaching and team workshops.">
   <section class="section mind"><NeuralCanvas />
-    <div class="wrap stack g22" style="max-width:820px">
+    <div class="wrap split hero-split">
+     <div class="stack g22">
       <span class="eyebrow">Claude coaching</span>
       <h1 style="color:#fff;font-size:clamp(2.4rem,5.5vw,4rem)">AI brings general intelligence. You bring specific intelligence.</h1>
       <p class="lede" style="color:#DCCFBF">I teach you to make Claude work like you, on your real work. You leave our first session with one real task done.</p>
@@ -38,6 +46,8 @@ const faq = [
         <a class="btn btn-primary" href="#apply">Apply for a Claude Audit</a>
         <a class="btn btn-secondary" href="#how">See how it works</a>
       </div>
+     </div>
+      <Snapshot src={welcome} alt="Marquis Harmon and the Hive team, in red shirts, welcoming the community from the stage" cap="Hi. That's me with the Hive crew, red shirts and all." tilt={2.5} eager sizes="(min-width:900px) 34vw, 80vw" />
     </div>
   </section>
 
@@ -61,6 +71,17 @@ const faq = [
     </div>
   </section>
 
+  <section class="section" aria-label="Behind the scenes">
+    <div class="wrap">
+      <div class="head"><span class="eyebrow">Off the record</span><h2>No suits required. This is how I actually work.</h2></div>
+      <div class="snaps">
+        <Snapshot src={roundtable} alt="Marquis Harmon, in a red Hive shirt, at a small-group roundtable" cap="Small table, real problems. That's the whole method." tilt={-2.5} />
+        <Snapshot src={studio} alt="A chalkboard wall in the studio covered in planning notes" cap="Where the plans start: a chalk wall and too much coffee." tilt={1.5} />
+        <Snapshot src={rigging} alt="The IRL Productions crew on the floor rigging a stage" cap="Behind the scenes with the IRL Productions crew. Nobody's too big for the floor." tilt={-1} />
+      </div>
+    </div>
+  </section>
+
   <section class="section">
     <div class="wrap">
       <div class="head"><h2>The curriculum: the G.O.D. Framework</h2></div>
@@ -72,8 +93,10 @@ const faq = [
 
   <section class="section dark">
     <div class="wrap split">
-      <div class="stack g16"><h2>Built for brains that move fast</h2></div>
-      <p>I was diagnosed with ADHD at 8. Getting me to sit down was impossible. Now I build systems that move at my speed, and I teach the same way: short sessions, real tasks, one rep a day, and an accountability partner who checks in. No theory weeks.</p>
+      <div class="stack g22"><h2>Built for brains that move fast</h2>
+        <Snapshot src={purpose} alt="Marquis Harmon, mic in hand, energizing a seated audience at a Hive session" cap="Me, mid-story. Sitting still was never the plan." tilt={-2} />
+      </div>
+      <p style="align-self:center">I was diagnosed with ADHD at 8. Getting me to sit down was impossible. Now I build systems that move at my speed, and I teach the same way: short sessions, real tasks, one rep a day, and an accountability partner who checks in. No theory weeks.</p>
     </div>
   </section>
 
@@ -100,7 +123,8 @@ const faq = [
     <div class="wrap split">
       <div class="stack g22">
         <h2>Ready to make Claude work like you?</h2>
-        <p>Apply for a Claude Audit. It takes five minutes.</p>
+        <p>Apply for a Claude Audit. It takes five minutes. I read every one myself.</p>
+        <Snapshot src={sfDay2} alt="Marquis Harmon high-fiving participants to kick off Day 2 at Hive San Francisco" cap="Fair warning: I celebrate your first win like this." tilt={2} />
       </div>
       <div class="card">
         <form class="form" name="claude-application" method="POST" action="/claude-coaching/thanks/" data-netlify="true" netlify-honeypot="bot-field">
@@ -135,3 +159,6 @@ const faq = [
     </div>
   </section>
 </Base>
+<style>
+  .hero-split { align-items: center; }
+</style>

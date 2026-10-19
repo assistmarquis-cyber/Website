@@ -1,12 +1,16 @@
 ---
 import NeuralCanvas from '../../components/NeuralCanvas.astro';
 import Base from '../../layouts/Base.astro';
+import Snapshot from '../../components/Snapshot.astro';
+import sfDay2 from '../../assets/gallery/hive-sf-day2.jpg';
 ---
 <Base title="Application received | Marquis Harmon" description="Your Claude coaching application has been received." noindex>
-  <section class="section mind"><NeuralCanvas /><div class="wrap stack g22" style="max-width:640px">
+  <section class="section mind"><NeuralCanvas /><div class="wrap split" style="align-items:center"><div class="stack g22" style="max-width:640px">
     <span class="eyebrow">Application received</span>
     <h1 style="font-size:clamp(2.2rem,5vw,3.4rem)">Thank you.</h1>
     <p class="lede">I review every application personally and will reply within 24 to 48 hours to set up your fit call.</p>
     <div><a class="btn btn-secondary" href="/claude-coaching/">Back to Claude Coaching</a></div>
+  </div>
+    <Snapshot src={sfDay2} alt="Marquis Harmon high-fiving participants at Hive San Francisco" cap="Consider this your first high five." tilt={2} eager />
   </div></section>
 </Base>

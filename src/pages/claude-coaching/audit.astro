@@ -1,5 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Snapshot from '../../components/Snapshot.astro';
+import breakout from '../../assets/gallery/hive-breakout.jpg';
+import boards from '../../assets/gallery/concept-boards.jpg';
 // Detailed intake, sent to paid clients in the welcome email. Not linked from the nav.
 type Q = { name: string; label: string; type?: 'text' | 'area' | 'select'; options?: string[]; required?: boolean };
 const sections: { title: string; note?: string; qs: Q[] }[] = [
@@ -58,9 +61,14 @@ const team: Q[] = [
 <Base title="Claude Audit | Marquis Harmon" description="Your Claude Audit: a short intake so our first session is spent building." noindex>
   <section class="section">
     <div class="wrap stack g22" style="max-width:820px">
-      <span class="eyebrow">Claude Audit</span>
-      <h1 style="font-size:clamp(2.2rem,5vw,3.4rem)">Let's find your first win.</h1>
-      <p class="lede">This takes 20 to 30 minutes. Please send it at least 48 hours before Session 1. I read every answer before we meet, so we spend our time building, not explaining. Short answers are fine. Skip anything you are not sure about.</p>
+      <div class="audit-intro">
+        <div class="stack g16">
+          <span class="eyebrow">Claude Audit</span>
+          <h1 style="font-size:clamp(2.2rem,5vw,3.4rem)">Let's find your first win.</h1>
+          <p class="lede">This takes 20 to 30 minutes. Please send it at least 48 hours before Session 1. I read every answer before we meet, so we spend our time building, not explaining. Short answers are fine. Skip anything you are not sure about.</p>
+        </div>
+        <Snapshot src={boards} alt="Marquis Harmon, in a red shirt, walking visitors through concept boards" cap="Your answers turn into a map like this. Messy first, then clear." tilt={2} eager sizes="(min-width:760px) 280px, 80vw" />
+      </div>
       <form class="form card" name="claude-audit" method="POST" action="/claude-coaching/audit-thanks/" data-netlify="true" netlify-honeypot="bot-field">
         <input type="hidden" name="form-name" value="claude-audit" />
         <p class="hp"><label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
@@ -68,7 +76,8 @@ const team: Q[] = [
           <label>Full name<input type="text" name="name" required autocomplete="name" /></label>
           <label>Email<input type="email" name="email" required autocomplete="email" /></label>
         </div>
-        {sections.map((s) => (
+        {sections.map((s, i) => (<>
+          {i === 4 && <div class="audit-break"><Snapshot src={breakout} alt="A small breakout group at Hive sharing ideas, notebooks in hand" cap="Halfway there. Short answers are fine, promise." tilt={-1.5} sizes="(min-width:760px) 360px, 80vw" /></div>}
           <fieldset class="audit-part">
             <legend><h2>{s.title}</h2>{s.note && <span class="small">{s.note}</span>}</legend>
             {s.qs.map((q) => (
@@ -79,7 +88,7 @@ const team: Q[] = [
               </label>
             ))}
           </fieldset>
-        ))}
+        </>))}
         <details class="audit-part">
           <summary><h2 style="display:inline">For teams</h2> <span class="small">Open if you are bringing Claude to a team.</span></summary>
           {team.map((q) => (
@@ -94,6 +103,9 @@ const team: Q[] = [
   </section>
 </Base>
 <style>
+  .audit-intro { display: grid; gap: 28px; align-items: center; }
+  @media (min-width: 760px) { .audit-intro { grid-template-columns: 1fr 280px; } }
+  .audit-break { display: grid; padding: 12px 0; }
   .audit-part { border: 0; padding: 0; margin: 12px 0 0; display: grid; gap: 16px; }
   .audit-part legend, .audit-part summary { margin-bottom: 8px; }
   .audit-part h2 { font-size: 1.4rem; margin: 0; }
