@@ -1,12 +1,14 @@
 ---
 import NeuralCanvas from '../components/NeuralCanvas.astro';
 import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
 ---
 <Base title="Thank you | Marquis Harmon" description="Your request has been received." noindex>
   <section class="section mind"><NeuralCanvas /><div class="wrap stack g22" style="max-width:640px">
     <span class="eyebrow">Request received</span>
     <h1 style="font-size:clamp(2.2rem,5vw,3.4rem)">Thank you.</h1>
     <p class="lede">Your inquiry is in. Our team will respond within 48 hours with availability and next steps.</p>
-    <div><a class="btn btn-secondary" href="/">Back to home</a></div>
+    <p>Prefer to talk sooner? Pick a time for a 30 minute call.</p>
+    <div class="btn-row"><a class="btn btn-primary" href={site.callUrl} target="_blank" rel="noopener">Book a 30 minute call</a><a class="btn btn-secondary" href="/">Back to home</a></div>
   </div></section>
 </Base>

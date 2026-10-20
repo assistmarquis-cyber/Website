@@ -5,6 +5,8 @@ export const site = {
   legal: 'Marquis Alan Experience LLC',
   oneSheet: '/marquis-harmon-speaker-one-sheet.pdf',
   bookUrl: 'https://a.co/d/07B1V4Js',
+  // Marquis's 30 minute Calendly booking link, used by every "book a call" button.
+  callUrl: 'https://calendly.com/assistmarquis/30min',
   email: 'book@bigpicturearchitect.com',
   phone: '',
   responseTime: '48 hours',
