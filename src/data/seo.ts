@@ -11,9 +11,11 @@ export const ids = {
   book: `${site.url}/#book`,
 };
 
-// Profiles that are clearly Marquis. Add his LinkedIn, Instagram, YouTube and speaker
-// directory profiles here as they are confirmed; each one helps engines link them to this site.
+// Profiles that are clearly Marquis (confirmed by him 2026-10-20). Add speaker directory
+// profiles here as they go up; each one helps engines link them to this site.
 export const sameAs = [
+  'https://www.linkedin.com/in/joinmaex/',
+  'https://www.youtube.com/@MARQUISHARMON',
   affiliations[0].url,
 ];
 
