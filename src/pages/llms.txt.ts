@@ -2,6 +2,7 @@
 // Built from the same data as the pages so it never drifts out of date.
 import { site, keynotes, workshops } from '../data/site';
 import { answers } from '../data/answers';
+import { published as insights } from '../data/insights';
 
 export function GET() {
   const u = (p: string) => `${site.url}${p}`;
@@ -22,6 +23,10 @@ ${workshops.map((w) => `  - [${w.title}](${u(`/workshops/${w.slug}/`)}): ${w.sum
 - [Claude coaching](${u('/claude-coaching/')}): coaching and team workshops on using Claude for real work.
 - [G.O.D. Coach](${u('/god-coach/')}): a Claude coaching prompt set up in your own account.
 - [IRL Productions](${u('/irl-productions/')}): AR and VR galleries, live performance pop-ups and hackathons.
+
+## Insights (first-person articles by Marquis)
+
+${insights.map((a) => `- [${a.title}](${u(`/insights/${a.slug}/`)}): ${a.dek}`).join('\n')}
 
 ## Questions buyers ask
 

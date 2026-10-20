@@ -2,6 +2,7 @@
 // Shown on /faq/, repeated as FAQPage structured data and in /llms.txt.
 // Keep every answer factual and in step with the rest of the site.
 import { site, keynotes, workshops, patternAudit, godCoach } from './site';
+import { published as insights } from './insights';
 
 export const answers: { q: string; a: string; href?: string }[] = [
   {
@@ -43,6 +44,11 @@ export const answers: { q: string; a: string; href?: string }[] = [
     q: 'What is the G.O.D. Coach?',
     a: `A Claude coaching prompt built by Marquis on his G.O.D. Framework and set up in your own Claude account, for a one-time ${godCoach.price}.`,
     href: '/god-coach/',
+  },
+  {
+    q: 'Where can I read Marquis Harmon\'s ideas?',
+    a: `In his Insights, first-person articles on the founder operating system, including ${insights.slice(0, 3).map((a) => `"${a.title}"`).join(', ')}.`,
+    href: '/insights/',
   },
   {
     q: 'Does he speak and facilitate on-site or virtually?',

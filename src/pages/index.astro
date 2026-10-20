@@ -10,6 +10,7 @@ import NextStage from '../components/NextStage.astro';
 import { prototype, roundtable, breakout, boards, purpose, energizer, sfDay2 } from '../data/gallery';
 import { site, layers, engagement, testimonials } from '../data/site';
 import { ph } from '../data/ph';
+import { published as insights } from '../data/insights';
 import hero from '../assets/hero-stage.jpg';
 import portrait from '../assets/portrait.jpg';
 const fns = [
@@ -161,6 +162,16 @@ const words = 'See the whole picture. Then build it.'.split(' ');
     </div>
   </section>
 
+  <section class="section" id="insights" aria-label="Insights">
+    <div class="wrap">
+      <div class="head"><span class="eyebrow">Insights</span><h2>Identity. Decision. Execution. Then the tools.</h2><p>First-person notes from Marquis on the founder operating system.</p></div>
+      <div class="grid c3">
+        {insights.slice(0, 3).map((a) => <article class="card"><h3>{a.title}</h3><p>{a.dek}</p><a class="price-link" href={`/insights/${a.slug}/`}>Read it →</a></article>)}
+      </div>
+      <p style="margin-top:24px"><a class="link-arrow" href="/insights/">All insights →</a></p>
+    </div>
+  </section>
+
   <section class="section" id="about">
     <div class="wrap split even">
       <div class="photo"><Image src={portrait} alt="Portrait of Marquis Harmon. Photo: LHT.HSE Creative Studio" widths={[480, 800, 1000]} sizes="(min-width:900px) 45vw, 100vw" /></div>
@@ -169,7 +180,7 @@ const words = 'See the whole picture. Then build it.'.split(' ');
         <h2>Strategist, founder and storyteller: the Digital Griot.</h2>
         <p>Marquis Harmon is a cultural technologist and human performance strategist who has advised leaders across multiple industries as a strategic and leadership consultant. He founded MAEx, a practice built on mindset, execution, identity, decision-making and the personal operating system a leader runs on. The AI frameworks, including the G.O.D. Framework he uses to train enterprise executives on AI adoption, are built on that core. He also founded a fintech venture grounded in regenerative economics.</p>
         <p>He has spoken at the United Nations, COP22, the World Syrian Refugee Summit and Hive at Harvard Business School, and is the author of the memoir <em>Thinking Out Loud to Myself: Psalms 1:3</em>.</p>
-        <div class="btn-row"><a class="link-arrow" href="/about/">Read full bio →</a><a class="link-arrow" href="/about/#book">About the book →</a></div>
+        <div class="btn-row"><a class="link-arrow" href="/about/">Read full bio →</a><a class="link-arrow" href="/insights/">Read his insights →</a><a class="link-arrow" href="/about/#book">About the book →</a></div>
       </div>
     </div>
   </section>
