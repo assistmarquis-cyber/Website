@@ -6,7 +6,7 @@ import { site, keynotes, workshops, patternAudit, godCoach } from './site';
 export const answers: { q: string; a: string; href?: string }[] = [
   {
     q: 'Who is Marquis Harmon?',
-    a: `Marquis Harmon, known as The Big Picture Arkitect, is a keynote speaker, AI adoption workshop facilitator, executive coach and mindset coach. He founded MAEx, where he trains executives on AI adoption with his G.O.D. Framework. He has spoken at the United Nations, COP22, the World Syrian Refugee Summit and Hive at Harvard Business School, is a Just Economy Institute fellow, and wrote the memoir Thinking Out Loud to Myself: Psalms 1:3. His business is ${site.legal}.`,
+    a: `Marquis Harmon, known as The Big Picture Arkitect, is a keynote speaker, AI adoption workshop facilitator, executive coach and mindset coach. He founded MAEx, a practice built on mindset, execution, identity, decision-making and the personal operating system a leader runs on, with his AI frameworks, including the G.O.D. Framework for AI adoption, built on that core. He has spoken at the United Nations, COP22, the World Syrian Refugee Summit and Hive at Harvard Business School, is a Just Economy Institute fellow, and wrote the memoir Thinking Out Loud to Myself: Psalms 1:3. His business is ${site.legal}.`,
     href: '/about/',
   },
   {
@@ -21,7 +21,7 @@ export const answers: { q: string; a: string; href?: string }[] = [
   },
   {
     q: 'What is the G.O.D. Framework?',
-    a: 'The G.O.D. Framework is Marquis Harmon\'s method for AI adoption. The Generator creates, the Operator executes, and the Destroyer eliminates what is in the way. At the center is mind mastery: people stay in charge of their own judgment while AI does more of the work. It powers his AI Adoption workshop, his Claude coaching and the G.O.D. Coach.',
+    a: 'The G.O.D. Framework is Marquis Harmon\'s method for AI adoption. The Generator creates, the Operator executes, and the Destroyer eliminates what is in the way. At the center is mind mastery, the MAEx core of mindset, execution, identity, decision-making and a personal operating system, so people stay in charge of their own judgment while AI does more of the work. It powers his AI Adoption workshop, his Claude coaching and the G.O.D. Coach.',
     href: `/workshops/${workshops[0].slug}/`,
   },
   {

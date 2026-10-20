@@ -36,11 +36,11 @@ export const siteGraph = [
     image: `${site.url}/og.jpg`,
     email: `mailto:${site.email}`,
     jobTitle: ['Keynote Speaker', 'AI Adoption Workshop Facilitator', 'Executive Coach', 'Mindset Coach', 'Claude AI Coach'],
-    description: 'Marquis Harmon, The Big Picture Arkitect, is a keynote speaker, AI adoption workshop facilitator, executive coach and mindset coach. He helps nonprofit and impact organizations, executives and everyday people put AI to work without losing their own judgment, using his G.O.D. Framework (Generator, Operator, Destroyer). He has spoken at the United Nations, COP22, the World Syrian Refugee Summit and Hive at Harvard Business School, and is the author of Thinking Out Loud to Myself: Psalms 1:3.',
+    description: 'Marquis Harmon, The Big Picture Arkitect, is a keynote speaker, AI adoption workshop facilitator, executive coach and mindset coach. He founded MAEx, a practice built on mindset, execution, identity, decision-making and the personal operating system a leader runs on. On that core sit his AI frameworks, including the G.O.D. Framework (Generator, Operator, Destroyer), which help nonprofit and impact organizations, executives and everyday people put AI to work without losing their own judgment. He has spoken at the United Nations, COP22, the World Syrian Refugee Summit and Hive at Harvard Business School, and is the author of Thinking Out Loud to Myself: Psalms 1:3.',
     worksFor: { '@id': ids.org },
     founder: { '@id': ids.org },
     memberOf: { '@type': 'Organization', name: affiliations[0].name, url: 'https://justeconomyinstitute.org/' },
-    knowsAbout: ['AI adoption', 'Generative AI for nonprofits', 'Claude (AI assistant)', 'AI governance', 'Leadership development', 'Executive coaching', 'Mindset coaching', 'Accountability coaching', 'Decision-making under pressure', 'Social impact', 'Regenerative economics', 'Rapid prototyping', 'Hackathons', 'Augmented and virtual reality experiences'],
+    knowsAbout: ['Mindset', 'Execution', 'Identity', 'Decision-making', 'Personal operating systems', 'AI adoption', 'Generative AI for nonprofits', 'Claude (AI assistant)', 'AI governance', 'Leadership development', 'Executive coaching', 'Mindset coaching', 'Accountability coaching', 'Social impact', 'Regenerative economics', 'Rapid prototyping', 'Hackathons', 'Augmented and virtual reality experiences'],
     sameAs,
   },
   {
