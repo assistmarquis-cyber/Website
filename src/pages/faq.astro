@@ -1,0 +1,30 @@
+---
+import NeuralCanvas from '../components/NeuralCanvas.astro';
+import Base from '../layouts/Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { answers } from '../data/answers';
+import { faqPage } from '../data/seo';
+const url = 'https://bigpicturearchitect.com/faq/';
+const schema = [faqPage(url, answers.map(({ q, a }) => [q, a]))];
+---
+<Base schema={schema} title="Booking Marquis Harmon: Keynotes, AI Workshops & Coaching FAQ" description="Straight answers on booking Marquis Harmon: keynote topics, AI adoption workshops for nonprofit and impact teams, the G.O.D. Framework, executive, mindset and Claude coaching, pricing and how to book.">
+  <section class="section mind"><NeuralCanvas />
+    <div class="wrap stack g22" style="max-width:820px">
+      <span class="eyebrow">Questions and answers</span>
+      <h1 style="color:#fff;font-size:clamp(2.2rem,5vw,3.6rem)">Booking Marquis Harmon, answered.</h1>
+      <p class="lede" style="color:#DCCFBF">Human and cognitive performance through keynotes, workshops, executive coaching and mindset coaching. People leave with clarity. Here is what event organizers, nonprofit leaders and executives ask before they book.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="grid c2">
+        {answers.map(({ q, a, href }) => (
+          <article class="card"><h2 style="font-size:1.25rem">{q}</h2><p>{a}</p>{href && <a class="price-link" href={href}>Learn more →</a>}</article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Have a date or a team in mind?" text="Tell Marquis about your audience and goals. He replies personally." />
+</Base>

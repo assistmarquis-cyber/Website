@@ -1,4 +1,5 @@
 ---
+import { service } from '../../data/seo';
 import NeuralCanvas from '../../components/NeuralCanvas.astro';
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
@@ -16,8 +17,9 @@ const model = [
   ['Deliver', 'Facilitation on-site or virtual, for leadership teams or larger cohorts.'],
   ['Measure', 'Agreed success measures, participant feedback and a post-session action plan.'],
 ];
+const schema = [service({ name: 'AI adoption workshops by Marquis Harmon', serviceType: 'AI adoption workshop', url: 'https://bigpicturearchitect.com/workshops/', description: 'Facilitated AI adoption and leadership workshops built on the G.O.D. Framework (Generator, Operator, Destroyer) for nonprofit and impact organizations, executive teams and cross-functional teams, on-site or virtual.' })];
 ---
-<Base title="Enterprise AI Adoption Workshops | The G.O.D. Framework | Marquis Harmon" description="Facilitated enterprise workshops for executive and cross-functional teams, including AI Adoption with the proprietary G.O.D. Framework, Creative CornerStore and the MAEx Hackathon.">
+<Base schema={schema} title="Enterprise AI Adoption Workshops | The G.O.D. Framework | Marquis Harmon" description="Facilitated AI adoption and leadership workshops for nonprofit and impact organizations, executive and cross-functional teams, including AI Adoption with the proprietary G.O.D. Framework, Creative CornerStore and the MAEx Hackathon.">
   <section class="section mind" style="padding-bottom:40px"><NeuralCanvas />
     <div class="wrap split even">
       <div class="stack g22"><span class="eyebrow">Enterprise workshops</span><h1 style="font-size:clamp(2.4rem,5.5vw,4rem)">Leave the room with momentum, not just notes.</h1></div>

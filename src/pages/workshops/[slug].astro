@@ -1,4 +1,5 @@
 ---
+import { service } from '../../data/seo';
 import NeuralCanvas from '../../components/NeuralCanvas.astro';
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
@@ -18,8 +19,10 @@ const model = [
   ['Deliver', 'Facilitation on-site or virtual, for leadership teams or larger cohorts.'],
   ['Measure', 'Agreed success measures, participant feedback and a post-session action plan.'],
 ];
+const url = `https://bigpicturearchitect.com/workshops/${w.slug}/`;
+const schema = [service({ name: w.title, serviceType: `Workshop: ${w.short === 'Signature program' ? 'AI adoption' : w.tagline}`, url, description: w.summary })];
 ---
-<Base title={`${w.seo} | Marquis Harmon`} description={`${w.summary} Enterprise workshop by Marquis Harmon.`}>
+<Base schema={schema} title={`${w.seo} | Marquis Harmon`} description={`${w.summary} Enterprise workshop by Marquis Harmon.`}>
   <section class="section mind"><NeuralCanvas />
     <div class="wrap split even">
       <div class="stack g22">

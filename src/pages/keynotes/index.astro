@@ -1,12 +1,14 @@
 ---
+import { service } from '../../data/seo';
 import NeuralCanvas from '../../components/NeuralCanvas.astro';
 import Base from '../../layouts/Base.astro';
 import NextStage from '../../components/NextStage.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { purpose } from '../../data/gallery';
 import { keynotes, site } from '../../data/site';
+const schema = [service({ name: 'Keynote speaking by Marquis Harmon', serviceType: 'Keynote speaking', url: 'https://bigpicturearchitect.com/keynotes/', description: 'Story-driven keynotes on leadership and business development, AI thought management, and creating social impact, for conferences, nonprofit and impact organizations, and corporate events.' })];
 ---
-<Base title="Keynote Speaker on Leadership, AI & Social Impact | Marquis Harmon" description="Three story-driven keynotes by Marquis Harmon: leadership and business development, AI thought management, and creating social impact.">
+<Base schema={schema} title="Keynote Speaker on Leadership, AI & Social Impact | Marquis Harmon" description="Book Marquis Harmon, keynote speaker on leadership, AI and social impact, for conferences, nonprofit and impact organizations and corporate events. He has spoken at the United Nations, COP22 and Harvard Business School.">
   <section class="section mind"><NeuralCanvas />
     <div class="wrap">
       <div class="head">

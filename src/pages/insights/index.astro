@@ -1,0 +1,31 @@
+---
+import NeuralCanvas from '../../components/NeuralCanvas.astro';
+import Base from '../../layouts/Base.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { published as insights } from '../../data/insights';
+import { ids } from '../../data/seo';
+const url = 'https://bigpicturearchitect.com/insights/';
+const schema = [{
+  '@type': 'CollectionPage', '@id': `${url}#collection`, url, name: 'Insights by Marquis Harmon', author: { '@id': ids.person },
+  hasPart: insights.map((a) => ({ '@id': `${url}${a.slug}/#article` })),
+}];
+---
+<Base schema={schema} title="Insights: Founder Identity, Decisions & Execution | Marquis Harmon" description="First-person articles by Marquis Harmon on the founder operating system: mindset, identity, decision-making and execution, and where AI fits on top of that core.">
+  <section class="section mind"><NeuralCanvas />
+    <div class="wrap stack g22" style="max-width:820px">
+      <span class="eyebrow">Insights</span>
+      <h1 style="color:#fff;font-size:clamp(2.2rem,5vw,3.6rem)">The thinking behind the work.</h1>
+      <p class="lede" style="color:#DCCFBF">First-person notes on the founder operating system: identity, decisions and execution first, the AI frameworks on top. Read one and leave with a little more clarity.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="grid c2">
+        {insights.map((a) => (
+          <article class="card"><h2 style="font-size:1.3rem">{a.title}</h2><p>{a.dek}</p><a class="price-link" href={`/insights/${a.slug}/`}>Read it →</a></article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <CtaBand title="Want this thinking in your room?" text="Keynotes, workshops and coaching built on the same operating system." />
+</Base>
