@@ -10,9 +10,10 @@ export const insights: { slug: string; title: string; dek: string; date: string;
     cta: ['/workshops/', 'Bring this thinking to your team'],
     body: [
       'Three hundred and fifty thousand dollars. An AI and blockchain implementation for a Fortune 25 company and a major airline.',
+      'We spent six months on the preliminaries of that project and deal. I staked every dime I had on the upfront costs, like hiring consultants for pre-production. I could taste the money in my account.',
       'Before the pressure hit, everyone was cool, calm and collected. Then we got close to the closing, and I learned the lesson that shapes how I work today: be true to your systems.',
       '## Anything can go wrong, especially at the closing',
-      'What went wrong was not the code. Funding from the government became a problem. The data was not protected the way it needed to be. And there was no contingency plan, no preparedness plan, for the extreme events that rarely happen, until one does.',
+      'What went wrong was not the code. The government funding was delayed, then shifted, then cut, all in a two-week span. Six months of work, gone at the closing. The data was not protected the way it needed to be. And there was no contingency plan, no preparedness plan, for the extreme events that rarely happen, until one does.',
       '## People are people',
       'The moment the pressure hit, you could sense it and see it: fear, moving through the leaders and executives in the room. Titles don\'t change that. People are people.',
       'I see the same pattern in AI rollouts everywhere. Projects rarely stall because of the tech. They stall when the culture, the confidence and the habits can\'t hold under pressure.',
