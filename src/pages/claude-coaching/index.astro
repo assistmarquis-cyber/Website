@@ -1,4 +1,5 @@
 ---
+import { service, faqPage } from '../../data/seo';
 import NeuralCanvas from '../../components/NeuralCanvas.astro';
 import Base from '../../layouts/Base.astro';
 import Snapshot from '../../components/Snapshot.astro';
@@ -34,8 +35,10 @@ const faq = [
   ['What happens after I apply?', 'I review every application personally and reply within 24 to 48 hours to set up your fit call.'],
   ['Do you guarantee hours saved?', 'No. We measure the real number together at the end. Results depend on the reps you put in.'],
 ];
+const url = 'https://bigpicturearchitect.com/claude-coaching/';
+const schema = [service({ name: 'Claude coaching', serviceType: 'AI coaching (Claude)', url, description: 'One-on-one coaching and team workshops that teach executives, founders, nonprofit and impact teams, and everyday people to use Claude on their real work, so AI gives them time back without losing their own voice.' }), faqPage(url, faq)];
 ---
-<Base title="Claude Coaching | Marquis Harmon" description="Learn to use Claude effectively on your real work. AI brings general intelligence. You bring specific intelligence. One on one coaching and team workshops.">
+<Base schema={schema} title="Claude Coaching | Marquis Harmon" description="Learn to use Claude effectively on your real work. AI brings general intelligence. You bring specific intelligence. One on one coaching and team workshops.">
   <section class="section mind"><NeuralCanvas />
     <div class="wrap split hero-split">
      <div class="stack g22">

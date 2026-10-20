@@ -1,0 +1,12 @@
+# bigpicturearchitect.com
+# Search engines and AI answer engines are welcome to read and cite this site.
+# ChatGPT search (OAI-SearchBot, ChatGPT-User), OpenAI (GPTBot), Bing (Bingbot),
+# Google (Googlebot, Google-Extended), Claude (ClaudeBot, Claude-SearchBot, Claude-User),
+# Perplexity (PerplexityBot, Perplexity-User) and Apple (Applebot, Applebot-Extended)
+# all follow the rules below. The client portal stays out; thank-you pages carry noindex.
+
+User-agent: *
+Allow: /
+Disallow: /portal/
+
+Sitemap: https://bigpicturearchitect.com/sitemap-index.xml
