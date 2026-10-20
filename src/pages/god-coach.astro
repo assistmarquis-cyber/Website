@@ -1,4 +1,5 @@
 ---
+import { service, offer } from '../data/seo';
 import NeuralCanvas from '../components/NeuralCanvas.astro';
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
@@ -24,8 +25,10 @@ const steps = godCoach.payUrl ? [
   ['Pay the ' + godCoach.price + ' setup', 'I email you a secure payment link, usually within 24 to 48 hours.'],
   ['Start coaching', 'I set the G.O.D. Coach up in your own Claude account and show you how to get the most from it.'],
 ];
+const url = 'https://bigpicturearchitect.com/god-coach/';
+const schema = [service({ name: 'G.O.D. Coach', serviceType: 'AI coaching prompt for Claude', url, description: 'A Claude coaching prompt built by Marquis Harmon on his G.O.D. Framework (Generator, Operator, Destroyer), set up in your own Claude account.', audience: ['Founders and creators', 'Executives and senior leadership teams'], offers: offer(godCoach.price, url, 'G.O.D. Coach setup') })];
 ---
-<Base title="G.O.D. Coach: Your AI Thinking Partner on Claude | Marquis Harmon" description={`The G.O.D. Coach is a Claude coaching prompt built by Marquis Harmon on his G.O.D. Framework: Generator, Operator, Destroyer. ${godCoach.price} one-time setup in your own Claude account.`}>
+<Base schema={schema} title="G.O.D. Coach: Your AI Thinking Partner on Claude | Marquis Harmon" description={`The G.O.D. Coach is a Claude coaching prompt built by Marquis Harmon on his G.O.D. Framework: Generator, Operator, Destroyer. ${godCoach.price} one-time setup in your own Claude account.`}>
   <section class="section mind"><NeuralCanvas />
     <div class="wrap split even">
       <div class="stack g22">

@@ -1,4 +1,5 @@
 ---
+import { service, offer, faqPage } from '../../data/seo';
 import NeuralCanvas from '../../components/NeuralCanvas.astro';
 import Base from '../../layouts/Base.astro';
 import { ph } from '../../data/ph';
@@ -23,8 +24,10 @@ const faq = [
   ['Is it confidential?', 'Yes, within the limits described in the coaching agreement, which you will see before we begin.'],
   ['Do you guarantee results?', 'No. I commit to showing up fully and holding you accountable. Results depend on the action you take.'],
 ];
+const url = 'https://bigpicturearchitect.com/mindset-coaching/';
+const schema = [service({ name: 'Mindset coaching and accountability', serviceType: 'Mindset coaching', url, description: 'One-on-one mindset coaching and accountability for founders, executives and creators under pressure: spot the patterns running your decisions, trust your instinct and act fast. Starts with a Pattern Audit.', audience: ['Founders and creators', 'Executives and senior leadership teams'], offers: offer(patternAudit.price, url, 'Pattern Audit: one 60 to 90 minute session plus a written action map') }), faqPage(url, faq)];
 ---
-<Base title="Mindset Coaching | Marquis Harmon" description="Mindset coaching and accountability for founders, creators, and leaders under pressure. Spot your patterns, trust your instinct, and act fast.">
+<Base schema={schema} title="Mindset Coaching | Marquis Harmon" description="Mindset coaching and accountability for founders, creators, and leaders under pressure. Spot your patterns, trust your instinct, and act fast.">
   <section class="section mind"><NeuralCanvas />
     <div class="wrap stack g22" style="max-width:820px">
       <span class="eyebrow">Mindset coaching</span>

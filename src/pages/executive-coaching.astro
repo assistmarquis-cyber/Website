@@ -1,12 +1,14 @@
 ---
+import { service } from '../data/seo';
 import NeuralCanvas from '../components/NeuralCanvas.astro';
 import Base from '../layouts/Base.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { breakout } from '../data/gallery';
 import Quote from '../components/Quote.astro';
 import { layers, testimonials } from '../data/site';
+const schema = [service({ name: 'Executive coaching: The 7 Layer Strategy', serviceType: 'Executive coaching', url: 'https://bigpicturearchitect.com/executive-coaching/', description: 'A ground-up executive coaching engagement for senior leaders and leadership teams, from personal identity and presence to systems, teams and sustained momentum.', audience: ['Executives and senior leadership teams', 'Nonprofit executive directors'] })];
 ---
-<Base title="Executive Coaching: The 7 Layer Strategy | Marquis Harmon" description="The 7 Layer Strategy is a ground-up executive coaching engagement for senior leaders, from personal identity and presence to systems, teams and sustained momentum.">
+<Base schema={schema} title="Executive Coaching: The 7 Layer Strategy | Marquis Harmon" description="The 7 Layer Strategy is a ground-up executive coaching engagement for senior leaders, from personal identity and presence to systems, teams and sustained momentum.">
   <section class="section mind"><NeuralCanvas />
     <div class="wrap split">
       <div class="stack g22">
