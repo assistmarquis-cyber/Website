@@ -10,7 +10,7 @@ export const insights: { slug: string; title: string; dek: string; date: string;
     cta: ['/workshops/', 'Bring this thinking to your team'],
     body: [
       'Three hundred and fifty thousand dollars. An AI and blockchain implementation for a Fortune 25 company and a major airline.',
-      'Before the pressure hit, everyone was cool, calm and collected. Then we got close to the closing, and I learned the lesson that shapes how I work today.',
+      'Before the pressure hit, everyone was cool, calm and collected. Then we got close to the closing, and I learned the lesson that shapes how I work today: be true to your systems.',
       '## Anything can go wrong, especially at the closing',
       'What went wrong was not the code. Funding from the government became a problem. The data was not protected the way it needed to be. And there was no contingency plan, no preparedness plan, for the extreme events that rarely happen, until one does.',
       '## People are people',
@@ -20,7 +20,8 @@ export const insights: { slug: string; title: string; dek: string; date: string;
       'Everybody plans for the likely problem. Very few plan for the rare one. The most expensive moment in any project is the decision nobody prepared for. Who owns it? Who decides when the money moves or the data is exposed?',
       '## The mode nobody wants to run',
       'Looking back through the G.O.D. Framework, the Generator was never the problem. Everyone loves creating. Very few people want to be the Destroyer: the one who cuts the risky assumption, like "the funding will be there" or "the data is fine," before it cuts you.',
-      '## What I carry into every engagement now',
+      '## Be true to your systems',
+      'That project taught me to be true to my systems. Under pressure, people fall back on whatever they practiced. If the system is only on paper, the fear takes over. These are the systems I carry into every engagement now.',
       '- Start with identity and decisions. Then the tools.',
       '- Protect the data before you scale it.',
       '- Write the contingency plan for the event that "never happens."',
