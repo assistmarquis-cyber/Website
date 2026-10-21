@@ -154,7 +154,7 @@ export const affiliations = [
 // Left empty, the buttons scroll to the application form instead.
 export const patternAudit = {
   price: '$88',
-  payUrl: 'https://buy.stripe.com/aFa9AT2agbK68YacQ9aZi05',
+  payUrl: 'https://buy.stripe.com/28E00j7uA01oeiu5nHaZi06',
 };
 export const patternAuditHref = patternAudit.payUrl ? `${patternAudit.payUrl}?client_reference_id=pattern_audit` : '#apply';
 
