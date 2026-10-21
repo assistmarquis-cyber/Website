@@ -1,0 +1,40 @@
+---
+// Sitewide snapshot layer: every page section without a photo of its own gets a strip of
+// casual, tilted snapshots from Marquis's life, so the whole site reads like a personal gallery.
+// The pool renders once per page inside a <template> (nothing loads until a snapshot is placed).
+// Opt a section out with data-nophotos.
+import { Image } from 'astro:assets';
+import { life } from '../data/life';
+const tilts = [-2.5, 1.8, -1.2, 2.4, -1.8, 1.2];
+---
+<template id="life-pool">
+  {life.map((p, i) => (
+    <figure class="snap" style={`--tilt:${tilts[i % tilts.length]}deg`}>
+      <Image src={p.src} alt={p.alt} widths={[360, 640]} sizes="(min-width:900px) 26vw, 44vw" loading="lazy" style={p.pos ? `object-position:${p.pos}` : undefined} />
+      <figcaption>{p.cap}</figcaption>
+    </figure>
+  ))}
+</template>
+<script is:inline>
+  (function () {
+    var pool = document.getElementById('life-pool');
+    if (!pool) return;
+    var shots = Array.prototype.slice.call(pool.content.children);
+    if (!shots.length) return;
+    // Start each page at a different photo so the same snapshots don't lead everywhere.
+    var path = location.pathname, seed = 0;
+    for (var i = 0; i < path.length; i++) seed = (seed * 31 + path.charCodeAt(i)) % 997;
+    var next = seed % shots.length;
+    var skip = 'img,picture,video,iframe,.reel';
+    document.querySelectorAll('main section').forEach(function (sec) {
+      if (sec.hasAttribute('data-nophotos') || sec.classList.contains('photo-band') || sec.classList.contains('credband')) return;
+      if (sec.querySelector(skip)) return;
+      var host = sec.querySelectorAll(':scope > .wrap');
+      host = host.length ? host[host.length - 1] : sec;
+      var strip = document.createElement('div');
+      strip.className = 'snaps life-strip reveal';
+      for (var n = 0; n < 3; n++) { strip.appendChild(shots[next].cloneNode(true)); next = (next + 1) % shots.length; }
+      host.appendChild(strip);
+    });
+  })();
+</script>
