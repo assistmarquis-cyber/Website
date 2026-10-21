@@ -9,7 +9,7 @@ export const insights: { slug: string; title: string; dek: string; date: string;
     date: '2026-10-20',
     cta: ['/workshops/', 'Bring this thinking to your team'],
     body: [
-      'Three hundred and fifty thousand dollars. An AI and blockchain implementation for a Fortune 25 company and a major airline.',
+      'Three hundred and fifty thousand dollars. An AI and blockchain implementation for a Fortune 25 company that is also an airline. It would have been one of the largest procurement deals I had ever closed.',
       'We spent six months on the preliminaries of that project and deal. I staked every dime I had on the upfront costs, like hiring consultants for pre-production. I could taste the money in my account.',
       'Before the pressure hit, everyone was cool, calm and collected. Then we got close to the closing, and I learned the lesson that shapes how I work today: be true to your systems.',
       '## Anything can go wrong, especially at the closing',
