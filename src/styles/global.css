@@ -222,3 +222,9 @@ input:focus,select:focus,textarea:focus,.btn:focus-visible,a:focus-visible{outli
 .snap figcaption{font-family:"Segoe Print","Bradley Hand","Comic Sans MS",cursive;font-size:15px;color:#2B2B2B;margin-top:10px;line-height:1.35;text-align:center}
 .snaps{display:grid;gap:34px;align-items:start}
 @media(min-width:760px){.snaps{grid-template-columns:repeat(3,1fr)}.snaps .snap:nth-child(2){margin-top:34px}}
+/* life strip: personal snapshots added to every photo-less section (PhotoLayer.astro) */
+.life-strip{grid-column:1/-1;flex-basis:100%;margin-top:48px;grid-template-columns:repeat(2,1fr);gap:18px}
+.life-strip .snap{padding:7px 7px 10px}
+.life-strip .snap figcaption{font-size:13px}
+.life-strip .snap:nth-child(3){display:none}
+@media(min-width:760px){.life-strip{grid-template-columns:repeat(3,1fr);gap:34px}.life-strip .snap{padding:10px 10px 14px}.life-strip .snap figcaption{font-size:15px}.life-strip .snap:nth-child(3){display:block}}

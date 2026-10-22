@@ -12,12 +12,12 @@
 //   STRIPE_WEBHOOK_SECRET  the signing secret Stripe shows for this webhook (whsec_...)
 //   GOD_COACH_URL          link to the G.O.D. Coach (the Momentum Coach artifact, shared as "anyone with the link")
 //   SMTP_PASSWORD          the password for book@bigpicturearchitect.com (already set)
-//   MAILING_ADDRESS        the postal address shown in the email footer (already set)
 import crypto from 'node:crypto';
 import nodemailer from 'nodemailer';
 
 const FROM = process.env.SMTP_USER || 'book@bigpicturearchitect.com';
-const ADDRESS = process.env.MAILING_ADDRESS || '';
+// Marquis's booking link. Keep in sync with callUrl in src/data/site.ts.
+const CALL_URL = process.env.CALL_URL || 'https://calendly.com/assistmarquis/30min';
 // Only $88 checkouts get the G.O.D. Coach email. Change this if the price changes.
 const PRICE_CENTS = 8800;
 const TOLERANCE_SECONDS = 300;
@@ -41,14 +41,17 @@ const firstName = (name = '') => name.trim().split(/\s+/)[0] || 'there';
 
 const auditEmail = (name) => `Hi ${firstName(name)}, thank you for booking your Pattern Audit.
 
-I'll email you within 24 to 48 hours to set our time. To speed that up, reply with two or three times that work for you this week.
+Pick a time that works for you here:
+${CALL_URL}
+
+If none of the times fit, reply to this email and we'll find one.
 
 Before we meet, think about the one pressure you most want to move. We will spend 60 to 90 minutes on it, and you will leave with a written action map.
 
 Marquis
 
 Mindset coaching is accountability and action-focused work. It is not therapy, counseling, or medical care. If you are in crisis, call or text 988 or call 911.
-Marquis Alan Experience LLC${ADDRESS ? `, ${ADDRESS}` : ''}. You received this because you booked a Pattern Audit at bigpicturearchitect.com.`;
+Marquis Alan Experience LLC. You received this because you booked a Pattern Audit at bigpicturearchitect.com.`;
 
 const buyerEmail = (name, url) => `Hi ${firstName(name)}, thank you for getting the G.O.D. Coach.
 
@@ -67,7 +70,7 @@ Your $88 setup also includes my help getting it running. Reply to this email wit
 Marquis
 
 The G.O.D. Coach is a thinking tool, not therapy, medical, legal or financial advice. Any Claude plan is billed by Anthropic separately.
-Marquis Alan Experience LLC${ADDRESS ? `, ${ADDRESS}` : ''}. You received this because you purchased the G.O.D. Coach at bigpicturearchitect.com.`;
+Marquis Alan Experience LLC. You received this because you purchased the G.O.D. Coach at bigpicturearchitect.com.`;
 
 const mailer = () => nodemailer.createTransport({
   host: process.env.SMTP_HOST || 'smtp.hostinger.com',
@@ -89,7 +92,7 @@ const sendAudit = async (s, email, name) => {
     return { statusCode: 500, body: 'Email failed' }; // Stripe retries
   }
   try {
-    await transport.sendMail({ from: `Pattern Audit bookings <${FROM}>`, to: FROM, subject: `New Pattern Audit booking: ${name || email}`, text: `${name || 'A buyer'} (${email}) paid $${(s.amount_total / 100).toFixed(2)} for a Pattern Audit. Their booking email has been sent. Email them within 24-48 hours to set a time.\n\nStripe checkout session: ${s.id}` });
+    await transport.sendMail({ from: `Pattern Audit bookings <${FROM}>`, to: FROM, subject: `New Pattern Audit booking: ${name || email}`, text: `${name || 'A buyer'} (${email}) paid $${(s.amount_total / 100).toFixed(2)} for a Pattern Audit. Their booking email has been sent with your Calendly link. If they don't book within 48 hours, follow up.\n\nStripe checkout session: ${s.id}` });
   } catch (err) {
     console.error('Audit notice failed:', err.message);
   }
