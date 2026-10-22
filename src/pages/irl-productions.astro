@@ -9,8 +9,16 @@ import Quote from '../components/Quote.astro';
 import { testimonials } from '../data/site';
 import irl1 from '../assets/irl-1.jpg';
 import irl2 from '../assets/irl-2.jpg';
+const schema = [{
+  '@type': 'VideoObject', '@id': 'https://bigpicturearchitect.com/irl-productions/#frequency-video',
+  name: 'Frequency, for Tune.FM at Philly Tech Week 2026',
+  description: 'An environment where artists could collab, create and connect, designed and built by Marquis Harmon and IRL Productions for Tune.FM at Philly Tech Week 2026.',
+  thumbnailUrl: 'https://bigpicturearchitect.com/video/frequency-tunefm-poster.jpg',
+  contentUrl: 'https://bigpicturearchitect.com/video/frequency-tunefm-philly-tech-week.mp4',
+  uploadDate: '2026-10-21', duration: 'PT32S', creator: { '@id': 'https://bigpicturearchitect.com/#person' },
+}];
 ---
-<Base title="IRL Productions: AR/VR Galleries, Live Pop-Ups & Hackathons | Marquis Harmon" description="IRL Productions (In Real Life) delivers augmented and virtual reality galleries, live performance pop-ups and hackathons for brands, institutions and communities.">
+<Base schema={schema} title="IRL Productions: AR/VR Galleries, Live Pop-Ups & Hackathons | Marquis Harmon" description="IRL Productions (In Real Life) delivers augmented and virtual reality galleries, live performance pop-ups and hackathons for brands, institutions and communities.">
   <section class="section mind"><NeuralCanvas />
     <div class="wrap split even">
       <div class="stack g22">
@@ -34,7 +42,12 @@ import irl2 from '../assets/irl-2.jpg';
     <div class="photo wide"><Image src={irl2} alt="The IRL Productions team on the floor rigging the stage" widths={[480, 800, 1000]} sizes="(min-width:900px) 45vw, 100vw" /></div>
     <div class="stack g16"><h2>Built on site, from the rigging up.</h2><p>Every production is designed around your audience, space and objectives.</p></div>
   </div></section>
-  <section class="section mint"><div class="wrap"><div class="split even" style="align-items:center"><div style="max-width:640px"><Quote {...testimonials.tunefm} /></div><div class="stack g16"><span class="eyebrow">Featured production</span><h2>Frequency, for Tune.FM</h2><p>An environment where artists could collab, create and connect, designed and built for Tune.FM at Philly Tech Week 2026.</p><div><a class="btn btn-secondary" href="https://tune.fm/" target="_blank" rel="noopener">Visit Tune.FM ↗</a></div></div></div></div></section>
+  <section class="section mint" id="frequency"><div class="wrap"><div class="split even" style="align-items:center">
+    <video class="reel-video" controls playsinline preload="metadata" poster="/video/frequency-tunefm-poster.jpg" aria-label="Frequency, built for Tune.FM at Philly Tech Week 2026" style="width:100%;max-width:380px;aspect-ratio:9/16;justify-self:center;border-radius:14px;background:#0f2a28;box-shadow:0 18px 40px rgba(0,0,0,.18)">
+      <source src="/video/frequency-tunefm-philly-tech-week.mp4" type="video/mp4" />
+    </video>
+    <div class="stack g16"><span class="eyebrow">Featured production</span><h2>Frequency, for Tune.FM</h2><p>An environment where artists could collab, create and connect, designed and built for Tune.FM at Philly Tech Week 2026.</p><Quote {...testimonials.tunefm} /><div><a class="btn btn-secondary" href="https://tune.fm/" target="_blank" rel="noopener">Visit Tune.FM ↗</a></div></div>
+  </div></div></section>
   <Gallery eyebrow="Past rooms" title="Experiences people walk into, and remember." text="Live gatherings, pop-ups and prototyping sessions built to get people moving, talking and making together." />
   <CtaBand photo={sfDay2} title="Have a venue, a launch or a community in mind?" text="Share the idea and we'll scope the production." />
 </Base>
