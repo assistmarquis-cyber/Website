@@ -12,12 +12,10 @@
 //   STRIPE_WEBHOOK_SECRET  the signing secret Stripe shows for this webhook (whsec_...)
 //   GOD_COACH_URL          link to the G.O.D. Coach (the Momentum Coach artifact, shared as "anyone with the link")
 //   SMTP_PASSWORD          the password for book@bigpicturearchitect.com (already set)
-//   MAILING_ADDRESS        the postal address shown in the email footer (already set)
 import crypto from 'node:crypto';
 import nodemailer from 'nodemailer';
 
 const FROM = process.env.SMTP_USER || 'book@bigpicturearchitect.com';
-const ADDRESS = process.env.MAILING_ADDRESS || '';
 // Marquis's booking link. Keep in sync with callUrl in src/data/site.ts.
 const CALL_URL = process.env.CALL_URL || 'https://calendly.com/assistmarquis/30min';
 // Only $88 checkouts get the G.O.D. Coach email. Change this if the price changes.
@@ -53,7 +51,7 @@ Before we meet, think about the one pressure you most want to move. We will spen
 Marquis
 
 Mindset coaching is accountability and action-focused work. It is not therapy, counseling, or medical care. If you are in crisis, call or text 988 or call 911.
-Marquis Alan Experience LLC${ADDRESS ? `, ${ADDRESS}` : ''}. You received this because you booked a Pattern Audit at bigpicturearchitect.com.`;
+Marquis Alan Experience LLC. You received this because you booked a Pattern Audit at bigpicturearchitect.com.`;
 
 const buyerEmail = (name, url) => `Hi ${firstName(name)}, thank you for getting the G.O.D. Coach.
 
@@ -72,7 +70,7 @@ Your $88 setup also includes my help getting it running. Reply to this email wit
 Marquis
 
 The G.O.D. Coach is a thinking tool, not therapy, medical, legal or financial advice. Any Claude plan is billed by Anthropic separately.
-Marquis Alan Experience LLC${ADDRESS ? `, ${ADDRESS}` : ''}. You received this because you purchased the G.O.D. Coach at bigpicturearchitect.com.`;
+Marquis Alan Experience LLC. You received this because you purchased the G.O.D. Coach at bigpicturearchitect.com.`;
 
 const mailer = () => nodemailer.createTransport({
   host: process.env.SMTP_HOST || 'smtp.hostinger.com',

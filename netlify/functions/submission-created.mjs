@@ -4,13 +4,10 @@
 //
 // Needs these Netlify environment variables, set in the Netlify UI (never in code):
 //   SMTP_PASSWORD    the password for book@bigpicturearchitect.com
-//   MAILING_ADDRESS  the postal address shown in the email footer
 import nodemailer from 'nodemailer';
 
 const FROM = process.env.SMTP_USER || 'book@bigpicturearchitect.com';
 const FORMS = ['mindset-application', 'claude-application'];
-// Postal address for the email footer (CAN-SPAM). Kept out of the public repo.
-const ADDRESS = process.env.MAILING_ADDRESS || '';
 // Marquis's 30 minute booking link. Keep in sync with callUrl in src/data/site.ts.
 const CALL_URL = process.env.CALL_URL || 'https://calendly.com/assistmarquis/30min';
 
@@ -23,7 +20,7 @@ ${CALL_URL}
 ${form === 'mindset-application' ? '\nIf you ever need urgent help, call or text 988 or call 911.\n' : ''}
 Marquis
 
-Marquis Alan Experience LLC${ADDRESS ? `, ${ADDRESS}` : ''}. You received this because you submitted an application at bigpicturearchitect.com. To stop receiving emails, reply "unsubscribe."`;
+Marquis Alan Experience LLC. You received this because you submitted an application at bigpicturearchitect.com. To stop receiving emails, reply "unsubscribe."`;
 
 export const handler = async (event) => {
   const { payload } = JSON.parse(event.body || '{}');
