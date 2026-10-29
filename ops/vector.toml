@@ -1,0 +1,40 @@
+# Turns Alan audit lines into Prometheus metrics. Untested example.
+[sources.netlify]
+type = "http_server"
+address = "0.0.0.0:8080"
+decoding.codec = "json"
+
+[transforms.alan]
+type = "filter"
+inputs = ["netlify"]
+condition = 'contains(string!(.message), "\"app\":\"alan\"")'
+
+[transforms.parse]
+type = "remap"
+inputs = ["alan"]
+source = '''
+. = parse_json!(string!(.message))
+'''
+
+[transforms.metrics]
+type = "log_to_metric"
+inputs = ["parse"]
+  [[transforms.metrics.metrics]]
+  type = "counter"
+  field = "status"
+  name = "alan_requests_total"
+  tags = { event = "{{event}}", status = "{{status}}" }
+  [[transforms.metrics.metrics]]
+  type = "histogram"
+  field = "ms"
+  name = "alan_request_ms"
+  [[transforms.metrics.metrics]]
+  type = "counter"
+  field = "redacted"
+  name = "alan_redactions_total"
+  increment_by_value = true
+
+[sinks.prom]
+type = "prometheus_exporter"
+inputs = ["metrics"]
+address = "0.0.0.0:9598"

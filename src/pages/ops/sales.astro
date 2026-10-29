@@ -1,0 +1,134 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="Sales dashboard" description="Private sales dashboard." noindex bare privatePage>
+  <main class="sd">
+    <header>
+      <h1>Sales dashboard</h1>
+      <p class="note">Private. Your file is read in this browser and goes nowhere: this page makes no network requests with your data and keeps nothing after you close it.</p>
+    </header>
+
+    <section class="load">
+      <label class="btn">1. Payments CSV (Stripe) <input id="pfile" type="file" accept=".csv,text/csv" hidden /></label>
+      <label class="btn">2. leads.csv <input id="file" type="file" accept=".csv,text/csv" hidden /></label>
+      <label>Cash received this month ($) <input id="cash" type="number" min="0" step="1" value="0" inputmode="numeric" /></label>
+      <label>Monthly target ($) <input id="target" type="number" min="1" step="1" value="25806" inputmode="numeric" /></label>
+      <span id="msg" role="status"></span>
+    </section>
+
+    <section id="sales" hidden>
+      <h2>Sales</h2>
+      <div class="tiles" id="stiles"></div>
+      <h2>Revenue by offer</h2>
+      <table id="offers"><thead><tr><th>Offer</th><th>Sales</th><th>Net revenue</th></tr></thead><tbody></tbody></table>
+      <h2>By month</h2>
+      <table id="months"><thead><tr><th>Month</th><th>Net revenue</th></tr></thead><tbody></tbody></table>
+      <h2>Latest payments</h2>
+      <table id="recent"><thead><tr><th>Date</th><th>Offer</th><th>Net</th><th>Payer</th></tr></thead><tbody></tbody></table>
+      <p id="pflags" class="note"></p>
+    </section>
+    <p id="nosales" class="note">No sales loaded yet. In Stripe: Payments, Export, choose the dates, download the CSV, then pick it above. It is read in this browser only. Sales from the work built in this project (Pattern Audit, G.O.D. Coach, Sprint, workshops, keynotes) show up here once Stripe has them; the project has recorded $0 so far.</p>
+
+    <section id="out" hidden>
+      <div class="tiles" id="tiles"></div>
+      <h2>Funnel</h2>
+      <div id="funnel" class="funnel"></div>
+      <h2>Follow-ups due</h2>
+      <p id="dueNote" class="note"></p>
+      <table id="due"><thead><tr><th>Due</th><th>Who</th><th>Stage</th><th>Next action</th></tr></thead><tbody></tbody></table>
+      <h2>Screening flags (KYC and AML lite)</h2>
+      <p class="note">Practical checks to prompt a human look. They do not block anyone and are not legal compliance. Stripe verifies who you get paid by; keep payments on card or ACH through Stripe.</p>
+      <table id="flags"><thead><tr><th>Level</th><th>Who</th><th>Check</th><th>Why</th></tr></thead><tbody></tbody></table>
+      <p><button id="dl" class="btn" type="button">Download flags as CSV</button></p>
+    </section>
+  </main>
+</Base>
+
+<style is:global>
+  .sd { max-width: 960px; margin: 0 auto; padding: 24px 16px 64px; color: #1f2a2a; font: 16px/1.5 system-ui, sans-serif; }
+  .sd h1 { margin: 0 0 4px; } .sd h2 { margin: 32px 0 8px; font-size: 1.15rem; }
+  .sd .note { color: #4a5858; margin: 4px 0 12px; max-width: 70ch; }
+  .sd .load { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end; margin: 16px 0; }
+  .sd label { display: grid; gap: 4px; font-size: .9rem; }
+  .sd input[type=number] { padding: 8px; border: 1px solid #9aa8a8; border-radius: 6px; width: 10em; }
+  .sd .btn { display: inline-block; background: #1B6663; color: #fff; padding: 10px 16px; border-radius: 8px; border: 0; cursor: pointer; font-size: .95rem; }
+  .sd .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .sd .tile { border: 1px solid #cfd8d8; border-radius: 10px; padding: 12px; }
+  .sd .tile b { display: block; font-size: 1.6rem; } .sd .tile span { font-size: .85rem; color: #4a5858; }
+  .sd .bar { height: 10px; background: #e3eaea; border-radius: 5px; overflow: hidden; margin-top: 6px; }
+  .sd .bar i { display: block; height: 100%; background: #1B6663; }
+  .sd .frow { display: grid; grid-template-columns: 9em 1fr 3em; gap: 8px; align-items: center; margin: 6px 0; }
+  .sd table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+  .sd th, .sd td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #dfe6e6; vertical-align: top; }
+  .sd .high { color: #a1261b; font-weight: 700; } .sd .medium { color: #8a5a00; font-weight: 700; } .sd .low { color: #4a5858; }
+  @media (max-width: 600px) { .sd .frow { grid-template-columns: 7em 1fr 2.5em; } .sd table { font-size: .8rem; } }
+</style>
+
+<script>
+  import { parseCsv, metrics, riskFlags, flagsCsv, parseLedger, salesSummary, pipelineByOffer } from '../../lib/sales.mjs';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const el = (tag: string, text = '', cls = '') => { const e = document.createElement(tag); e.textContent = text; if (cls) e.className = cls; return e; };
+  let rows: Record<string, string>[] = [];
+  let flags: ReturnType<typeof riskFlags> = [];
+
+  function render() {
+    const today = new Date().toISOString().slice(0, 10);
+    const m = metrics(rows, today, Number((document.getElementById('cash') as HTMLInputElement).value), Number((document.getElementById('target') as HTMLInputElement).value));
+    flags = riskFlags(rows);
+    const tiles = $('tiles'); tiles.replaceChildren();
+    const tile = (n: string | number, l: string) => { const t = el('div', '', 'tile'); t.append(el('b', String(n)), el('span', l)); tiles.append(t); };
+    tile(m.total, 'leads in file'); tile(m.due.length, 'follow-ups due'); tile(`$${m.cash.toLocaleString('en-US')}`, `cash of $${m.target.toLocaleString('en-US')}`); tile(`${m.pct}%`, `to target ($${m.gap.toLocaleString('en-US')} to go)`); tile(flags.filter((f) => f.level === 'high').length, 'high flags');
+
+    const fn = $('funnel'); fn.replaceChildren();
+    const max = Math.max(1, ...m.funnel.map((f) => f[1] as number));
+    for (const [label, n] of m.funnel) {
+      const r = el('div', '', 'frow'); const bar = el('div', '', 'bar'); const i = el('i'); i.style.width = `${((n as number) / max) * 100}%`; bar.append(i);
+      r.append(el('span', String(label)), bar, el('span', String(n))); fn.append(r);
+    }
+    $('dueNote').textContent = m.due.length ? `${m.due.length} due today or earlier. Top ${Math.min(15, m.due.length)} by date then score.` : 'Nothing due.';
+    const db = $('due').querySelector('tbody')!; db.replaceChildren();
+    for (const r of m.due.slice(0, 15)) { const tr = el('tr'); for (const v of [r.next_action_date, r.org_or_name, r.stage, r.next_action]) tr.append(el('td', v)); db.append(tr); }
+    const fb = $('flags').querySelector('tbody')!; fb.replaceChildren();
+    for (const f of flags) { const tr = el('tr'); tr.append(el('td', f.level, f.level), el('td', `${f.name} (#${f.id})`), el('td', f.code), el('td', f.why)); fb.append(tr); }
+    $('out').hidden = false;
+  }
+
+  const usd = (n: number) => `$${Math.round(n).toLocaleString('en-US')}`;
+  function fill(id: string, data: string[][]) {
+    const b = $(id).querySelector('tbody')!; b.replaceChildren();
+    for (const r of data) { const tr = el('tr'); for (const v of r) tr.append(el('td', v)); b.append(tr); }
+  }
+  document.getElementById('pfile')!.addEventListener('change', async (e) => {
+    const f = (e.target as HTMLInputElement).files?.[0];
+    if (!f) return;
+    if (f.size > 5_000_000) { $('msg').textContent = 'File is over 5 MB.'; return; }
+    const pays = parseLedger(parseCsv(await f.text()));
+    if (!pays.length) { $('msg').textContent = 'No payments found. Expect Stripe columns like Created date (UTC), Amount, Status, Description.'; return; }
+    const s = salesSummary(pays, new Date().toISOString().slice(0, 10));
+    const t = $('stiles'); t.replaceChildren();
+    for (const [n, l] of [[usd(s.monthToDate), 'this month, net'], [usd(s.total), 'all time, net'], [String(s.count), 'paid sales'], [usd(s.refunded), 'refunded'], [String(s.flags.length), 'payment flags']]) { const d = el('div', '', 'tile'); d.append(el('b', n), el('span', l)); t.append(d); }
+    fill('offers', s.offers.map((o) => [o.offer, String(o.count), usd(o.net)]));
+    fill('months', s.months.map(([m, n]) => [m, usd(n as number)]));
+    fill('recent', s.recent.map((p) => [p.date, p.offer, usd(p.net), p.who.replace(/^(.).*(@.*)$/, '$1***$2')]));
+    $('pflags').textContent = s.flags.length ? s.flags.map((x) => `${x.level}: ${x.why}`).join(' ') : `No payment flags. ${s.notCounted} failed or unpaid rows not counted.`;
+    (document.getElementById('cash') as HTMLInputElement).value = String(Math.round(s.monthToDate));
+    $('sales').hidden = false; $('nosales').hidden = true; $('msg').textContent = `Loaded ${pays.length} payment rows.`;
+    if (rows.length) render();
+  });
+  document.getElementById('file')!.addEventListener('change', async (e) => {
+    const f = (e.target as HTMLInputElement).files?.[0];
+    if (!f) return;
+    if (f.size > 5_000_000) { $('msg').textContent = 'File is over 5 MB. Pick the leads CSV.'; return; }
+    rows = parseCsv(await f.text());
+    if (!rows.length || !('stage' in rows[0])) { $('msg').textContent = 'That does not look like leads.csv (no stage column).'; return; }
+    $('msg').textContent = `Loaded ${rows.length} rows.`;
+    render();
+  });
+  for (const id of ['cash', 'target']) document.getElementById(id)!.addEventListener('input', () => rows.length && render());
+  $('dl').addEventListener('click', () => {
+    const a = el('a') as HTMLAnchorElement;
+    a.href = URL.createObjectURL(new Blob([flagsCsv(flags)], { type: 'text/csv' }));
+    a.download = 'screening-flags.csv'; a.click(); URL.revokeObjectURL(a.href);
+  });
+</script>

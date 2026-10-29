@@ -1,0 +1,7 @@
+id,date_added,org_or_name,type,offer_fit,source,url,contact_route,stage,score,next_action,next_action_date,notes
+1,2026-10-01,Acme Corp,warm,Pattern Audit,referral,https://acme.example,jane@acme.example,contacted,5,follow up,2026-10-20,"Asked about pricing, said ""maybe"""
+2,2026-10-01,Beta LLC,event,keynote,web,,,closed,4,none,,Paid $12000 by wire from a third party
+3,2026-10-02,"=HYPERLINK(""http://evil.example"",""x"")",cold,workshop,web,https://x.example,hi@x.example,researched,3,send dm,2026-10-25,
+4,2026-10-02,Tehran Studio,cold,workshop,web,https://studio.ir,,researched,2,send dm,2030-01-01,Based in Iran
+5,2026-10-03,acme corp,cold,workshop,web,,,hold: confirm pay,1,none,,paying in bitcoin
+6,2026-10-03,Gamma,warm,Sprint,web,,x@g.example,closed,5,none,,Stripe invoice paid

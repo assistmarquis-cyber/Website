@@ -1,0 +1,297 @@
+---
+import { getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { patternAudit, patternAuditHref, godCoach } from '../data/site';
+import fw from '../../brain/frameworks.json';
+import loopsFeed from '../../brain/feed/loops.json';
+import library from '../../brain/feed/library.json';
+import hero from '../assets/hero-stage.jpg';
+import light from '../assets/life/chasing-the-light.jpg';
+import whiteboard from '../assets/life/whiteboard-solution-for-who.jpg';
+import prototype from '../assets/gallery/hive-prototype.jpg';
+import roundtable from '../assets/gallery/hive-roundtable.jpg';
+import vision from '../assets/life/vision-board-workshop.jpg';
+import group from '../assets/gallery/hive-group.jpg';
+
+// One still frame per scene, each a real photo from Marquis's gallery. Pre-sized and graded in CSS.
+const sets = await Promise.all([hero, light, whiteboard, prototype, roundtable, vision, group].map(async (img) =>
+  (await getImage({ src: img, width: 1800, format: 'webp', quality: 74 })).src));
+
+// Everything the page needs, handed to the script as plain data.
+const data = {
+  fw,
+  parts: loopsFeed.mindsetArchitecture,
+  loops: loopsFeed.loops,
+  library: library.entries.map((e) => ({ id: e.id, finding: e.finding, caveat: e.caveat, citation: e.citation, url: e.verifiedUrl, grade: e.evidence })),
+  sets,
+  offers: {
+    'god-coach': { price: godCoach.price, href: godCoach.payUrl },
+    audit: { price: patternAudit.price, href: patternAuditHref },
+    sprint: { price: 'By application', href: '/mindset-coaching/#apply' },
+    team: { price: 'By inquiry', href: '/workshops/' },
+  },
+};
+---
+<Base bare noindex title="Alan | Seven taps from stuck to a plan" description="Alan is Marquis Harmon's coaching in software form. Pick what you want, find the loop that stops you, get one move, and set a time. No typing required.">
+  <meta name="referrer" content="no-referrer" />
+  <div class="set" id="set" data-d={JSON.stringify(data)}>
+    <img class="bg" id="bg" alt="" width="1800" height="1200" fetchpriority="high" decoding="async" />
+    <div class="grade" aria-hidden="true"></div>
+    <div class="bar top"><span class="slate" id="slate"></span><nav class="tn" aria-label="Alan"><a href="/portal/">Client portal</a><a href="/">Marquis Harmon</a></nav></div>
+    <main class="frame" id="frame" tabindex="-1"></main>
+    <form name="alan-callsheet" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden aria-hidden="true"><input name="form-name" value="alan-callsheet" /><input name="bot-field" /><input name="email" /><input name="sheet" /><input name="consent" /></form>
+    <div class="bar bot"><div class="dots" id="dots" aria-hidden="true"></div><div class="cap" id="cap">Alan is an AI coach built on Marquis's frameworks. Coaching, not therapy. Nothing here is saved.</div><div class="ctl"><button class="lnk" id="back" hidden>Back</button><button class="lnk" id="restart" hidden>Start over</button></div></div>
+  </div>
+</Base>
+
+<style is:global>
+  html, body { background: #0A0806; }
+  .set { --ink:#EFE7DA; --soft:#CDBFAE; --faint:#9A8C7B; --amber:#E3A857; --teal:#7FB1A8; --line:rgba(239,231,218,.18); --panel:rgba(14,11,9,.78);
+    position: relative; height: 100svh; min-height: 560px; overflow: hidden; color: var(--ink); font-family: var(--sans); background: #0A0806; display: flex; flex-direction: column; }
+  .set .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.82) contrast(1.04) brightness(.7) sepia(.12); transition: opacity .35s ease; }
+  .set .bg.swap { opacity: 0; }
+  .grade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10,8,6,.92) 0%, rgba(10,8,6,.62) 38%, rgba(10,8,6,.12) 78%), linear-gradient(180deg, rgba(227,168,87,.10), transparent 28%, rgba(20,40,40,.28) 100%); }
+  .bar { position: relative; z-index: 3; flex: none; background: #0A0806; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 clamp(14px, 3vw, 36px); }
+  .bar.top { height: clamp(40px, 7vh, 64px); } .bar.bot { min-height: clamp(48px, 8vh, 72px); padding-block: 8px; }
+  .slate { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .18em; text-transform: uppercase; color: var(--amber); }
+  .tn { display: flex; gap: 18px; } .tn a { color: var(--faint); font-size: 13px; text-decoration: none; } .tn a:hover { color: var(--ink); }
+  .dots { display: flex; gap: 6px; } .dots i { width: 22px; height: 3px; border-radius: 2px; background: rgba(239,231,218,.2); } .dots i.on { background: var(--amber); }
+  .cap { flex: 1; text-align: center; font-size: 11.5px; color: var(--faint); line-height: 1.4; }
+  .ctl { display: flex; gap: 10px; min-width: 120px; justify-content: flex-end; }
+  .lnk { background: none; border: 0; color: var(--faint); font: 13px var(--sans); cursor: pointer; padding: 6px 4px; } .lnk:hover { color: var(--ink); }
+
+  .frame { position: relative; z-index: 2; flex: 1; min-height: 0; overflow-y: auto; display: flex; align-items: center; padding: 18px clamp(16px, 6vw, 96px); outline: none; }
+  .card { width: min(560px, 100%); background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: clamp(18px, 3vw, 30px); box-shadow: 0 24px 70px rgba(0,0,0,.5); animation: fi .35s ease both; }
+  .card.wide { width: min(760px, 100%); }
+  @keyframes fi { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+  .who { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .16em; text-transform: uppercase; color: var(--amber); }
+  .who b { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--amber); display: grid; place-items: center; font: 600 13px var(--serif); letter-spacing: 0; color: var(--amber); }
+  .set h1 { font: 500 clamp(30px, 5.4vw, 52px)/1.06 var(--serif); margin: 0 0 14px; color: var(--ink); }
+  .set h2 { font: 500 clamp(24px, 3.8vw, 34px)/1.12 var(--serif); margin: 0 0 12px; color: var(--ink); }
+  .set p { color: var(--soft); font-size: 16px; line-height: 1.6; margin: 0 0 12px; }
+  .set .small { font-size: 13px; color: var(--faint); }
+  .set .alan { font: 500 19px/1.45 var(--serif); color: var(--ink); }
+  .btn { display: inline-flex; align-items: center; background: var(--amber); color: #1c1308; border: 0; border-radius: 3px; padding: 14px 26px; font: 700 15px var(--sans); letter-spacing: .02em; cursor: pointer; text-decoration: none; transition: filter .2s; }
+  .btn:hover { filter: brightness(1.08); } .btn.alt { background: transparent; color: var(--ink); border: 1px solid var(--line); } .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; align-items: center; }
+  .set button:focus-visible, .set a:focus-visible, .set textarea:focus-visible, .set input:focus-visible, .set .frame:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+  .picks { display: grid; gap: 8px; margin: 14px 0 0; }
+  .pick { display: block; width: 100%; text-align: left; background: rgba(239,231,218,.05); border: 1px solid var(--line); border-radius: 3px; padding: 13px 15px; color: var(--ink); font: 500 17px/1.3 var(--serif); cursor: pointer; transition: border-color .2s, background .2s; }
+  .pick:hover { border-color: var(--amber); background: rgba(227,168,87,.1); }
+  .pick small { display: block; font: 400 13.5px/1.4 var(--sans); color: var(--soft); margin-top: 3px; }
+  .pick .part { float: right; font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); margin-left: 10px; }
+  .parts { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 14px; } .parts span { font: 600 10.5px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; border: 1px solid var(--line); border-radius: 2px; padding: 4px 8px; color: var(--soft); }
+  .parts span.me { border-color: var(--teal); color: var(--teal); }
+  .today { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 12px; } .today .k { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .16em; text-transform: uppercase; color: var(--teal); }
+  .field { margin: 12px 0 0; } .field label { display: block; font: 600 10.5px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--teal); margin: 0 0 4px; }
+  .move { border-left: 2px solid var(--amber); padding: 2px 0 2px 14px; margin: 10px 0; font: 500 21px/1.4 var(--serif); color: var(--ink); }
+  .draft { display: inline-block; font: 600 10px ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; color: #1c1308; background: var(--teal); border-radius: 2px; padding: 2px 6px; margin-left: 8px; vertical-align: middle; }
+  .research { font-size: 13.5px; line-height: 1.55; color: var(--soft); border-top: 1px solid var(--line); padding-top: 10px; margin-top: 12px; } .research a { color: var(--amber); }
+  .note { font-size: 13.5px; color: var(--ink); background: rgba(127,177,168,.14); border: 1px solid rgba(127,177,168,.4); border-radius: 3px; padding: 10px 12px; margin: 10px 0; }
+  .set textarea, .set input[type=text] { width: 100%; background: rgba(0,0,0,.4); color: var(--ink); border: 1px solid var(--line); border-radius: 3px; padding: 11px 12px; font: 17px/1.4 var(--serif); }
+  .count { font: 600 11px ui-monospace, monospace; letter-spacing: .08em; color: var(--faint); margin-top: 4px; } .count.ok { color: var(--teal); }
+
+  .sheet { background: #EFE7DA; color: #1c1308; border-radius: 2px; padding: clamp(16px, 3vw, 26px); }
+  .sheet h2 { color: #1c1308; font-size: 20px; letter-spacing: .14em; text-transform: uppercase; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; margin: 0 0 12px; border-bottom: 2px solid #1c1308; padding-bottom: 8px; }
+  .sheet dl { margin: 0; display: grid; grid-template-columns: 110px 1fr; gap: 0; } .sheet dt, .sheet dd { margin: 0; padding: 8px 0; border-bottom: 1px solid #cfc3b0; }
+  .sheet dt { font: 700 10.5px ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; color: #6a5a45; } .sheet dd { font: 500 17px/1.35 var(--serif); }
+  .sheet input { background: transparent; border: 0; border-bottom: 1px dashed #6a5a45; color: #1c1308; padding: 2px 0; font: 500 17px var(--serif); width: 100%; }
+  .shelf { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 14px; }
+  .item { position: relative; background: rgba(239,231,218,.06); border: 1px solid var(--line); border-radius: 3px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .item.pick1 { border-color: var(--amber); background: rgba(227,168,87,.1); }
+  .item .tag { position: absolute; top: -10px; left: 12px; background: var(--amber); color: #1c1308; font: 700 10px ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; }
+  .item h3 { font: 500 21px var(--serif); margin: 0; color: var(--ink); } .item p { font-size: 14px; margin: 0; flex: 1; } .item .price { font: 700 20px var(--sans); color: var(--amber); }
+
+  .fact { font: 12.5px/1.5 var(--sans); color: var(--soft); margin: 0; } .fact b { color: var(--teal); font: 600 10px ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; display: block; }
+  .proof { font-size: 13.5px; color: var(--soft); border-top: 1px solid var(--line); padding-top: 12px; margin-top: 16px; }
+  .mail { margin-top: 14px; border-top: 1px dashed var(--line); padding-top: 12px; } .mail label.c { display: flex; gap: 8px; font-size: 13px; color: var(--soft); align-items: flex-start; margin: 8px 0; } .mail input[type=checkbox] { margin-top: 3px; accent-color: var(--amber); }
+  @media (max-width: 700px) { .frame { align-items: flex-end; padding: 10px 12px; } .cap { display: none; } .grade { background: linear-gradient(180deg, rgba(10,8,6,.2) 0%, rgba(10,8,6,.55) 45%, rgba(10,8,6,.9) 100%); } .ctl { min-width: 0; } .tn a:last-child { display: none; } .sheet dl { grid-template-columns: 88px 1fr; } }
+  @media (max-height: 880px) and (min-width: 701px) { .set h1 { font-size: clamp(28px, 4.2vw, 42px); margin-bottom: 8px; } .card { padding: 20px 26px; } .today { margin-top: 10px; } }
+  @media print { html, body, .set { background: #fff !important; height: auto; overflow: visible; } .bg, .grade, .bar, .row, .noprint { display: none !important; } .frame { display: block; padding: 0; overflow: visible; } .card { background: #fff; border: 0; box-shadow: none; padding: 0; } .sheet { padding: 0; } }
+  @media (prefers-reduced-motion: reduce) { .card, .set .bg { animation: none !important; transition: none !important; } }
+</style>
+
+<script>
+  import { scrub, isCrisis, CRISIS_MESSAGE } from '../lib/safety.mjs';
+
+  const root = document.getElementById('set')!;
+  const D = JSON.parse(root.dataset.d!);
+  const FW = D.fw, LOOPS: any[] = D.loops, PARTS: any[] = D.parts;
+  const SHOW_DRAFT = true; // flip to false when Marquis has approved the move wording
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const frame = $('frame'), bg = $<HTMLImageElement>('bg'), slate = $('slate'), dots = $('dots'), back = $('back'), restart = $('restart');
+  const esc = (s: string) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+  const words = (s: string) => s.trim().split(/\s+/).filter(Boolean);
+
+  // The seven taps. Everything chosen stays in this object, in memory only.
+  const SCENES = ['The Opening', 'The Want', 'The Loop', 'The Move', 'The Time', 'The Call Sheet', 'The Counter'];
+  let scene = 0;
+  let S: { want?: any; loop?: any; when?: any; seven?: string; witness?: string; sevenFrom: 'preset' | 'you' | 'alan' | 'alan edited' } = { sevenFrom: 'preset' };
+
+  const partOf = (l: any) => PARTS.find((p) => p.id === FW.loopPart[l.id]);
+  const libOf = (id: string) => D.library.find((e: any) => e.id === id);
+  const offerFor = (l: any) => FW.offerByTool[l.strategy.tool] || 'audit';
+
+  function setBg(i: number) {
+    const url = D.sets[i];
+    if (bg.getAttribute('src') === url) return;
+    bg.classList.add('swap');
+    const im = new Image(); im.onload = im.onerror = () => { bg.src = url; requestAnimationFrame(() => bg.classList.remove('swap')); }; im.src = url;
+  }
+  function go(n: number, push = true) {
+    scene = n; setBg(n);
+    slate.textContent = `Scene ${String(n + 1).padStart(2, '0')} / ${String(SCENES.length).padStart(2, '0')}  ·  ${SCENES[n]}  ·  Take 1`;
+    dots.innerHTML = SCENES.map((_, i) => `<i class="${i <= n ? 'on' : ''}"></i>`).join('');
+    back.hidden = n === 0; restart.hidden = n === 0;
+    if (push) history.pushState({ n }, '', `#scene-${n + 1}`);
+    [opening, want, loop, move, time, sheet, counter][n]();
+    frame.scrollTop = 0; frame.focus({ preventScroll: true });
+    // Pre-load the next frame so the cut is clean.
+    if (D.sets[n + 1]) { const p = new Image(); p.src = D.sets[n + 1]; }
+  }
+  const card = (html: string, cls = '') => { frame.innerHTML = `<section class="card ${cls}">${html}</section>`; };
+  const alan = (line: string) => `<p class="who"><b>A</b>Alan</p><p class="alan">${esc(line)}</p>`;
+
+  // 1. The opening: the line, what a mindset is made of, and today's loop (changes every day).
+  function opening() {
+    const day = Math.floor(Date.now() / 86400000), today = LOOPS[day % LOOPS.length];
+    card(`${alan(FW.alan.open)}
+      <h1>Know your voice. Trust your instinct. Act fast.</h1>
+      <p class="small" style="margin-bottom:6px">What a mindset is made of</p>
+      <div class="parts">${PARTS.map((p) => `<span title="${esc(p.question)}">${esc(p.name)}</span>`).join('')}</div>
+      <div class="row" style="margin-top:6px"><button class="btn" id="go">Roll camera</button></div>
+      <div class="today"><span class="k">Today's loop</span><p style="margin:4px 0 0"><b style="color:var(--ink)">${esc(today.name)}.</b> ${esc(today.plain)}</p><button class="lnk" id="tp" style="padding-left:0;color:var(--teal)">Save today's loop as a poster</button></div>`);
+    $('go').addEventListener('click', () => go(1));
+    $('tp').addEventListener('click', () => poster(today));
+  }
+
+  // 2. What do you want?
+  function want() {
+    card(`${alan(FW.alan.want)}<div class="picks">${FW.wants.map((w: any) => `<button class="pick" data-id="${w.id}">${esc(w.label)}</button>`).join('')}</div>`);
+    frame.querySelectorAll<HTMLButtonElement>('.pick').forEach((b) => b.addEventListener('click', () => { S.want = FW.wants.find((w: any) => w.id === b.dataset.id); S.seven = S.want.seven; S.sevenFrom = 'preset'; go(2); }));
+  }
+
+  // 3. Where does it get stuck? The negative loops, from the research feed.
+  function loop() {
+    card(`${alan(FW.alan.loop)}<div class="picks">${LOOPS.map((l) => `<button class="pick" data-id="${l.id}"><span class="part">${esc(partOf(l)?.name.split(' ').slice(-1)[0] || '')}</span>${esc(l.name)}<small>${esc(l.plain)}</small></button>`).join('')}</div>`, 'wide');
+    frame.querySelectorAll<HTMLButtonElement>('.pick').forEach((b) => b.addEventListener('click', () => { S.loop = LOOPS.find((l) => l.id === b.dataset.id); go(3); }));
+  }
+
+  // 4. The move, and the research behind it, with its honest caveat.
+  function move() {
+    const l = S.loop, part = partOf(l), ev = libOf(l.evidence[0]);
+    card(`${alan(FW.alan.play)}
+      <h2>${esc(l.name)}</h2><p>${esc(l.plain)}</p>
+      <p class="small">This sits in <b style="color:var(--teal)">${esc(part?.name || '')}</b>. ${esc(part?.question || '')}</p>
+      <div class="move">${esc(l.strategy.move)}${SHOW_DRAFT ? '<span class="draft">Draft wording</span>' : ''}</div>
+      <p class="small">G.O.D. role: ${esc(l.strategy.god)}.</p>
+      ${FW.referOut.includes(l.id) ? `<div class="note">${esc(FW.referOutNote)}</div>` : ''}
+      ${ev ? `<div class="research"><b style="color:var(--ink)">What the research says.</b> ${esc(ev.finding)} <br><b style="color:var(--ink)">The honest limit.</b> ${esc(ev.caveat)} <br><a href="${esc(ev.url)}" target="_blank" rel="noopener noreferrer">${esc(ev.citation.split('(')[0].trim())} (${esc(String(ev.citation.match(/\((\d{4})\)/)?.[1] || ''))})</a></div>` : ''}
+      <div class="row"><button class="btn" id="run">Run this move</button><button class="btn alt noprint" id="pst">Save as a poster</button></div>`, 'wide');
+    $('run').addEventListener('click', () => go(4));
+    $('pst').addEventListener('click', () => poster(l));
+  }
+
+  // 5. When will you do it, and what is it in seven words?
+  function time() {
+    card(`${alan(FW.alan.commit)}
+      <div class="field"><label for="sv">Your want, in seven words (optional, edit it)</label><input type="text" id="sv" value="${esc(S.seven || '')}" autocomplete="off" spellcheck="false" /><div class="count" id="cnt" role="status"></div></div>
+      <div class="row" style="margin-top:8px"><button class="lnk noprint" id="sharp" style="color:var(--teal)">Sharpen it with Alan (sends this one line to an AI)</button></div>
+      <p class="small" id="aimsg" role="status"></p>
+      <h2 style="margin-top:14px">When will you do the move?</h2>
+      <div class="row" style="margin-top:6px">${FW.whens.map((w: any) => `<button class="btn alt when" data-id="${w.id}">${esc(w.label)}</button>`).join('')}</div>`);
+    const sv = $<HTMLInputElement>('sv'), cnt = $('cnt');
+    const upd = () => { const n = words(sv.value).length; cnt.textContent = n === 7 ? '7 of 7' : `${n} of 7 words`; cnt.className = 'count' + (n === 7 ? ' ok' : ''); S.seven = sv.value.trim(); if (S.sevenFrom === 'preset' && S.seven !== S.want.seven) S.sevenFrom = 'you'; };
+    sv.addEventListener('input', upd); upd();
+    $('sharp').addEventListener('click', async () => {
+      const msg = $('aimsg'); const text = scrub(sv.value).text;
+      if (isCrisis(text)) { msg.textContent = CRISIS_MESSAGE; return; }
+      msg.textContent = 'Alan is thinking...';
+      try {
+        const r = await fetch('/.netlify/functions/alan', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ mode: 'seven', kind: 'outcome', answer: text, trail: [{ stop: 'Want', a: S.want.label }, { stop: 'Loop', a: S.loop.name }] }), signal: AbortSignal.timeout(25000) });
+        const j = r.ok ? await r.json() : null;
+        if (j?.crisis) { msg.textContent = j.reply; return; }
+        if (!j?.options?.length) { msg.textContent = 'Alan could not find a clean seven-word version right now. Your own words are fine.'; return; }
+        msg.innerHTML = 'Tap one to use it:'; const wrap = document.createElement('div'); wrap.className = 'picks';
+        j.options.forEach((o: string) => { const b = document.createElement('button'); b.className = 'pick'; b.textContent = o; b.addEventListener('click', () => { sv.value = o; S.sevenFrom = 'alan'; upd(); wrap.remove(); msg.textContent = ''; }); wrap.append(b); });
+        msg.after(wrap);
+      } catch { msg.textContent = 'Alan could not be reached right now. Your own words are fine.'; }
+    });
+    frame.querySelectorAll<HTMLButtonElement>('.when').forEach((b) => b.addEventListener('click', () => { S.when = FW.whens.find((w: any) => w.id === b.dataset.id); if (S.sevenFrom === 'alan' && S.seven !== sv.value.trim()) S.sevenFrom = 'alan edited'; go(5); }));
+  }
+
+  // 6. The call sheet: everything you chose, on one page.
+  function sheet() {
+    card(`${alan(FW.alan.sheet)}
+      <div class="sheet" id="sheetbox"><h2>Call sheet</h2><dl>
+        <dt>Want</dt><dd>${esc(S.want.label)}</dd>
+        <dt>In 7 words</dt><dd>${esc(S.seven || S.want.seven)}</dd>
+        <dt>The loop</dt><dd>${esc(S.loop.name)}</dd>
+        <dt>The move</dt><dd>${esc(S.loop.strategy.move)}</dd>
+        <dt>When</dt><dd>${esc(S.when.label)}</dd>
+        <dt>Who knows</dt><dd><input type="text" id="who" aria-label="Who will know" placeholder="Type a name, or leave it" autocomplete="off" /></dd>
+      </dl></div>
+      <div class="row noprint"><button class="btn" id="next">See what fits</button><button class="btn alt" id="print">Print</button><button class="btn alt" id="copy">Copy</button></div>
+      <form class="mail noprint" id="mail"><label class="small" for="em" style="display:block">Want this in your inbox? (optional)</label>
+        <input type="email" id="em" placeholder="you@example.com" autocomplete="email" />
+        <label class="c"><input type="checkbox" id="cs" /><span>Email me this call sheet, and a loop to watch for each week from Marquis. Marquis sees my email and these choices. I can unsubscribe any time.</span></label>
+        <input type="text" id="bf" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true" />
+        <button class="btn alt" type="submit" id="send">Email it to me</button><p class="small" id="mmsg" role="status" style="margin-top:8px"></p></form>`, 'wide');
+    $('next').addEventListener('click', () => go(6));
+    $('mail').addEventListener('submit', async (e) => {
+      e.preventDefault(); const msg = $('mmsg'); const email = $<HTMLInputElement>('em').value.trim();
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { msg.textContent = 'Please enter a valid email.'; return; }
+      if (!$<HTMLInputElement>('cs').checked) { msg.textContent = 'Please tick the box so I know you agree.'; return; }
+      const w = $<HTMLInputElement>('who').value;
+      const sheet = `Want: ${S.want.label}\nIn 7 words: ${S.seven}\nLoop: ${S.loop.name}\nMove: ${S.loop.strategy.move}\nWhen: ${S.when.label}${w ? `\nWho knows: ${scrub(w).text}` : ''}`;
+      msg.textContent = 'Sending...';
+      try {
+        const r = await fetch('/', { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ 'form-name': 'alan-callsheet', 'bot-field': $<HTMLInputElement>('bf').value, email, sheet, consent: 'yes' }).toString() });
+        msg.textContent = r.ok ? 'Done. Check your inbox in a few minutes.' : 'That did not go through. You can still print or copy your call sheet.';
+        if (r.ok) $<HTMLButtonElement>('send').disabled = true;
+      } catch { msg.textContent = 'That did not go through. You can still print or copy your call sheet.'; }
+    });
+    $('print').addEventListener('click', () => { const w = $<HTMLInputElement>('who'); w.setAttribute('value', w.value); print(); });
+    $('copy').addEventListener('click', async () => { const w = $<HTMLInputElement>('who').value; const t = `Want: ${S.want.label}\nIn 7 words: ${S.seven}\nLoop: ${S.loop.name}\nMove: ${S.loop.strategy.move}\nWhen: ${S.when.label}${w ? `\nWho knows: ${w}` : ''}`; try { await navigator.clipboard.writeText(t); $('copy').textContent = 'Copied'; } catch { $('copy').textContent = 'Select and copy'; } });
+  }
+
+  // 7. The counter: a few things on a shelf, one matched. Tap to buy or apply.
+  function counter() {
+    const pick = offerFor(S.loop);
+    const order = [pick, ...FW.offers.map((o: any) => o.id).filter((id: string) => id !== pick && id !== 'team')];
+    card(`${alan(FW.alan.counter)}
+      <div class="shelf">${order.map((id) => { const o = FW.offers.find((x: any) => x.id === id), p = D.offers[id]; const label = o.kind === 'buy' ? 'Buy now' : o.kind === 'apply' ? 'Apply' : 'Inquire';
+        return `<div class="item ${id === pick ? 'pick1' : ''}">${id === pick ? '<span class="tag">Alan\'s pick</span>' : ''}<h3>${esc(o.title)}</h3><p>${esc(o.line)}</p><p class="fact"><b>First win</b>${esc(o.firstWin)}</p><p class="fact"><b>Your effort</b>${esc(o.effort)}</p><div class="price">${esc(p.price)}</div><a class="btn ${id === pick ? '' : 'alt'}" href="${esc(p.href)}">${label}</a></div>`; }).join('')}</div>
+      <p class="proof">${esc(FW.proof)}</p>
+      <p class="small" style="margin-top:14px">Training a whole team? <a href="/workshops/" style="color:var(--amber)">See the workshops</a>. Not sure? <a href="/contact/" style="color:var(--amber)">Ask Marquis a question</a>. Coaching is not therapy and no result is guaranteed.</p>`, 'wide');
+  }
+
+  // A static movie-poster card for the loop, made in the browser. Nothing is uploaded.
+  async function poster(l: any) {
+    await (document as any).fonts?.ready;
+    const W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d')!;
+    const img = new Image(); img.src = bg.src; await new Promise((r) => { img.onload = img.onerror = r as any; });
+    g.fillStyle = '#0A0806'; g.fillRect(0, 0, W, H);
+    if (img.naturalWidth) { const k = Math.max(W / img.naturalWidth, H / img.naturalHeight); g.drawImage(img, (W - img.naturalWidth * k) / 2, (H - img.naturalHeight * k) / 2, img.naturalWidth * k, img.naturalHeight * k); }
+    const gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, 'rgba(10,8,6,.55)'); gr.addColorStop(.45, 'rgba(10,8,6,.72)'); gr.addColorStop(1, 'rgba(10,8,6,.95)'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+    g.fillStyle = '#E3A857'; g.font = '600 26px ui-monospace, Menlo, monospace'; g.fillText('LOOP OF THE DAY  ·  ALAN', 80, 120);
+    const wrap = (t: string, x: number, y: number, max: number, lh: number) => { let line = '', yy = y; for (const w of t.split(' ')) { const test = line ? line + ' ' + w : w; if (g.measureText(test).width > max && line) { g.fillText(line, x, yy); line = w; yy += lh; } else line = test; } g.fillText(line, x, yy); return yy + lh; };
+    g.fillStyle = '#EFE7DA'; g.font = '500 96px Fraunces, Georgia, serif'; let y = wrap(l.name, 80, 330, 920, 108);
+    g.fillStyle = '#CDBFAE'; g.font = '400 40px "Work Sans", system-ui, sans-serif'; y = wrap(l.plain, 80, y + 30, 920, 56);
+    g.fillStyle = '#E3A857'; g.fillRect(80, y + 20, 6, 150); g.fillStyle = '#EFE7DA'; g.font = '500 40px Fraunces, Georgia, serif'; wrap('The move: ' + l.strategy.move, 112, y + 56, 880, 54);
+    g.fillStyle = '#9A8C7B'; g.font = '500 28px "Work Sans", system-ui, sans-serif'; g.fillText('Find yours in seven taps  ·  bigpicturearchitect.com/alan', 80, H - 80);
+    const blob: Blob | null = await new Promise((r) => c.toBlob(r, 'image/png'));
+    if (!blob) return;
+    const file = new File([blob], `alan-${l.id}.png`, { type: 'image/png' });
+    if ((navigator as any).canShare?.({ files: [file] })) { try { await (navigator as any).share({ files: [file], text: `${l.name}. Find yours: bigpicturearchitect.com/alan` }); return; } catch { /* fall through to download */ } }
+    const u = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = u; a.download = file.name; a.click(); URL.revokeObjectURL(u);
+  }
+
+  back.addEventListener('click', () => history.back());
+  restart.addEventListener('click', () => { S = { sevenFrom: 'preset' }; go(0); });
+  // Browser back and forward only land on scenes whose choices still exist.
+  const allowed = (n: number) => (n >= 5 && !S.when ? 4 : n >= 4 && !S.loop ? (S.want ? 2 : 1) : n >= 3 && !S.loop ? (S.want ? 2 : 1) : n >= 2 && !S.want ? 1 : n);
+  addEventListener('popstate', (e) => go(allowed((e.state && e.state.n) ?? 0), false));
+  history.replaceState({ n: 0 }, '', location.pathname);
+  go(0, false);
+</script>

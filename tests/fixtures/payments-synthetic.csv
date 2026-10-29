@@ -1,0 +1,7 @@
+id,Created date (UTC),Amount,Amount Refunded,Currency,Status,Description,Customer Email,client_reference_id
+ch_1,2026-10-05 14:02,88.00,0.00,usd,Paid,Payment for Payment Link,a@example.com,pattern_audit
+ch_2,2026-10-07 09:10,88.00,88.00,usd,Paid,G.O.D. Coach setup,b@example.com,
+ch_3,2026-10-20 18:44,"1,500.00",0.00,usd,Paid,Mindset Sprint,c@example.com,
+ch_4,2026-09-30 10:00,12000.00,0.00,usd,Paid,Keynote deposit,d@example.com,
+ch_5,2026-10-21 10:00,88.00,0.00,usd,Failed,Payment Link,e@example.com,
+ch_6,2026-10-22 10:00,500.00,0.00,usd,Disputed,Workshop,f@example.com,
