@@ -64,6 +64,13 @@ await page.setInputFiles('#file', { name: 'x.csv', mimeType: 'text/csv', buffer:
 await page.waitForTimeout(200);
 ok(/does not look like leads/.test(await page.locator('#msg').innerText()), 'wrong file type is refused politely');
 
+writeFileSync(join(dir, 'p.csv'), readFileSync('tests/fixtures/payments-synthetic.csv', 'utf8') + '7,2026-10-23,5,0,usd,Paid,"<img src=x onerror=window.__pwned=9>",x@y.com,\n');
+await page.setInputFiles('#pfile', join(dir, 'p.csv'));
+await page.waitForSelector('#sales:not([hidden])');
+ok(/Pattern Audit/.test(await page.locator('#offers').innerText()) && /\$13,593/.test(await page.locator('#stiles').innerText()), 'payments ledger shows offers and net totals');
+ok(await page.evaluate(() => !window.__pwned) && await page.locator('#sales img').count() === 0, 'hostile payment description is text, not code');
+ok(reqs.every((u) => u.startsWith(base)), 'payments load: still same-origin only');
+
 const real = process.argv[2];
 if (real) {
   await page.setInputFiles('#file', real);

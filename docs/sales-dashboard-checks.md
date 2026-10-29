@@ -12,3 +12,6 @@ Not covered, and not claimed:
 - No live sanctions list lookup. Use https://sanctionssearch.ofac.treas.gov for any unfamiliar payer.
 - No penetration test of Netlify itself, and the edge login has not been exercised on a live deploy (needs SALES_PASSWORD set in Netlify).
 - npm audit still reports advisories in astro and sharp (build-time, not in the dashboard page). Upgrading Astro is a breaking change and belongs in its own PR.
+
+## Sales view (added 2026-10-29)
+The page also reads a Stripe payments export (Payments, Export) in the browser: net revenue this month and all time, by offer (Pattern Audit, G.O.D. Coach, Sprint, workshops, keynotes, Alan), by month, latest payments (emails masked), refunds netted, failed rows not counted, and flags for payments of $10,000 or more and disputes. Offers are matched from the Stripe description and client_reference_id; the two $88 products can only be told apart by that tag. Tested with synthetic payments, including hostile descriptions.

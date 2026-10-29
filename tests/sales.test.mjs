@@ -72,3 +72,30 @@ test('basic auth: rejects wrong, empty, malformed, oversize and unset', async ()
   assert.equal(await checkBasic(hdr('u', PW), undefined), false);
   assert.equal(parseBasic('Basic /w=='), null); // invalid utf-8 must not throw
 });
+
+import { parseLedger, salesSummary, pipelineByOffer, offerOf } from '../src/lib/sales.mjs';
+const pays = parseLedger(parseCsv(readFileSync(new URL('./fixtures/payments-synthetic.csv', import.meta.url), 'utf8')));
+
+test('ledger: only paid payments count, refunds netted, offers labeled', () => {
+  const s = salesSummary(pays, '2026-10-29');
+  assert.equal(s.count, 4);
+  assert.equal(s.total, 88 + 0 + 1500 + 12000);
+  assert.equal(s.monthToDate, 88 + 1500);
+  assert.equal(s.refunded, 88);
+  assert.equal(s.notCounted, 2);
+  assert.deepEqual(s.offers.map((o) => o.offer), ['Keynotes', 'Mindset Sprint', 'Pattern Audit', 'G.O.D. Coach']);
+  assert.deepEqual(s.months.map(([m]) => m), ['2026-09', '2026-10']);
+});
+test('ledger: large payments and disputes are flagged', () => {
+  const codes2 = salesSummary(pays, '2026-10-29').flags.map((f) => f.code);
+  assert.ok(codes2.includes('large-payment') && codes2.includes('dispute'));
+});
+test('offerOf and pipelineByOffer', () => {
+  assert.equal(offerOf('client_reference_id=pattern_audit'), 'Pattern Audit');
+  assert.equal(offerOf('nothing'), 'Unlabeled');
+  assert.ok(pipelineByOffer(rows).every((o) => o.active + o.closed > 0));
+});
+test('ledger parser tolerates empty and junk', () => {
+  assert.deepEqual(parseLedger([]), []);
+  assert.equal(salesSummary(parseLedger(parseCsv('a,b\n1,2')), '2026-10-29').total, 0);
+});

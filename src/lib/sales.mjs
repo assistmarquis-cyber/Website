@@ -94,3 +94,67 @@ export function flagsCsv(flags) {
   const head = ['id', 'name', 'stage', 'level', 'code', 'why'];
   return [head.join(','), ...flags.map((f) => head.map((h) => csvCell(f[h])).join(','))].join('\n');
 }
+
+// ---- Payments ledger (Stripe Dashboard export, or any CSV with a date, amount and description) ----
+const pick = (r, ...names) => { for (const n of names) if (r[n] !== undefined && r[n] !== '') return r[n]; return ''; };
+const money = (v) => { const n = Number(String(v).replace(/[$,\s]/g, '')); return Number.isFinite(n) ? n : 0; };
+
+export function offerOf(text) {
+  const t = String(text).toLowerCase();
+  if (/pattern[_ ]?audit/.test(t)) return 'Pattern Audit';
+  if (/g\.?o\.?d\.? ?coach|god[_ ]coach/.test(t)) return 'G.O.D. Coach';
+  if (/sprint/.test(t)) return 'Mindset Sprint';
+  if (/workshop/.test(t)) return 'Workshops';
+  if (/keynote|speak/.test(t)) return 'Keynotes';
+  if (/alan/.test(t)) return 'Alan';
+  return 'Unlabeled';
+}
+
+export function parseLedger(rows) {
+  return rows.map((r) => {
+    const status = pick(r, 'status').toLowerCase();
+    const gross = money(pick(r, 'amount', 'amount captured', 'gross'));
+    const refunded = money(pick(r, 'amount refunded', 'refunded'));
+    const text = [pick(r, 'description', 'product', 'item'), pick(r, 'client_reference_id', 'client reference id'), pick(r, 'metadata')].join(' ');
+    return {
+      date: pick(r, 'created date (utc)', 'created (utc)', 'date', 'created').slice(0, 10),
+      status, gross, refunded, net: Math.max(0, gross - refunded),
+      offer: offerOf(text), who: pick(r, 'customer email', 'email', 'customer name', 'customer'), text: text.trim(),
+      counted: /^(paid|succeeded|complete|completed)$/.test(status),
+    };
+  }).filter((p) => p.gross > 0 || p.counted);
+}
+
+export function salesSummary(pays, today) {
+  const paid = pays.filter((p) => p.counted);
+  const month = today.slice(0, 7);
+  const sum = (a) => a.reduce((s, p) => s + p.net, 0);
+  const byOffer = {};
+  for (const p of paid) { const o = (byOffer[p.offer] ||= { offer: p.offer, count: 0, net: 0 }); o.count++; o.net += p.net; }
+  const byMonth = {};
+  for (const p of paid) { const k = p.date.slice(0, 7) || 'unknown'; byMonth[k] = (byMonth[k] || 0) + p.net; }
+  return {
+    count: paid.length, total: sum(paid), monthToDate: sum(paid.filter((p) => p.date.startsWith(month))),
+    refunded: paid.reduce((s, p) => s + p.refunded, 0),
+    offers: Object.values(byOffer).sort((a, b) => b.net - a.net),
+    months: Object.entries(byMonth).sort(([a], [b]) => a.localeCompare(b)),
+    notCounted: pays.length - paid.length,
+    recent: [...paid].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 10),
+    flags: pays.flatMap((p) => [
+      ...(p.counted && p.net >= 10000 ? [{ code: 'large-payment', level: 'medium', why: `$${p.net.toLocaleString('en-US')} on ${p.date}. Confirm the payer and keep the invoice.` }] : []),
+      ...(/dispute|chargeback|lost/.test(p.status) ? [{ code: 'dispute', level: 'high', why: `Payment on ${p.date} is ${p.status}. Respond in Stripe before the deadline.` }] : []),
+    ]),
+  };
+}
+
+// Pipeline by offer from leads.csv: counts only, since leads carry no confirmed price.
+export function pipelineByOffer(rows) {
+  const out = {};
+  for (const r of rows) {
+    if (OUT(r.stage)) continue;
+    const k = r.type || 'other';
+    const o = (out[k] ||= { type: k, active: 0, closed: 0 });
+    CLOSED(r.stage) ? o.closed++ : o.active++;
+  }
+  return Object.values(out).sort((a, b) => b.active - a.active);
+}

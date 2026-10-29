@@ -9,11 +9,25 @@ import Base from '../../layouts/Base.astro';
     </header>
 
     <section class="load">
-      <label class="btn">Choose leads.csv <input id="file" type="file" accept=".csv,text/csv" hidden /></label>
+      <label class="btn">1. Payments CSV (Stripe) <input id="pfile" type="file" accept=".csv,text/csv" hidden /></label>
+      <label class="btn">2. leads.csv <input id="file" type="file" accept=".csv,text/csv" hidden /></label>
       <label>Cash received this month ($) <input id="cash" type="number" min="0" step="1" value="0" inputmode="numeric" /></label>
       <label>Monthly target ($) <input id="target" type="number" min="1" step="1" value="25806" inputmode="numeric" /></label>
       <span id="msg" role="status"></span>
     </section>
+
+    <section id="sales" hidden>
+      <h2>Sales</h2>
+      <div class="tiles" id="stiles"></div>
+      <h2>Revenue by offer</h2>
+      <table id="offers"><thead><tr><th>Offer</th><th>Sales</th><th>Net revenue</th></tr></thead><tbody></tbody></table>
+      <h2>By month</h2>
+      <table id="months"><thead><tr><th>Month</th><th>Net revenue</th></tr></thead><tbody></tbody></table>
+      <h2>Latest payments</h2>
+      <table id="recent"><thead><tr><th>Date</th><th>Offer</th><th>Net</th><th>Payer</th></tr></thead><tbody></tbody></table>
+      <p id="pflags" class="note"></p>
+    </section>
+    <p id="nosales" class="note">No sales loaded yet. In Stripe: Payments, Export, choose the dates, download the CSV, then pick it above. It is read in this browser only. Sales from the work built in this project (Pattern Audit, G.O.D. Coach, Sprint, workshops, keynotes) show up here once Stripe has them; the project has recorded $0 so far.</p>
 
     <section id="out" hidden>
       <div class="tiles" id="tiles"></div>
@@ -51,7 +65,7 @@ import Base from '../../layouts/Base.astro';
 </style>
 
 <script>
-  import { parseCsv, metrics, riskFlags, flagsCsv } from '../../lib/sales.mjs';
+  import { parseCsv, metrics, riskFlags, flagsCsv, parseLedger, salesSummary, pipelineByOffer } from '../../lib/sales.mjs';
 
   const $ = (id: string) => document.getElementById(id) as HTMLElement;
   const el = (tag: string, text = '', cls = '') => { const e = document.createElement(tag); e.textContent = text; if (cls) e.className = cls; return e; };
@@ -80,6 +94,28 @@ import Base from '../../layouts/Base.astro';
     $('out').hidden = false;
   }
 
+  const usd = (n: number) => `$${Math.round(n).toLocaleString('en-US')}`;
+  function fill(id: string, data: string[][]) {
+    const b = $(id).querySelector('tbody')!; b.replaceChildren();
+    for (const r of data) { const tr = el('tr'); for (const v of r) tr.append(el('td', v)); b.append(tr); }
+  }
+  document.getElementById('pfile')!.addEventListener('change', async (e) => {
+    const f = (e.target as HTMLInputElement).files?.[0];
+    if (!f) return;
+    if (f.size > 5_000_000) { $('msg').textContent = 'File is over 5 MB.'; return; }
+    const pays = parseLedger(parseCsv(await f.text()));
+    if (!pays.length) { $('msg').textContent = 'No payments found. Expect Stripe columns like Created date (UTC), Amount, Status, Description.'; return; }
+    const s = salesSummary(pays, new Date().toISOString().slice(0, 10));
+    const t = $('stiles'); t.replaceChildren();
+    for (const [n, l] of [[usd(s.monthToDate), 'this month, net'], [usd(s.total), 'all time, net'], [String(s.count), 'paid sales'], [usd(s.refunded), 'refunded'], [String(s.flags.length), 'payment flags']]) { const d = el('div', '', 'tile'); d.append(el('b', n), el('span', l)); t.append(d); }
+    fill('offers', s.offers.map((o) => [o.offer, String(o.count), usd(o.net)]));
+    fill('months', s.months.map(([m, n]) => [m, usd(n as number)]));
+    fill('recent', s.recent.map((p) => [p.date, p.offer, usd(p.net), p.who.replace(/^(.).*(@.*)$/, '$1***$2')]));
+    $('pflags').textContent = s.flags.length ? s.flags.map((x) => `${x.level}: ${x.why}`).join(' ') : `No payment flags. ${s.notCounted} failed or unpaid rows not counted.`;
+    (document.getElementById('cash') as HTMLInputElement).value = String(Math.round(s.monthToDate));
+    $('sales').hidden = false; $('nosales').hidden = true; $('msg').textContent = `Loaded ${pays.length} payment rows.`;
+    if (rows.length) render();
+  });
   document.getElementById('file')!.addEventListener('change', async (e) => {
     const f = (e.target as HTMLInputElement).files?.[0];
     if (!f) return;
