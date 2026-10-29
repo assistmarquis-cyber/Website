@@ -5,8 +5,8 @@ import Footer from '../components/Footer.astro';
 import PhotoLayer from '../components/PhotoLayer.astro';
 import { site } from '../data/site';
 import { siteGraph, ids } from '../data/seo';
-interface Props { title: string; description: string; noindex?: boolean; bare?: boolean; schema?: object[] }
-const { title, description, noindex = false, bare = false, schema = [] } = Astro.props;
+interface Props { title: string; description: string; noindex?: boolean; bare?: boolean; privatePage?: boolean; schema?: object[] }
+const { title, description, noindex = false, bare = false, privatePage = false, schema = [] } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const og = new URL('/og.jpg', site.url).href;
 const graph = {
@@ -38,9 +38,9 @@ const graph = {
   <meta name="msvalidate.01" content="9CCDEE8F065EF2A23B4214B67AA9F32C" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM summary" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  {!privatePage && <link rel="preconnect" href="https://fonts.googleapis.com" />}
+  {!privatePage && <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />}
+  {!privatePage && <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />}
   <script type="application/ld+json" set:html={JSON.stringify(graph)} />
   <script is:inline>
     // Teleport between pages: remember where the visitor clicked, and open the next page from that spot.
