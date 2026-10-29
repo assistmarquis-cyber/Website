@@ -1,0 +1,390 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base bare noindex title="The Room | A thinking partner by Marquis Harmon" description="A quiet place to think out loud and build your personal operating system from your own life's work. Nothing leaves your device.">
+  <div id="app" class="app" data-stage="welcome">
+    <div class="orb" aria-hidden="true"></div>
+
+    <header class="bar">
+      <a class="mark" href="/" aria-label="Back to site">Marquis Harmon</a>
+      <div class="bar-r">
+        <span class="prog" id="prog" hidden><i id="prog-fill"></i></span>
+        <button class="ghost" id="reset" hidden>Start over</button>
+      </div>
+    </header>
+
+    <main class="stage" id="stage" aria-live="polite"></main>
+
+    <footer class="foot">Stays on this device. No account, no tracking, nothing sent. <span id="saved"></span></footer>
+  </div>
+</Base>
+
+<style is:global>
+  html, body { background: #0F2B2A; }
+  .app {
+    --ink: #F4EEE3; --soft: #B9CCC8; --faint: #7F9894; --line: rgba(244,238,227,.14);
+    --glow: #E8B76A; --card: rgba(244,238,227,.055);
+    position: relative; min-height: 100svh; display: flex; flex-direction: column; overflow: hidden;
+    color: var(--ink); font-family: var(--sans);
+    background: radial-gradient(120% 90% at 50% -10%, #1D4B49 0%, #0F2B2A 55%, #0A1E1D 100%);
+  }
+  .orb {
+    position: absolute; left: 50%; top: 38%; width: min(70vw, 560px); aspect-ratio: 1; translate: -50% -50%;
+    border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle at 40% 35%, rgba(232,183,106,.28), rgba(27,102,99,.18) 45%, transparent 70%);
+    filter: blur(30px); animation: breathe 9s ease-in-out infinite;
+  }
+  @keyframes breathe { 0%,100% { transform: scale(.92); opacity: .75 } 50% { transform: scale(1.08); opacity: 1 } }
+  .bar, .stage, .foot { position: relative; z-index: 1; }
+  .bar { display: flex; justify-content: space-between; align-items: center; padding: 18px var(--pad); max-width: 860px; width: 100%; margin: 0 auto; }
+  .mark { font-family: var(--serif); font-size: 15px; letter-spacing: .02em; color: var(--soft); text-decoration: none; }
+  .bar-r { display: flex; align-items: center; gap: 14px; }
+  .prog { width: 90px; height: 3px; background: var(--line); border-radius: 3px; overflow: hidden; }
+  .prog i { display: block; height: 100%; width: 0; background: var(--glow); transition: width .6s ease; }
+  .ghost { background: none; border: 0; color: var(--faint); font: inherit; font-size: 13px; cursor: pointer; padding: 6px; }
+  .ghost:hover { color: var(--ink); }
+  .stage { flex: 1; width: 100%; max-width: 760px; margin: 0 auto; padding: 4vh var(--pad) 40px; display: flex; flex-direction: column; justify-content: center; }
+  .foot { text-align: center; font-size: 12px; color: var(--faint); padding: 14px var(--pad) 20px; }
+  .fade { animation: rise .7s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+
+  .eyebrow-l { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--glow); margin: 0 0 18px; }
+  .app h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(34px, 7vw, 58px); line-height: 1.08; margin: 0 0 20px; color: var(--ink); }
+  .app h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(26px, 4.6vw, 38px); line-height: 1.18; margin: 0 0 14px; color: var(--ink); }
+  .app p { color: var(--soft); font-size: 17px; line-height: 1.6; margin: 0 0 14px; }
+  .app .hint { font-size: 15px; color: var(--faint); }
+
+  .btn { display: inline-flex; align-items: center; gap: 8px; background: var(--glow); color: #2A1D14; border: 0; border-radius: 999px; padding: 14px 26px; font: 600 16px var(--sans); cursor: pointer; text-decoration: none; transition: transform .2s, box-shadow .2s; }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(232,183,106,.28); }
+  .btn.alt { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .btn.alt:hover { border-color: var(--soft); box-shadow: none; }
+  .btn:focus-visible, .ghost:focus-visible, textarea:focus-visible, .chip:focus-visible { outline: 2px solid var(--glow); outline-offset: 3px; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 22px; }
+
+  textarea {
+    width: 100%; min-height: 150px; resize: vertical; background: var(--card); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 16px; padding: 18px; font: 400 18px/1.55 var(--sans);
+  }
+  textarea::placeholder { color: var(--faint); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; }
+  .chip { background: var(--card); color: var(--soft); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; font: 14px var(--sans); cursor: pointer; }
+  .chip:hover { color: var(--ink); border-color: var(--soft); }
+  .chip[aria-pressed="true"] { background: rgba(232,183,106,.16); border-color: var(--glow); color: var(--ink); }
+
+  .echo { border-left: 2px solid var(--glow); padding: 4px 0 4px 18px; margin: 4px 0 22px; }
+  .echo q { display: block; font-family: var(--serif); font-size: 21px; line-height: 1.4; color: var(--ink); quotes: "\201C" "\201D"; }
+  .echo p { margin: 12px 0 0; }
+
+  .os { background: #FBF8F3; color: #2A1D14; border-radius: 20px; padding: clamp(22px, 5vw, 44px); box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+  .os h1 { color: #124A48; font-size: clamp(28px, 5vw, 40px); margin-bottom: 6px; }
+  .os .sub { color: #6B5646; font-size: 14px; margin-bottom: 26px; }
+  .os section { padding: 18px 0; border-top: 1px solid #E6DDD0; }
+  .os h3 { font: 600 12px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: #B8322A; margin: 0 0 8px; }
+  .os .ed { font-family: var(--serif); font-size: 19px; line-height: 1.5; color: #2A1D14; white-space: pre-wrap; border-radius: 8px; padding: 4px 6px; margin: 0 -6px; outline: none; }
+  .os .ed:hover { background: #EEF6F4; }
+  .os .ed:focus { background: #EEF6F4; box-shadow: 0 0 0 2px #1B6663; }
+  .os .ed:empty::before { content: attr(data-empty); color: #9b8a7b; }
+  .os .note { font-size: 13px; color: #6B5646; margin-top: 6px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tags span { background: #D6EBE8; color: #124A48; border-radius: 999px; padding: 6px 14px; font-size: 15px; font-weight: 500; }
+
+  .log { margin-top: 36px; }
+  .log h2 { font-size: 24px; }
+  .entry { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; margin: 10px 0; }
+  .entry b { color: var(--glow); font: 600 12px var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+  .entry p { margin: 6px 0 0; font-size: 15px; }
+
+  .how { display: grid; gap: 10px; margin: 26px 0 8px; }
+  .how div { display: flex; gap: 14px; color: var(--soft); font-size: 16px; }
+  .how b { color: var(--glow); font-family: var(--serif); font-weight: 500; min-width: 22px; }
+
+  @media print {
+    html, body, .app { background: #fff !important; }
+    .bar, .foot, .orb, .row, .log, .note, .noprint { display: none !important; }
+    .stage { max-width: none; padding: 0; }
+    .os { box-shadow: none; padding: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .orb, .fade { animation: none; } .prog i { transition: none; } }
+</style>
+
+<script>
+  type Room = {
+    id: string; label: string; os: string; q: string; help: string; ph: string;
+    chips?: string[]; pick?: number; echo: (a: string) => string;
+  };
+
+  const rooms: Room[] = [
+    {
+      id: 'work', label: 'Life\'s work', os: 'What I\'ve been doing all along',
+      q: 'What have you done for years that people keep coming to you for?',
+      help: 'Not your job title. The thing people bring you, even when it isn\'t your job. Tell it the way you would to a friend.',
+      ph: 'People call me when...',
+      echo: () => 'This is your specific intelligence. A tool can be general. This part is only yours, so everything else gets built around it.',
+    },
+    {
+      id: 'story', label: 'A real moment', os: 'The moment that proves it',
+      q: 'Tell me about one time it really mattered. What happened?',
+      help: 'One real scene. Where you were, who was there, what you did. Specifics beat summaries.',
+      ph: 'It was...',
+      echo: () => 'Keep that scene close. When a plan sounds right on paper but wrong to you, this is the evidence you check it against.',
+    },
+    {
+      id: 'gifts', label: 'Gifts', os: 'My gifts',
+      q: 'Which of these are actually yours?',
+      help: 'Pick up to three, or write your own below. Be honest, not modest and not flattering.',
+      ph: 'Anything else you would add?',
+      chips: ['Design thinking', 'Building rapport', 'Motivating people', 'Seeing patterns', 'Staying calm in a crisis', 'Teaching', 'Making things from nothing', 'Telling the truth kindly', 'Connecting people', 'Finishing', 'Strategy', 'Listening'],
+      pick: 3,
+      echo: (a) => a ? 'Gifts are tools for other people. Hold onto what you pointed to, because your decisions should protect them, not burn them out.' : 'No gifts named yet. That is fine, come back to this one after the rest.',
+    },
+    {
+      id: 'identity', label: 'Identity', os: 'Who I\'m becoming',
+      q: 'Who do you want to be, and have to become, to accomplish your goal?',
+      help: 'Start with the goal, then describe the person who reaches it. How do they decide? What do they stop doing?',
+      ph: 'The person who gets this done...',
+      echo: () => 'Goals get chased. Identities get lived. Read that answer as a person you are practicing being, starting with the next decision.',
+    },
+    {
+      id: 'voices', label: 'Two voices', os: 'My two voices',
+      q: 'Think of the last time pressure shrank your view. What did your survival voice say, and what did your instinct say?',
+      help: 'Survival voice grabs for what you want most, right now. Instinct is quieter and usually earlier. Write both.',
+      ph: 'Survival said... Instinct said...',
+      echo: () => 'You will not stop the survival voice. You will learn to name it in the moment. Naming is the whole skill.',
+    },
+    {
+      id: 'rules', label: 'Decisions', os: 'My rules under pressure',
+      q: 'What decision do you keep making over and over? Write the rule that ends it.',
+      help: 'A rule is a decision made while calm, for the version of you who is not. If X happens, I do Y.',
+      ph: 'When ___ happens, I ___.',
+      echo: () => 'Systems hold when people don\'t. Everyone is calm before the pressure. The rule is what the calm version leaves for the stressed one.',
+    },
+    {
+      id: 'cut', label: 'Destroyer', os: 'What I\'m cutting',
+      q: 'What is one thing you are carrying that you should destroy?',
+      help: 'A commitment, a habit, a project, a person\'s opinion, an old plan. The thing that takes room and gives nothing back.',
+      ph: 'I\'m done with...',
+      echo: () => 'Cutting is the step most people skip, because creating feels better. Whatever you named now has an end date. Pick it.',
+    },
+    {
+      id: 'move', label: 'Execution', os: 'My next move',
+      q: 'What is the smallest real move you can make in the next 24 hours, and who will know whether you did it?',
+      help: 'Small enough to do today. Someone specific has to know, because insight without action fades.',
+      ph: 'By tomorrow I will... and I\'ll tell...',
+      echo: () => 'That is the prototype. Not the plan, the first test. Do it while the clarity is still fresh.',
+    },
+  ];
+
+  const KEY = 'marquis-room-v1';
+  type State = { i: number; a: Record<string, string>; picks: string[]; os?: Record<string, string>; log: { t: string; v: string; r: string; c: string }[] };
+  const load = (): State => {
+    try { const s = JSON.parse(localStorage.getItem(KEY) || ''); if (s && s.a) return s; } catch (_) {}
+    return { i: -1, a: {}, picks: [], log: [] };
+  };
+  let S = load();
+  const save = () => {
+    try { localStorage.setItem(KEY, JSON.stringify(S)); const el = document.getElementById('saved'); if (el) { el.textContent = 'Saved.'; setTimeout(() => { if (el) el.textContent = ''; }, 1500); } } catch (_) {}
+  };
+
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const stage = $('stage'), app = $('app'), prog = $('prog'), fill = $('prog-fill'), reset = $('reset');
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+  const snippet = (s: string) => { const t = s.trim().replace(/\s+/g, ' '); return t.length > 150 ? t.slice(0, 147).replace(/\s\S*$/, '') + '...' : t; };
+  const render = (html: string) => { stage.innerHTML = `<div class="fade">${html}</div>`; stage.scrollIntoView({ block: 'start' }); window.scrollTo({ top: 0 }); };
+  const setBar = (i: number) => {
+    const on = i >= 0 && i < rooms.length;
+    prog.hidden = !on; reset.hidden = !(i >= 0);
+    fill.style.width = `${Math.max(0, i) / rooms.length * 100}%`;
+  };
+
+  function welcome() {
+    app.dataset.stage = 'welcome'; setBar(-1);
+    const back = Object.keys(S.a).length > 0;
+    render(`
+      <p class="eyebrow-l">A thinking partner</p>
+      <h1>Say it out loud. We'll make sense of it together.</h1>
+      <p>This is a quiet place to think. No feed, no streaks, no account. You answer ${rooms.length} questions in your own words, one at a time, and what comes out is a one-page operating system built from your own life's work.</p>
+      <div class="how">
+        <div><b>1</b><span>I ask. You answer in your own words, as long or short as you like.</span></div>
+        <div><b>2</b><span>I reflect back what I heard, so you can hear it too.</span></div>
+        <div><b>3</b><span>You leave with a page you can edit, print, and live by.</span></div>
+      </div>
+      <p class="hint">About 15 minutes. Everything stays in this browser.</p>
+      <div class="row">
+        ${S.os ? '<button class="btn" id="go-os">Open my operating system</button>' : `<button class="btn" id="go">${back ? 'Pick up where I left off' : 'Begin'}</button>`}
+        ${back && !S.os ? '' : S.os ? '<button class="btn alt" id="go-redo">Revisit the questions</button>' : ''}
+      </div>`);
+    $('go')?.addEventListener('click', () => { if (S.i < 0) S.i = 0; ask(S.i); });
+    $('go-os')?.addEventListener('click', showOS);
+    $('go-redo')?.addEventListener('click', () => { S.i = 0; ask(0); });
+  }
+
+  function ask(i: number) {
+    S.i = i; save(); app.dataset.stage = 'ask'; setBar(i);
+    const r = rooms[i];
+    const chips = r.chips ? `<div class="chips" role="group" aria-label="Gifts">${r.chips.map((c) => `<button type="button" class="chip" aria-pressed="${S.picks.includes(c)}">${esc(c)}</button>`).join('')}</div>` : '';
+    render(`
+      <p class="eyebrow-l">${i + 1} of ${rooms.length} · ${esc(r.label)}</p>
+      <h2>${esc(r.q)}</h2>
+      <p class="hint">${esc(r.help)}</p>
+      ${r.chips ? chips + '<div style="height:14px"></div>' : ''}
+      <textarea id="ans" aria-label="Your answer" placeholder="${esc(r.ph)}">${esc(S.a[r.id] || '')}</textarea>
+      <div class="row">
+        <button class="btn" id="next">Continue</button>
+        ${i > 0 ? '<button class="btn alt" id="prev">Back</button>' : ''}
+        <button class="ghost" id="skip">Skip for now</button>
+      </div>`);
+    const ta = $<HTMLTextAreaElement>('ans'); ta.focus({ preventScroll: true });
+    ta.addEventListener('input', () => { S.a[r.id] = ta.value; save(); });
+    document.querySelectorAll<HTMLButtonElement>('.chip').forEach((b) => b.addEventListener('click', () => {
+      const v = b.textContent!;
+      if (S.picks.includes(v)) S.picks = S.picks.filter((x) => x !== v);
+      else if (S.picks.length < (r.pick || 3)) S.picks.push(v);
+      document.querySelectorAll<HTMLButtonElement>('.chip').forEach((c) => c.setAttribute('aria-pressed', String(S.picks.includes(c.textContent!))));
+      save();
+    }));
+    $('next').addEventListener('click', () => reflect(i));
+    $('prev')?.addEventListener('click', () => ask(i - 1));
+    $('skip').addEventListener('click', () => advance(i));
+  }
+
+  const advance = (i: number) => (i + 1 < rooms.length ? ask(i + 1) : build());
+
+  function reflect(i: number) {
+    const r = rooms[i];
+    const a = (S.a[r.id] || '').trim();
+    const heard = r.id === 'gifts' ? S.picks.join(', ') || a : a;
+    if (!heard) return advance(i);
+    app.dataset.stage = 'reflect'; setBar(i + 1);
+    render(`
+      <p class="eyebrow-l">What I heard</p>
+      <div class="echo"><q>${esc(snippet(heard))}</q><p>${esc(r.echo(heard))}</p></div>
+      <div class="row">
+        <button class="btn" id="cont">${i + 1 < rooms.length ? 'Next question' : 'Build my operating system'}</button>
+        <button class="btn alt" id="edit">Say it differently</button>
+      </div>`);
+    $('cont').addEventListener('click', () => advance(i));
+    $('edit').addEventListener('click', () => ask(i));
+    $('cont').focus();
+  }
+
+  const lines = (s: string) => s.trim();
+
+  function build() {
+    const a = S.a;
+    S.os = {
+      work: lines(a.work || ''),
+      story: lines(a.story || ''),
+      gifts: S.picks.join('|'),
+      giftsNote: lines(a.gifts || ''),
+      identity: lines(a.identity || ''),
+      voices: lines(a.voices || ''),
+      rules: lines(a.rules || ''),
+      cut: lines(a.cut || ''),
+      move: lines(a.move || ''),
+    };
+    save(); showOS();
+  }
+
+  const sections: { k: string; h: string; empty: string; note?: string }[] = [
+    { k: 'work', h: 'My specific intelligence', empty: 'What people keep coming to you for.', note: 'The one thing no tool brings. Every other part of this page protects it.' },
+    { k: 'story', h: 'The proof', empty: 'A real moment that shows it.' },
+    { k: 'identity', h: 'Identity: who I\'m becoming', empty: 'The person who reaches the goal.' },
+    { k: 'voices', h: 'Mindset: my two voices', empty: 'What survival says. What instinct says.', note: 'When my view shrinks, I name the voice before I act.' },
+    { k: 'rules', h: 'Decisions: my rules under pressure', empty: 'When ___ happens, I ___.', note: 'Written calm, for the version of me who is not.' },
+    { k: 'cut', h: 'Destroy: what I\'m cutting', empty: 'The thing to end.' },
+    { k: 'move', h: 'Execution: my next move', empty: 'Smallest move in 24 hours, and who knows.' },
+  ];
+
+  function showOS() {
+    app.dataset.stage = 'os'; setBar(rooms.length); prog.hidden = true; reset.hidden = false;
+    const os = S.os!;
+    const gifts = os.gifts ? os.gifts.split('|') : [];
+    const secs = sections.map((s) => `
+      <section>
+        <h3>${esc(s.h)}</h3>
+        <div class="ed" contenteditable="true" role="textbox" aria-label="${esc(s.h)}" data-k="${s.k}" data-empty="${esc(s.empty)}">${esc(os[s.k] || '')}</div>
+        ${s.note ? `<div class="note">${esc(s.note)}</div>` : ''}
+      </section>`);
+    secs.splice(1, 0, `
+      <section>
+        <h3>My gifts</h3>
+        ${gifts.length ? `<div class="tags">${gifts.map((g) => `<span>${esc(g)}</span>`).join('')}</div>` : '<div class="ed" data-empty="No gifts picked yet." style="color:#9b8a7b">No gifts picked yet.</div>'}
+        ${os.giftsNote ? `<div class="note">${esc(os.giftsNote)}</div>` : ''}
+      </section>`);
+    const today = new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
+    render(`
+      <div class="os" id="os">
+        <h1>My operating system</h1>
+        <div class="sub">Built from my own answers · ${today} · click any line to edit</div>
+        ${secs.join('')}
+      </div>
+      <div class="row noprint">
+        <button class="btn" id="copy">Copy as text</button>
+        <button class="btn alt" id="dl">Download</button>
+        <button class="btn alt" id="print">Print</button>
+        <button class="btn alt" id="redo">Revisit questions</button>
+      </div>
+      <div class="log noprint">
+        <h2>Weekly check-in</h2>
+        <p class="hint">Two minutes, once a week. Be honest, nobody sees this but you.</p>
+        <div id="checkin"></div>
+        <div id="entries"></div>
+      </div>
+      <div class="log noprint">
+        <h2>Want a human in the room?</h2>
+        <p>A Pattern Audit is one session with me where we go through this page together and turn it into an action map. <a href="/mindset-coaching/" style="color:var(--glow)">See how it works</a>.</p>
+      </div>`);
+    document.querySelectorAll<HTMLElement>('.ed[data-k]').forEach((el) => el.addEventListener('input', () => { S.os![el.dataset.k!] = el.innerText.trim(); save(); }));
+    $('copy').addEventListener('click', async () => { try { await navigator.clipboard.writeText(osText()); $('copy').textContent = 'Copied'; } catch (_) { $('copy').textContent = 'Select the page and copy'; } });
+    $('dl').addEventListener('click', () => {
+      const url = URL.createObjectURL(new Blob([osText()], { type: 'text/markdown' }));
+      const a = document.createElement('a'); a.href = url; a.download = 'my-operating-system.md'; a.click(); URL.revokeObjectURL(url);
+    });
+    $('print').addEventListener('click', () => window.print());
+    $('redo').addEventListener('click', () => { S.i = 0; ask(0); });
+    checkin(); entries();
+  }
+
+  function osText() {
+    const os = S.os!;
+    const g = os.gifts ? os.gifts.split('|').join(', ') : '';
+    const parts = ['# My operating system', ''];
+    sections.forEach((s, i) => {
+      if (i === 1 && g) parts.push('## My gifts', g, '');
+      parts.push('## ' + s.h, os[s.k] || '', '');
+    });
+    return parts.join('\n');
+  }
+
+  function checkin() {
+    const box = $('checkin');
+    box.innerHTML = `
+      <textarea id="c-v" style="min-height:80px;font-size:16px" aria-label="Which voice drove this week" placeholder="Which voice ran the week, survival or instinct? When?"></textarea>
+      <div style="height:10px"></div>
+      <textarea id="c-r" style="min-height:80px;font-size:16px" aria-label="Rules" placeholder="Which of my rules did I keep? Which did I break?"></textarea>
+      <div style="height:10px"></div>
+      <textarea id="c-c" style="min-height:80px;font-size:16px" aria-label="Cut" placeholder="What did I cut? What should I cut next?"></textarea>
+      <div class="row"><button class="btn alt" id="c-save">Save this week</button></div>`;
+    $('c-save').addEventListener('click', () => {
+      const v = $<HTMLTextAreaElement>('c-v').value.trim(), r = $<HTMLTextAreaElement>('c-r').value.trim(), c = $<HTMLTextAreaElement>('c-c').value.trim();
+      if (!v && !r && !c) return;
+      S.log.unshift({ t: new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric' }), v, r, c });
+      save(); checkin(); entries();
+    });
+  }
+
+  function entries() {
+    $('entries').innerHTML = S.log.map((e) => `
+      <div class="entry"><b>${esc(e.t)}</b>
+        ${e.v ? `<p><em>Voice:</em> ${esc(e.v)}</p>` : ''}${e.r ? `<p><em>Rules:</em> ${esc(e.r)}</p>` : ''}${e.c ? `<p><em>Cut:</em> ${esc(e.c)}</p>` : ''}
+      </div>`).join('');
+  }
+
+  reset.addEventListener('click', () => {
+    if (!confirm('Erase everything on this device and start over?')) return;
+    try { localStorage.removeItem(KEY); } catch (_) {}
+    S = { i: -1, a: {}, picks: [], log: [] }; welcome();
+  });
+
+  welcome();
+</script>
