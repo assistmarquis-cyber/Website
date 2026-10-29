@@ -2,6 +2,8 @@
 
 Plain-language status for Marquis. Last updated 2026-10-29.
 
+> **Update (v2 flow, 2026-10-29).** Alan is now a seven-tap, tap-to-choose flow. By default nothing a person types is sent anywhere. The only thing that can reach the AI is one optional seven-word line, and only if the person presses "Sharpen it with Alan", with the choices they made (want and loop names) as context. The identifier removal, crisis routing, signed audit lines, rate limit and headers described below still apply to that one call. Alan is described to users as an AI coach built on Marquis's frameworks, not Marquis himself. Research claims come only from the research agent's verified library (`brain/feed/`), with the honest limit shown beside each.
+
 ## The honest bottom line
 
 Code can make Alan *hard to misuse, light on data and easy to audit*. Code cannot make it "HIPAA compliant" or "SOC 2 compliant" by itself, because both are about how an organization operates, not only what software does.

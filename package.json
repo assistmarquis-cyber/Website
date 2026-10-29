@@ -5,10 +5,10 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/sync-research.mjs && astro build",
     "preview": "astro preview",
     "pdf": "node scripts/make-pdf.mjs",
-    "test": "node --test tests/safety.test.mjs",
+    "test": "node --test tests/safety.test.mjs tests/brain.test.mjs",
     "audit:verify": "node scripts/verify-audit.mjs"
   },
   "dependencies": {
