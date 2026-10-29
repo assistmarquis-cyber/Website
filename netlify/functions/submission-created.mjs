@@ -7,9 +7,21 @@
 import nodemailer from 'nodemailer';
 
 const FROM = process.env.SMTP_USER || 'book@bigpicturearchitect.com';
-const FORMS = ['mindset-application', 'claude-application'];
+const FORMS = ['mindset-application', 'claude-application', 'alan-callsheet'];
 // Marquis's 30 minute booking link. Keep in sync with callUrl in src/data/site.ts.
 const CALL_URL = process.env.CALL_URL || 'https://calendly.com/assistmarquis/30min';
+
+const sheetBody = (sheet = '') => `Here is your call sheet from Alan.
+
+${String(sheet).slice(0, 1200)}
+
+The move only counts if it has a time and a witness. Do it, then tell someone.
+
+If you want company on it, a Pattern Audit with me is one session and a written action map: ${CALL_URL}
+
+Marquis
+
+Marquis Alan Experience LLC. You received this because you asked for your call sheet at bigpicturearchitect.com/alan. Reply "unsubscribe" to stop receiving emails.`;
 
 const firstName = (name = '') => name.trim().split(/\s+/)[0] || 'there';
 
@@ -26,7 +38,9 @@ export const handler = async (event) => {
   const { payload } = JSON.parse(event.body || '{}');
   if (!payload || !FORMS.includes(payload.form_name)) return { statusCode: 200 };
 
-  const { name, email } = payload.data || {};
+  const { name, email, sheet } = payload.data || {};
+  if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || /[\r\n]/.test(email)) { console.log('Auto-reply skipped: bad email'); return { statusCode: 200 }; }
+  if (payload.form_name === 'alan-callsheet' && payload.data?.consent !== 'yes') return { statusCode: 200 };
   if (!email || !process.env.SMTP_PASSWORD) {
     console.log('Auto-reply skipped:', !email ? 'no email' : 'SMTP_PASSWORD not set');
     return { statusCode: 200 };
@@ -43,8 +57,8 @@ export const handler = async (event) => {
     await transport.sendMail({
       from: `Marquis Harmon <${FROM}>`,
       to: email,
-      subject: 'Got your application',
-      text: body(name, payload.form_name),
+      subject: payload.form_name === 'alan-callsheet' ? 'Your Alan call sheet' : 'Got your application',
+      text: payload.form_name === 'alan-callsheet' ? sheetBody(sheet) : body(name, payload.form_name),
     });
   } catch (err) {
     // Never fail the submission because the auto-reply couldn't send.

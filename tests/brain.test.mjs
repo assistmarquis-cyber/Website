@@ -21,3 +21,11 @@ test('every library entry has a verified link, a finding and an honest caveat', 
 test('copy has no em-dashes', () => {
   assert.equal(/—/.test(JSON.stringify(fw)), false);
 });
+test('every loop has a content hook with a bracketed story slot, and every offer states first win and effort', () => {
+  for (const l of loops.loops) { const h = fw.hooks[l.id]; assert.ok(h && h.hook && /^\[/.test(h.story), `${l.id} hook`); }
+  for (const o of fw.offers) assert.ok(o.firstWin && o.effort, `${o.id} firstWin/effort`);
+});
+test('the daily content pack builds for any date and carries the draft warning', async () => {
+  const { pack } = await import('../scripts/content-pack.mjs');
+  for (const d of ['2026-10-29', '2026-10-30', '2027-01-01']) { const t = pack(d); assert.match(t, /needs Marquis's OK/); assert.equal(/—/.test(t), false); }
+});

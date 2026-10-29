@@ -38,25 +38,33 @@
       "id": "god-coach",
       "title": "G.O.D. Coach",
       "line": "Marquis's framework as a coach you can use today. Instant access.",
-      "kind": "buy"
+      "kind": "buy",
+      "firstWin": "Today",
+      "effort": "A few minutes at a time"
     },
     {
       "id": "audit",
       "title": "Pattern Audit",
-      "line": "One 60 to 90 minute session with Marquis and a written action map.",
-      "kind": "buy"
+      "line": "One session with Marquis, then a written action map you keep.",
+      "kind": "buy",
+      "firstWin": "In the session, 60 to 90 minutes",
+      "effort": "One conversation"
     },
     {
       "id": "sprint",
       "title": "Mindset Sprint",
       "line": "Six weeks of weekly sessions and accountability. By application.",
-      "kind": "apply"
+      "kind": "apply",
+      "firstWin": "Week one",
+      "effort": "One session a week plus check-ins"
     },
     {
       "id": "team",
       "title": "Workshop for your team",
       "line": "The G.O.D. Framework and mindset work for groups. By inquiry.",
-      "kind": "inquire"
+      "kind": "inquire",
+      "firstWin": "Scoped with you",
+      "effort": "Marquis designs it with you"
     }
   ],
   "whens": [
@@ -102,5 +110,45 @@
   "referOut": [
     "rumination"
   ],
-  "referOutNote": "If this feels heavy or constant, or you are not coping, please talk to a doctor or therapist. Coaching is not treatment."
+  "referOutNote": "If this feels heavy or constant, or you are not coping, please talk to a doctor or therapist. Coaching is not treatment.",
+  "proof": "Marquis Harmon is a mindset coach and supreme accountability partner. He has spoken at the United Nations, COP22, the World Syrian Refugee Summit, and Hive at Harvard Business School.",
+  "hooks": {
+    "story-rewrite": {
+      "hook": "You did not stop wanting it. You rewrote the story so quitting would not hurt.",
+      "story": "[Marquis: a time you quietly changed what you said you wanted]"
+    },
+    "borrowed-goal": {
+      "hook": "Whose voice is behind your goal? If nobody ever knew you got it, would you still want it?",
+      "story": "[Marquis: a goal you chased for someone else's approval]"
+    },
+    "wish-without-obstacle": {
+      "hook": "You can see the finish line perfectly. Can you name the one thing that will stop you this week?",
+      "story": "[Marquis: a plan that fell apart in the middle, not at the start]"
+    },
+    "intention-action-gap": {
+      "hook": "You know exactly what to do. So why are you still not doing it?",
+      "story": "[Marquis: something you knew to do and did not, and what finally moved you]"
+    },
+    "rumination": {
+      "hook": "Same conversation, 2am, again. Here is the question that breaks the replay.",
+      "story": "[Marquis: a loop you were stuck in, only if you want to share it]"
+    },
+    "defensiveness": {
+      "hook": "Someone gave you honest feedback and you got angry. That is information, not an insult.",
+      "story": "[Marquis: feedback that stung and turned out right]"
+    },
+    "all-or-nothing": {
+      "hook": "You missed one day and decided the whole plan was dead. Plan the miss instead.",
+      "story": "[Marquis: a streak you broke and what you did next]"
+    },
+    "fixed-label": {
+      "hook": "\"I am just not a ___ person.\" Add one word: yet. Then add one practice.",
+      "story": "[Marquis: a label you used to wear, for example the one you were given at 8]"
+    },
+    "willpower-myth": {
+      "hook": "Stop arguing with your willpower. Change the cue, not the person.",
+      "story": "[Marquis: a time you changed the room instead of trying harder]"
+    }
+  },
+  "cta": "Alan finds your loop in seven taps, no typing. Link in bio."
 }

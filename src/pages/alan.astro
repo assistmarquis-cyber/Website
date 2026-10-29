@@ -39,6 +39,7 @@ const data = {
     <div class="grade" aria-hidden="true"></div>
     <div class="bar top"><span class="slate" id="slate"></span><nav class="tn" aria-label="Alan"><a href="/portal/">Client portal</a><a href="/">Marquis Harmon</a></nav></div>
     <main class="frame" id="frame" tabindex="-1"></main>
+    <form name="alan-callsheet" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden aria-hidden="true"><input name="form-name" value="alan-callsheet" /><input name="bot-field" /><input name="email" /><input name="sheet" /><input name="consent" /></form>
     <div class="bar bot"><div class="dots" id="dots" aria-hidden="true"></div><div class="cap" id="cap">Alan is an AI coach built on Marquis's frameworks. Coaching, not therapy. Nothing here is saved.</div><div class="ctl"><button class="lnk" id="back" hidden>Back</button><button class="lnk" id="restart" hidden>Start over</button></div></div>
   </div>
 </Base>
@@ -101,6 +102,9 @@ const data = {
   .item .tag { position: absolute; top: -10px; left: 12px; background: var(--amber); color: #1c1308; font: 700 10px ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; }
   .item h3 { font: 500 21px var(--serif); margin: 0; color: var(--ink); } .item p { font-size: 14px; margin: 0; flex: 1; } .item .price { font: 700 20px var(--sans); color: var(--amber); }
 
+  .fact { font: 12.5px/1.5 var(--sans); color: var(--soft); margin: 0; } .fact b { color: var(--teal); font: 600 10px ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; display: block; }
+  .proof { font-size: 13.5px; color: var(--soft); border-top: 1px solid var(--line); padding-top: 12px; margin-top: 16px; }
+  .mail { margin-top: 14px; border-top: 1px dashed var(--line); padding-top: 12px; } .mail label.c { display: flex; gap: 8px; font-size: 13px; color: var(--soft); align-items: flex-start; margin: 8px 0; } .mail input[type=checkbox] { margin-top: 3px; accent-color: var(--amber); }
   @media (max-width: 700px) { .frame { align-items: flex-end; padding: 10px 12px; } .cap { display: none; } .grade { background: linear-gradient(180deg, rgba(10,8,6,.2) 0%, rgba(10,8,6,.55) 45%, rgba(10,8,6,.9) 100%); } .ctl { min-width: 0; } .tn a:last-child { display: none; } .sheet dl { grid-template-columns: 88px 1fr; } }
   @media (max-height: 880px) and (min-width: 701px) { .set h1 { font-size: clamp(28px, 4.2vw, 42px); margin-bottom: 8px; } .card { padding: 20px 26px; } .today { margin-top: 10px; } }
   @media print { html, body, .set { background: #fff !important; height: auto; overflow: visible; } .bg, .grade, .bar, .row, .noprint { display: none !important; } .frame { display: block; padding: 0; overflow: visible; } .card { background: #fff; border: 0; box-shadow: none; padding: 0; } .sheet { padding: 0; } }
@@ -156,8 +160,9 @@ const data = {
       <p class="small" style="margin-bottom:6px">What a mindset is made of</p>
       <div class="parts">${PARTS.map((p) => `<span title="${esc(p.question)}">${esc(p.name)}</span>`).join('')}</div>
       <div class="row" style="margin-top:6px"><button class="btn" id="go">Roll camera</button></div>
-      <div class="today"><span class="k">Today's loop</span><p style="margin:4px 0 0"><b style="color:var(--ink)">${esc(today.name)}.</b> ${esc(today.plain)}</p></div>`);
+      <div class="today"><span class="k">Today's loop</span><p style="margin:4px 0 0"><b style="color:var(--ink)">${esc(today.name)}.</b> ${esc(today.plain)}</p><button class="lnk" id="tp" style="padding-left:0;color:var(--teal)">Save today's loop as a poster</button></div>`);
     $('go').addEventListener('click', () => go(1));
+    $('tp').addEventListener('click', () => poster(today));
   }
 
   // 2. What do you want?
@@ -182,8 +187,9 @@ const data = {
       <p class="small">G.O.D. role: ${esc(l.strategy.god)}.</p>
       ${FW.referOut.includes(l.id) ? `<div class="note">${esc(FW.referOutNote)}</div>` : ''}
       ${ev ? `<div class="research"><b style="color:var(--ink)">What the research says.</b> ${esc(ev.finding)} <br><b style="color:var(--ink)">The honest limit.</b> ${esc(ev.caveat)} <br><a href="${esc(ev.url)}" target="_blank" rel="noopener noreferrer">${esc(ev.citation.split('(')[0].trim())} (${esc(String(ev.citation.match(/\((\d{4})\)/)?.[1] || ''))})</a></div>` : ''}
-      <div class="row"><button class="btn" id="run">Run this move</button></div>`, 'wide');
+      <div class="row"><button class="btn" id="run">Run this move</button><button class="btn alt noprint" id="pst">Save as a poster</button></div>`, 'wide');
     $('run').addEventListener('click', () => go(4));
+    $('pst').addEventListener('click', () => poster(l));
   }
 
   // 5. When will you do it, and what is it in seven words?
@@ -225,8 +231,26 @@ const data = {
         <dt>When</dt><dd>${esc(S.when.label)}</dd>
         <dt>Who knows</dt><dd><input type="text" id="who" aria-label="Who will know" placeholder="Type a name, or leave it" autocomplete="off" /></dd>
       </dl></div>
-      <div class="row noprint"><button class="btn" id="next">See what fits</button><button class="btn alt" id="print">Print</button><button class="btn alt" id="copy">Copy</button></div>`, 'wide');
+      <div class="row noprint"><button class="btn" id="next">See what fits</button><button class="btn alt" id="print">Print</button><button class="btn alt" id="copy">Copy</button></div>
+      <form class="mail noprint" id="mail"><label class="small" for="em" style="display:block">Want this in your inbox? (optional)</label>
+        <input type="email" id="em" placeholder="you@example.com" autocomplete="email" />
+        <label class="c"><input type="checkbox" id="cs" /><span>Email me this call sheet, and a loop to watch for each week from Marquis. Marquis sees my email and these choices. I can unsubscribe any time.</span></label>
+        <input type="text" id="bf" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true" />
+        <button class="btn alt" type="submit" id="send">Email it to me</button><p class="small" id="mmsg" role="status" style="margin-top:8px"></p></form>`, 'wide');
     $('next').addEventListener('click', () => go(6));
+    $('mail').addEventListener('submit', async (e) => {
+      e.preventDefault(); const msg = $('mmsg'); const email = $<HTMLInputElement>('em').value.trim();
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { msg.textContent = 'Please enter a valid email.'; return; }
+      if (!$<HTMLInputElement>('cs').checked) { msg.textContent = 'Please tick the box so I know you agree.'; return; }
+      const w = $<HTMLInputElement>('who').value;
+      const sheet = `Want: ${S.want.label}\nIn 7 words: ${S.seven}\nLoop: ${S.loop.name}\nMove: ${S.loop.strategy.move}\nWhen: ${S.when.label}${w ? `\nWho knows: ${scrub(w).text}` : ''}`;
+      msg.textContent = 'Sending...';
+      try {
+        const r = await fetch('/', { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ 'form-name': 'alan-callsheet', 'bot-field': $<HTMLInputElement>('bf').value, email, sheet, consent: 'yes' }).toString() });
+        msg.textContent = r.ok ? 'Done. Check your inbox in a few minutes.' : 'That did not go through. You can still print or copy your call sheet.';
+        if (r.ok) $<HTMLButtonElement>('send').disabled = true;
+      } catch { msg.textContent = 'That did not go through. You can still print or copy your call sheet.'; }
+    });
     $('print').addEventListener('click', () => { const w = $<HTMLInputElement>('who'); w.setAttribute('value', w.value); print(); });
     $('copy').addEventListener('click', async () => { const w = $<HTMLInputElement>('who').value; const t = `Want: ${S.want.label}\nIn 7 words: ${S.seven}\nLoop: ${S.loop.name}\nMove: ${S.loop.strategy.move}\nWhen: ${S.when.label}${w ? `\nWho knows: ${w}` : ''}`; try { await navigator.clipboard.writeText(t); $('copy').textContent = 'Copied'; } catch { $('copy').textContent = 'Select and copy'; } });
   }
@@ -234,11 +258,33 @@ const data = {
   // 7. The counter: a few things on a shelf, one matched. Tap to buy or apply.
   function counter() {
     const pick = offerFor(S.loop);
-    const order = [pick, ...FW.offers.map((o: any) => o.id).filter((id: string) => id !== pick)];
+    const order = [pick, ...FW.offers.map((o: any) => o.id).filter((id: string) => id !== pick && id !== 'team')];
     card(`${alan(FW.alan.counter)}
       <div class="shelf">${order.map((id) => { const o = FW.offers.find((x: any) => x.id === id), p = D.offers[id]; const label = o.kind === 'buy' ? 'Buy now' : o.kind === 'apply' ? 'Apply' : 'Inquire';
-        return `<div class="item ${id === pick ? 'pick1' : ''}">${id === pick ? '<span class="tag">Alan\'s pick</span>' : ''}<h3>${esc(o.title)}</h3><p>${esc(o.line)}</p><div class="price">${esc(p.price)}</div><a class="btn ${id === pick ? '' : 'alt'}" href="${esc(p.href)}">${label}</a></div>`; }).join('')}</div>
-      <p class="small" style="margin-top:14px">Not sure? <a href="/contact/" style="color:var(--amber)">Ask Marquis a question</a>. Coaching is not therapy and no result is guaranteed.</p>`, 'wide');
+        return `<div class="item ${id === pick ? 'pick1' : ''}">${id === pick ? '<span class="tag">Alan\'s pick</span>' : ''}<h3>${esc(o.title)}</h3><p>${esc(o.line)}</p><p class="fact"><b>First win</b>${esc(o.firstWin)}</p><p class="fact"><b>Your effort</b>${esc(o.effort)}</p><div class="price">${esc(p.price)}</div><a class="btn ${id === pick ? '' : 'alt'}" href="${esc(p.href)}">${label}</a></div>`; }).join('')}</div>
+      <p class="proof">${esc(FW.proof)}</p>
+      <p class="small" style="margin-top:14px">Training a whole team? <a href="/workshops/" style="color:var(--amber)">See the workshops</a>. Not sure? <a href="/contact/" style="color:var(--amber)">Ask Marquis a question</a>. Coaching is not therapy and no result is guaranteed.</p>`, 'wide');
+  }
+
+  // A static movie-poster card for the loop, made in the browser. Nothing is uploaded.
+  async function poster(l: any) {
+    await (document as any).fonts?.ready;
+    const W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d')!;
+    const img = new Image(); img.src = bg.src; await new Promise((r) => { img.onload = img.onerror = r as any; });
+    g.fillStyle = '#0A0806'; g.fillRect(0, 0, W, H);
+    if (img.naturalWidth) { const k = Math.max(W / img.naturalWidth, H / img.naturalHeight); g.drawImage(img, (W - img.naturalWidth * k) / 2, (H - img.naturalHeight * k) / 2, img.naturalWidth * k, img.naturalHeight * k); }
+    const gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, 'rgba(10,8,6,.55)'); gr.addColorStop(.45, 'rgba(10,8,6,.72)'); gr.addColorStop(1, 'rgba(10,8,6,.95)'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+    g.fillStyle = '#E3A857'; g.font = '600 26px ui-monospace, Menlo, monospace'; g.fillText('LOOP OF THE DAY  ·  ALAN', 80, 120);
+    const wrap = (t: string, x: number, y: number, max: number, lh: number) => { let line = '', yy = y; for (const w of t.split(' ')) { const test = line ? line + ' ' + w : w; if (g.measureText(test).width > max && line) { g.fillText(line, x, yy); line = w; yy += lh; } else line = test; } g.fillText(line, x, yy); return yy + lh; };
+    g.fillStyle = '#EFE7DA'; g.font = '500 96px Fraunces, Georgia, serif'; let y = wrap(l.name, 80, 330, 920, 108);
+    g.fillStyle = '#CDBFAE'; g.font = '400 40px "Work Sans", system-ui, sans-serif'; y = wrap(l.plain, 80, y + 30, 920, 56);
+    g.fillStyle = '#E3A857'; g.fillRect(80, y + 20, 6, 150); g.fillStyle = '#EFE7DA'; g.font = '500 40px Fraunces, Georgia, serif'; wrap('The move: ' + l.strategy.move, 112, y + 56, 880, 54);
+    g.fillStyle = '#9A8C7B'; g.font = '500 28px "Work Sans", system-ui, sans-serif'; g.fillText('Find yours in seven taps  ·  bigpicturearchitect.com/alan', 80, H - 80);
+    const blob: Blob | null = await new Promise((r) => c.toBlob(r, 'image/png'));
+    if (!blob) return;
+    const file = new File([blob], `alan-${l.id}.png`, { type: 'image/png' });
+    if ((navigator as any).canShare?.({ files: [file] })) { try { await (navigator as any).share({ files: [file], text: `${l.name}. Find yours: bigpicturearchitect.com/alan` }); return; } catch { /* fall through to download */ } }
+    const u = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = u; a.download = file.name; a.click(); URL.revokeObjectURL(u);
   }
 
   back.addEventListener('click', () => history.back());
