@@ -1,124 +1,147 @@
 ---
+import { getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
----
-<Base bare noindex title="Alan | Ride the bus, find your seven words" description="A small guide named Alan helps you go around a hard problem instead of at it, and land your friction and your outcome in seven words each.">
-  <meta name="referrer" content="no-referrer" />
-  <div class="al" id="al" data-mode="ai">
-    <div class="glow" aria-hidden="true"></div>
-    <header class="top">
-      <a class="mk" href="/">Marquis Harmon</a>
-      <div class="tr">
-        <span id="stopname" class="sn" aria-live="polite"></span>
-        <button class="wipe" id="wipe" hidden>Wipe everything</button>
-      </div>
-    </header>
+import { photos } from '../data/gallery';
 
-    <div class="route" id="route" aria-hidden="true" hidden>
-      <div class="road"></div>
-      <div class="dots" id="dots"></div>
-      <svg class="bus" id="bus" viewBox="0 0 64 36" width="48" height="27"><rect x="2" y="4" width="58" height="22" rx="7" fill="#F5B82E"/><rect x="8" y="8" width="10" height="9" rx="2" fill="#0F2B2A"/><rect x="21" y="8" width="10" height="9" rx="2" fill="#0F2B2A"/><rect x="34" y="8" width="10" height="9" rx="2" fill="#0F2B2A"/><rect x="47" y="8" width="9" height="9" rx="2" fill="#E8F3F1"/><rect x="2" y="20" width="58" height="3" fill="#C98E12"/><g class="wh"><circle cx="16" cy="27" r="5" fill="#2A1D14"/><circle cx="48" cy="27" r="5" fill="#2A1D14"/><circle cx="16" cy="27" r="1.8" fill="#F4EEE3"/><circle cx="48" cy="27" r="1.8" fill="#F4EEE3"/></g></svg>
-    </div>
+// Marquis's own gallery photos become the worlds of the galaxy. Small webp copies keep it fast.
+const worlds = await Promise.all(photos.map(async (p) => {
+  const thumb = await getImage({ src: p.src, width: 560, format: 'webp', quality: 72 });
+  const big = await getImage({ src: p.src, width: 1400, format: 'webp', quality: 80 });
+  return { t: thumb.src, b: big.src, a: p.alt, fn: p.fn, cap: p.cap || p.fn, credit: p.credit || '' };
+}));
+---
+<Base bare noindex title="Alan | Fly through the problem, find your seven words" description="A cinematic galaxy of real photos, a pilot named Alan, and a flight that ends in two lines of seven words: what is in the way, and what you want instead.">
+  <meta name="referrer" content="no-referrer" />
+  <div class="al" id="al" data-mode="ai" data-worlds={JSON.stringify(worlds)}>
+    <canvas id="sky" aria-hidden="true"></canvas>
+    <div class="space" id="space"><div class="world" id="world"></div></div>
+    <div class="fx grain" aria-hidden="true"></div>
+    <div class="fx vig" aria-hidden="true"></div>
+    <div class="fx flare" id="flare" aria-hidden="true"></div>
+
+    <header class="hud">
+      <a class="mk" href="/">Marquis Harmon</a>
+      <div class="sector" id="sector" aria-live="polite"></div>
+      <button class="wipe" id="wipe" hidden>Wipe everything</button>
+    </header>
+    <div class="ticks" id="ticks" aria-hidden="true" hidden></div>
 
     <main class="stage" id="stage"></main>
 
-    <footer class="ft" id="ft">Not therapy and not for emergencies. Nothing here is saved.</footer>
+    <footer class="ft"><span id="ft">Not therapy and not for emergencies. Nothing here is saved.</span><span class="cr" id="cr"></span></footer>
+
+    <dialog class="scan" id="scan" aria-label="Photo">
+      <button class="x" type="button" id="scan-x" aria-label="Close">×</button>
+      <img alt="" id="scan-img" />
+      <p id="scan-cap"></p>
+    </dialog>
   </div>
 </Base>
 
 <style is:global>
-  html, body { background: #0F2B2A; }
-  .al { --ink:#F4EEE3; --soft:#B9CCC8; --faint:#7F9894; --line:rgba(244,238,227,.15); --gold:#F5B82E; --card:rgba(244,238,227,.06);
-    position: relative; min-height: 100svh; display: flex; flex-direction: column; overflow: hidden; color: var(--ink); font-family: var(--sans);
-    background: radial-gradient(120% 90% at 50% -10%, #1D4B49 0%, #0F2B2A 55%, #0A1E1D 100%); }
-  .al .glow { position: absolute; left: 50%; top: 30%; width: min(80vw, 620px); aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; pointer-events: none;
-    background: radial-gradient(circle at 40% 35%, rgba(245,184,46,.22), rgba(27,102,99,.16) 45%, transparent 70%); filter: blur(28px); animation: alb 9s ease-in-out infinite; transition: filter .6s; }
-  .al.think .glow { animation-duration: 2.2s; filter: blur(22px) brightness(1.5); }
-  @keyframes alb { 0%,100% { transform: scale(.92); opacity: .75 } 50% { transform: scale(1.08); opacity: 1 } }
-  .top, .route, .stage, .ft { position: relative; z-index: 1; width: 100%; max-width: 760px; margin: 0 auto; }
-  .top { display: flex; justify-content: space-between; align-items: center; padding: 16px var(--pad); }
-  .mk { font: 15px var(--serif); color: var(--soft); text-decoration: none; }
-  .tr { display: flex; align-items: center; gap: 12px; }
-  .sn { font: 600 11px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
-  .wipe { background: none; border: 1px solid var(--line); border-radius: 999px; color: var(--soft); font: 12px var(--sans); padding: 6px 12px; cursor: pointer; }
+  html, body { background: #02070A; }
+  .al { --ink:#EAF1EE; --soft:#A9C2BD; --faint:#6E8B86; --line:rgba(190,230,222,.16); --gold:#FFC857; --cy:#6FE3D4; --panel:rgba(6,18,20,.58);
+    position: relative; min-height: 100svh; overflow: hidden; color: var(--ink); font-family: var(--sans); background: #02070A; isolation: isolate; }
+  .al canvas#sky { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+  .space { position: absolute; inset: 0; z-index: 1; perspective: 900px; perspective-origin: 50% 46%; overflow: hidden; }
+  .world { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; will-change: transform; }
+  .ph { position: absolute; left: 0; top: 0; margin: 0; width: var(--w); transform-style: preserve-3d; will-change: transform, filter; transition: opacity .6s; }
+  .ph button { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; position: relative; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(190,230,222,.22), 0 20px 60px rgba(0,0,0,.65), 0 0 60px rgba(111,227,212,.08); }
+  .ph img { display: block; width: 100%; height: auto; aspect-ratio: 4/3; object-fit: cover; }
+  .ph button::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, rgba(255,255,255,.16), transparent 38%, transparent 70%, rgba(111,227,212,.12)); pointer-events: none; }
+  .ph .tag { position: absolute; left: 0; top: 100%; margin-top: 10px; font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--cy); white-space: nowrap; opacity: 0; transition: opacity .6s; text-shadow: 0 0 12px rgba(111,227,212,.6); }
+  .ph.near .tag { opacity: .95; }
+  .ph button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+  .fx { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+  .vig { background: radial-gradient(120% 100% at 50% 45%, transparent 45%, rgba(0,0,0,.55) 80%, rgba(0,0,0,.92) 100%); }
+  .grain { opacity: .07; mix-blend-mode: overlay; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); animation: gr .6s steps(3) infinite; }
+  @keyframes gr { 0% { background-position: 0 0 } 33% { background-position: -40px 22px } 66% { background-position: 30px -35px } }
+  .flare { background: radial-gradient(circle at var(--fx, 78%) var(--fy, 18%), rgba(255,214,150,.22), rgba(255,200,87,.06) 12%, transparent 30%), radial-gradient(circle at calc(100% - var(--fx, 78%)) calc(100% - var(--fy, 18%)), rgba(111,227,212,.10), transparent 18%); mix-blend-mode: screen; transition: opacity .6s; }
+  .al.warp .flare { opacity: 1.8; }
+
+  .hud, .ticks, .stage, .ft { position: relative; z-index: 5; }
+  .hud { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px var(--pad); }
+  .mk { font: 15px var(--serif); color: var(--soft); text-decoration: none; text-shadow: 0 1px 12px #000; }
+  .sector { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .16em; text-transform: uppercase; color: var(--cy); text-shadow: 0 0 14px rgba(111,227,212,.5); text-align: center; }
+  .wipe { background: rgba(6,18,20,.6); border: 1px solid var(--line); border-radius: 999px; color: var(--soft); font: 12px var(--sans); padding: 6px 12px; cursor: pointer; backdrop-filter: blur(8px); }
   .wipe:hover { color: var(--ink); border-color: var(--soft); }
+  .ticks { display: flex; gap: 5px; justify-content: center; padding: 0 var(--pad); }
+  .ticks i { width: 26px; height: 3px; border-radius: 2px; background: rgba(190,230,222,.2); transition: .5s; }
+  .ticks i.on { background: var(--gold); box-shadow: 0 0 10px rgba(255,200,87,.7); }
+  .ticks i.now { background: var(--cy); box-shadow: 0 0 12px rgba(111,227,212,.9); }
 
-  .route { height: 52px; padding: 0 calc(var(--pad) + 14px); }
-  .road { position: absolute; left: calc(var(--pad) + 14px); right: calc(var(--pad) + 14px); top: 33px; border-top: 2px dashed rgba(244,238,227,.22); }
-  .dots { position: absolute; left: calc(var(--pad) + 14px); right: calc(var(--pad) + 14px); top: 29px; height: 10px; }
-  .dots i { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #0F2B2A; border: 2px solid rgba(244,238,227,.35); translate: -50% 0; transition: .5s; }
-  .dots i.on { background: var(--gold); border-color: var(--gold); }
-  .bus { position: absolute; top: 3px; translate: -50% 0; transition: left 1s cubic-bezier(.5,0,.2,1); filter: drop-shadow(0 4px 8px rgba(0,0,0,.4)); }
-  .route .bus { left: calc(var(--pad) + 14px); }
-  .al.ride .bus { animation: bump .5s ease 2; }
-  @keyframes bump { 50% { transform: translateY(-3px) } }
+  .stage { min-height: calc(100svh - 120px); display: flex; flex-direction: column; justify-content: flex-end; max-width: 640px; margin: 0 auto; padding: 0 var(--pad) 16px; }
+  @media (min-width: 900px) { .stage { margin: 0 0 0 clamp(24px, 6vw, 90px); justify-content: center; } }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: clamp(16px, 3vw, 26px); backdrop-filter: blur(16px) saturate(1.2); -webkit-backdrop-filter: blur(16px) saturate(1.2); box-shadow: 0 30px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.05); animation: pin .7s ease both; }
+  @keyframes pin { from { opacity: 0; transform: translateY(14px) } to { opacity: 1; transform: none } }
+  .ft { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; font-size: 11px; color: var(--faint); padding: 6px var(--pad) 14px; text-shadow: 0 1px 8px #000; }
 
-  .stage { flex: 1; padding: clamp(6px, 4vh, 40px) var(--pad) 28px; display: flex; flex-direction: column; justify-content: flex-start; }
-  .ft { text-align: center; font-size: 12px; color: var(--faint); padding: 10px var(--pad) 18px; }
-  .fd { animation: alr .6s ease both; }
-  @keyframes alr { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
-
-  .guide { display: flex; gap: 14px; align-items: flex-end; margin-bottom: 16px; }
-  .alan { flex: none; width: 84px; height: 94px; }
-  .alan .eye { transition: transform .25s; }
-  .alan .lids { animation: blink 5s infinite; transform-origin: center; transform-box: fill-box; }
-  @keyframes blink { 0%,94%,100% { transform: scaleY(0) } 96% { transform: scaleY(1) } }
-  .alan .tail { animation: sway 4s ease-in-out infinite; transform-origin: 60px 78px; }
-  @keyframes sway { 50% { transform: rotate(5deg) } }
-  .alan .spark { animation: tw 2.4s ease-in-out infinite; }
-  .alan .spark:nth-of-type(2) { animation-delay: .8s; }
-  @keyframes tw { 50% { opacity: .2 } }
-  .al.think .alan .mouth { d: path("M52 62 q8 7 16 0 q-8 -3 -16 0"); }
-  .bubble { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 18px 18px 18px 4px; padding: 14px 18px; font: 500 18px/1.45 var(--serif); color: var(--ink); min-height: 54px; }
-  .bubble.quiet { font: 16px/1.5 var(--sans); color: var(--soft); }
-
-  .al h1 { font: 500 clamp(30px, 6vw, 46px)/1.1 var(--serif); margin: 6px 0 14px; color: var(--ink); }
-  .al h2 { font: 500 clamp(22px, 4.2vw, 30px)/1.2 var(--serif); margin: 0 0 10px; color: var(--ink); }
-  .al p { color: var(--soft); font-size: 16px; line-height: 1.6; margin: 0 0 12px; }
-  .al .hint { color: var(--faint); font-size: 14px; }
-  .al .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
-  .al .btn { background: var(--gold); color: #2A1D14; border: 0; border-radius: 999px; padding: 13px 24px; font: 600 16px var(--sans); cursor: pointer; transition: transform .2s, box-shadow .2s; }
-  .al .btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 26px rgba(245,184,46,.28); }
-  .al .btn:disabled { opacity: .4; cursor: not-allowed; }
-  .al .btn.alt { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .pilot { display: flex; gap: 14px; align-items: center; margin-bottom: 12px; }
+  .orb { position: relative; flex: none; width: 44px; height: 44px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #FFF3CC, #FFC857 45%, #B8650A 100%); box-shadow: 0 0 26px rgba(255,200,87,.65), 0 0 70px rgba(255,200,87,.25); animation: orbp 3.6s ease-in-out infinite; }
+  .orb::before, .orb::after { content: ""; position: absolute; inset: -7px; border-radius: 50%; border: 1px solid rgba(255,200,87,.35); animation: ring 3.6s ease-out infinite; }
+  .orb::after { animation-delay: 1.8s; }
+  @keyframes orbp { 50% { transform: scale(1.07) } }
+  @keyframes ring { from { transform: scale(.8); opacity: .8 } to { transform: scale(1.7); opacity: 0 } }
+  .al.think .orb { animation-duration: .8s; filter: hue-rotate(-12deg) brightness(1.15); }
+  .who { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin: 0 0 4px; }
+  .say { font: 500 18px/1.45 var(--serif); color: var(--ink); min-height: 26px; margin: 0; }
+  .al h1 { font: 500 clamp(28px, 5.4vw, 44px)/1.08 var(--serif); margin: 4px 0 12px; color: var(--ink); }
+  .al h2 { font: 500 clamp(20px, 3.6vw, 27px)/1.22 var(--serif); margin: 10px 0 10px; color: var(--ink); }
+  .al p { color: var(--soft); font-size: 15px; line-height: 1.6; margin: 0 0 10px; }
+  .al .hint { color: var(--faint); font-size: 13.5px; }
+  .al .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
+  .al .btn { background: var(--gold); color: #1a1205; border: 0; border-radius: 999px; padding: 12px 22px; font: 600 15px var(--sans); cursor: pointer; transition: transform .2s, box-shadow .2s; text-decoration: none; }
+  .al .btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(255,200,87,.35); }
+  .al .btn:disabled { opacity: .35; cursor: not-allowed; }
+  .al .btn.alt { background: rgba(255,255,255,.04); color: var(--ink); border: 1px solid var(--line); }
   .al .ghost { background: none; border: 0; color: var(--faint); font: 14px var(--sans); cursor: pointer; padding: 8px; }
   .al .ghost:hover { color: var(--ink); }
-  .al textarea, .al input[type=text] { width: 100%; background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 14px; padding: 15px; font: 17px/1.5 var(--sans); resize: vertical; min-height: 110px; }
+  .al textarea { width: 100%; background: rgba(0,0,0,.35); color: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 14px; font: 16px/1.5 var(--sans); resize: vertical; min-height: 96px; }
   .al textarea::placeholder { color: var(--faint); }
   .al button:focus-visible, .al textarea:focus-visible, .al a:focus-visible, .al input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
-  .chip { background: var(--card); color: var(--soft); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; font: 14px var(--sans); cursor: pointer; }
-  .chip[aria-pressed="true"] { background: rgba(245,184,46,.16); border-color: var(--gold); color: var(--ink); }
-  .listen { color: var(--soft); font: 18px var(--serif); margin: 4px 0; }
+  .chip { background: rgba(255,255,255,.04); color: var(--soft); border: 1px solid var(--line); border-radius: 999px; padding: 7px 13px; font: 14px var(--sans); cursor: pointer; }
+  .chip[aria-pressed="true"] { background: rgba(255,200,87,.16); border-color: var(--gold); color: var(--ink); }
+  .listen { color: var(--soft); font: 17px var(--serif); margin: 4px 0; }
   .listen span { animation: dd 1.2s infinite; opacity: .2; } .listen span:nth-child(2) { animation-delay: .2s } .listen span:nth-child(3) { animation-delay: .4s }
   @keyframes dd { 50% { opacity: 1 } }
 
-  .gate label { display: flex; gap: 12px; align-items: flex-start; color: var(--soft); font-size: 15px; line-height: 1.5; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; cursor: pointer; }
+  .gate label { display: flex; gap: 12px; align-items: flex-start; color: var(--soft); font-size: 14.5px; line-height: 1.5; background: rgba(0,0,0,.3); border: 1px solid var(--line); border-radius: 12px; padding: 12px; cursor: pointer; }
   .gate input[type=checkbox] { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--gold); flex: none; }
-  .gate ul { margin: 0 0 14px; padding-left: 18px; color: var(--soft); font-size: 15px; line-height: 1.6; }
-  .crisis { background: rgba(184,50,42,.14); border: 1px solid rgba(232,120,110,.5); border-radius: 16px; padding: 18px; }
+  .gate ul { margin: 0 0 12px; padding-left: 18px; color: var(--soft); font-size: 14.5px; line-height: 1.6; }
+  .crisis { background: rgba(120,20,16,.5); border-color: rgba(255,130,120,.5); }
   .crisis p { color: var(--ink); }
 
-  .opts { display: grid; gap: 10px; margin: 0 0 12px; }
-  .opt { text-align: left; background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; font: 500 19px/1.35 var(--serif); cursor: pointer; }
-  .opt:hover { border-color: var(--gold); }
-  .count { font: 600 13px var(--sans); letter-spacing: .06em; color: var(--faint); margin: 8px 0 0; }
-  .count.ok { color: var(--gold); }
+  .opts { display: grid; gap: 8px; margin: 0 0 10px; }
+  .opt { text-align: left; background: rgba(255,255,255,.05); color: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; font: 500 18px/1.35 var(--serif); cursor: pointer; }
+  .opt:hover { border-color: var(--gold); box-shadow: 0 0 24px rgba(255,200,87,.15); }
+  .nodes { display: flex; align-items: center; justify-content: space-between; margin: 6px 4px 2px; }
+  .nodes i { width: 12px; height: 12px; border-radius: 50%; background: rgba(190,230,222,.18); transition: .3s; }
+  .nodes i.lit { background: var(--gold); box-shadow: 0 0 14px rgba(255,200,87,.9); }
+  .nodes.full i { background: var(--cy); box-shadow: 0 0 16px rgba(111,227,212,.95); }
+  .count { font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; color: var(--faint); margin: 8px 0 0; }
+  .count.ok { color: var(--cy); }
 
-  .seven { background: #FBF8F3; color: #2A1D14; border-radius: 20px; padding: clamp(22px, 5vw, 38px); box-shadow: 0 20px 60px rgba(0,0,0,.35); }
-  .seven h2 { color: #124A48; font-size: 16px; letter-spacing: .14em; text-transform: uppercase; font-family: var(--sans); font-weight: 600; margin: 0 0 6px; }
-  .seven .line { font: 500 clamp(26px, 5.2vw, 40px)/1.15 var(--serif); color: #2A1D14; margin: 0 0 6px; }
-  .seven .src { font-size: 12px; color: #6B5646; margin: 0 0 22px; }
-  .seven hr { border: 0; border-top: 1px solid #E6DDD0; margin: 4px 0 20px; }
-  .seven .prov { font-size: 12px; line-height: 1.6; color: #6B5646; border-top: 1px solid #E6DDD0; padding-top: 14px; margin-top: 8px; word-break: break-word; }
-  .seven .prov b { color: #2A1D14; }
+  .chart { background: var(--panel); border: 1px solid rgba(255,200,87,.35); border-radius: 18px; padding: clamp(18px, 4vw, 30px); backdrop-filter: blur(16px); box-shadow: 0 30px 90px rgba(0,0,0,.6), 0 0 80px rgba(255,200,87,.08); animation: pin .8s ease both; }
+  .chart .lab { font: 600 10px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .2em; text-transform: uppercase; color: var(--cy); margin: 0 0 4px; }
+  .chart svg.con { display: block; width: 100%; max-width: 360px; height: 34px; margin: 0 0 6px; overflow: visible; }
+  .chart .line { font: 500 clamp(24px, 4.6vw, 36px)/1.15 var(--serif); color: var(--ink); margin: 0 0 4px; text-shadow: 0 0 30px rgba(255,200,87,.25); }
+  .chart .src { font-size: 12px; color: var(--faint); margin: 0 0 18px; }
+  .chart hr { border: 0; border-top: 1px solid var(--line); margin: 0 0 16px; }
+  .chart .log { font: 11.5px/1.7 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--faint); border-top: 1px solid var(--line); padding-top: 12px; margin-top: 6px; word-break: break-word; }
+  .chart .log b { color: var(--soft); font-weight: 600; }
 
-  .trip { display: grid; gap: 8px; margin-top: 14px; }
-  .trip div { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: 14px; color: var(--soft); }
-  .trip b { color: var(--gold); font: 600 11px var(--sans); letter-spacing: .12em; text-transform: uppercase; display: block; margin-bottom: 2px; }
+  .scan { border: 1px solid var(--line); border-radius: 14px; background: #050d10; padding: 0; max-width: min(94vw, 980px); color: var(--ink); }
+  .scan::backdrop { background: rgba(0,0,0,.82); backdrop-filter: blur(6px); }
+  .scan img { display: block; max-width: 100%; max-height: 78vh; margin: 0 auto; }
+  .scan p { margin: 0; padding: 12px 16px; font-size: 14px; color: var(--soft); }
+  .scan .x { position: absolute; top: 8px; right: 8px; width: 36px; height: 36px; border-radius: 50%; border: 0; background: rgba(0,0,0,.6); color: #fff; font-size: 22px; cursor: pointer; }
 
-  @media (max-width: 520px) { .alan { width: 64px; height: 72px; } .bubble { font-size: 17px; } .sn { display: none; } }
-  @media print { html, body, .al { background: #fff !important; } .top, .route, .ft, .row, .glow, .trip, .noprint { display: none !important; } .seven { box-shadow: none; padding: 0; } }
-  @media (prefers-reduced-motion: reduce) { .glow, .fd, .alan .tail, .alan .spark, .alan .lids, .bus { animation: none !important; transition: none !important; } }
+  @media (max-width: 520px) { .sector { font-size: 10px; } .mk { display: none; } .say { font-size: 17px; } .ticks i { width: 18px; } }
+  @media print { html, body, .al { background: #fff !important; color: #000; } canvas, .space, .fx, .hud, .ticks, .ft, .row, .noprint, .scan { display: none !important; } .chart { background: #fff; border: 0; box-shadow: none; backdrop-filter: none; } .chart .line { color: #000; text-shadow: none; } .chart .lab, .chart .log b, .chart .log, .chart .src { color: #333; } .stage { max-width: none; margin: 0; } }
+  @media (prefers-reduced-motion: reduce) { .grain, .orb, .orb::before, .orb::after, .panel, .chart { animation: none !important; } }
 </style>
 
 <script>
@@ -126,15 +149,16 @@ import Base from '../layouts/Base.astro';
 
   type Stop = { id: string; name: string; say: string; q: string; ph: string; chips?: string[]; written: string };
   const STOPS: Stop[] = [
-    { id: 'board', name: 'Boarding', say: 'Hop on. I am Alan. We are not going to charge at the hard thing. We are going to ride around it first.', q: 'What is the weather like inside right now?', ph: 'Optional. Or say more...', chips: ['Stormy', 'Foggy', 'Heavy', 'Buzzing', 'Flat', 'Tangled'], written: 'Good. Weather is real information, and it is a lot easier to say than the whole story.' },
-    { id: 'window', name: 'The Window', say: 'First stop. We look at it through the bus window, from a safe distance.', q: 'If someone you love were carrying this, what would you notice about them?', ph: 'I would notice...', written: 'Interesting. You can often see a problem more kindly from the window than from the driver\'s seat.' },
-    { id: 'shrink', name: 'The Shrink Ray', say: 'Now we shrink the bus. Big problems are made of small pieces.', q: 'Pick one piece, small enough for a single afternoon. What is it?', ph: 'The piece is...', written: 'That is a piece you can actually hold. We will ride inside it next.' },
+    { id: 'board', name: 'Launch', say: 'Pilot Alan here. We are not going to fly at the hard thing. We are going to fly around it first.', q: 'What is the weather like inside right now?', ph: 'Optional. Or say more...', chips: ['Stormy', 'Foggy', 'Heavy', 'Buzzing', 'Flat', 'Tangled'], written: 'Good. Weather is real information, and it is much easier to say than the whole story.' },
+    { id: 'window', name: 'The Window', say: 'Sector one. We stay at a safe distance and look at it through the glass.', q: 'If someone you love were carrying this, what would you notice about them?', ph: 'I would notice...', written: 'Interesting. You can often see a problem more kindly from the window than from the pilot seat.' },
+    { id: 'shrink', name: 'The Shrink Ray', say: 'Now we shrink the ship. Big problems are made of small pieces.', q: 'Pick one piece, small enough for a single afternoon. What is it?', ph: 'The piece is...', written: 'That is a piece you can actually hold. We will fly inside it next.' },
     { id: 'inside', name: 'Inside the Machine', say: 'Inside the piece, there are parts. Let us listen to them.', q: 'What does your survival voice say in there? And what does your quieter instinct say?', ph: 'Survival says... Instinct says...', written: 'You do not have to silence the loud one. You just have to know which voice is talking.' },
-    { id: 'map', name: 'The Map Room', say: 'Time to sort the luggage.', q: 'Which part of this is yours to carry, and which part is not?', ph: 'Mine: ... Not mine: ...', written: 'Setting down what was never yours is not quitting. It is packing lighter.' },
-    { id: 'lever', name: 'The Loose Thread', say: 'Last stop before the wish. Every tangle has a loose thread.', q: 'If one small thing moved, what else would loosen?', ph: 'If this moved...', written: 'That is your lever. Now we say it short.' },
+    { id: 'map', name: 'The Map Room', say: 'Time to sort the cargo.', q: 'Which part of this is yours to carry, and which part is not?', ph: 'Mine: ... Not mine: ...', written: 'Setting down what was never yours is not quitting. It is packing lighter.' },
+    { id: 'lever', name: 'The Loose Thread', say: 'Last sector before the wish. Every tangle has a loose thread.', q: 'If one small thing moved, what else would loosen?', ph: 'If this moved...', written: 'That is your lever. Now we say it short.' },
   ];
-  const ROUTE = [...STOPS.map((s) => s.name), 'Your Friction', 'Your Wish', 'Seven Words'];
+  const ROUTE = [...STOPS.map((s) => s.name), 'Your Friction', 'Your Wish', 'Star Chart'];
   const SEVEN = 7;
+  const SP = 760; // distance between sectors
 
   const rnd = () => Array.from(crypto.getRandomValues(new Uint8Array(8)), (b) => b.toString(16).padStart(2, '0')).join('');
   // Everything lives in this object, in memory only. Closing the tab, wiping, or 15 idle minutes ends it.
@@ -144,65 +168,149 @@ import Base from '../layouts/Base.astro';
   function fresh() { return { mode: 'ai' as const, sid: rnd(), step: -1, ans: {}, picks: [], replies: [] }; }
 
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
-  const el = $('al'), stage = $('stage'), dots = $('dots'), bus = $('bus'), route = $('route'), sn = $('stopname'), wipeBtn = $('wipe');
+  const el = $('al'), stage = $('stage'), world = $('world'), sky = $<HTMLCanvasElement>('sky'), sector = $('sector'), ticks = $('ticks'), wipeBtn = $('wipe');
   const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
   const words = (s: string) => s.trim().split(/\s+/).filter(Boolean);
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const small = matchMedia('(max-width: 700px)').matches;
 
-  dots.innerHTML = ROUTE.map((_, i) => `<i style="left:${(i / (ROUTE.length - 1)) * 100}%"></i>`).join('');
-  const setRoute = (i: number) => {
-    route.hidden = i < 0; wipeBtn.hidden = i < 0;
-    const pos = (Math.max(i, 0) / (ROUTE.length - 1)) * 100;
-    (bus as unknown as HTMLElement).style.left = `calc(var(--pad) + 14px + (100% - 2 * (var(--pad) + 14px)) * ${pos / 100})`;
-    dots.querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k <= i));
-    sn.textContent = i >= 0 ? ROUTE[i] : '';
-    el.classList.add('ride'); setTimeout(() => el.classList.remove('ride'), 1100);
+  // ---------- the galaxy: Marquis's photos as worlds ----------
+  type W = { t: string; b: string; a: string; fn: string; cap: string; credit: string };
+  const all: W[] = JSON.parse(el.dataset.worlds || '[]');
+  const worlds = small ? all.slice(0, 14) : all;
+  const seed = (n: number) => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+  const SECT = ROUTE.length;
+  const cam = (k: number) => ({ x: 150 * Math.sin(k * 0.9), y: 48 * Math.cos(k * 1.3), z: -k * SP });
+  const planes = worlds.map((w, i) => {
+    const k = Math.floor((i / worlds.length) * SECT);
+    const side = i % 2 ? 1 : -1;
+    const c = cam(k);
+    const x = c.x + side * (330 + seed(i) * 300), y = c.y + (seed(i + 9) - 0.5) * 340, z = c.z - 140 - seed(i + 3) * 380;
+    const f = document.createElement('figure'); f.className = 'ph';
+    const width = small ? 210 : 270 + seed(i + 5) * 90;
+    f.style.setProperty('--w', width + 'px');
+    f.innerHTML = `<button type="button" aria-label="Look closer: ${esc(w.cap)}"><img src="${w.t}" alt="${esc(w.a)}" loading="eager" decoding="async" draggable="false"></button><figcaption class="tag" aria-hidden="true">${esc(w.fn)} / ${esc(w.cap)}</figcaption>`;
+    const ry = -side * (14 + seed(i + 7) * 14);
+    f.style.transform = `translate3d(${x}px, ${y}px, ${z}px) translate(-50%, -50%) rotateY(${ry}deg) rotateZ(${(seed(i + 2) - 0.5) * 5}deg)`;
+    f.querySelector('button')!.addEventListener('click', () => { $<HTMLImageElement>('scan-img').src = w.b; $<HTMLImageElement>('scan-img').alt = w.a; $('scan-cap').textContent = w.cap + (w.credit ? ` (photo: ${w.credit})` : ''); $<HTMLDialogElement>('scan').showModal(); });
+    world.append(f);
+    return { f, x, y, z };
+  });
+  $('scan-x').addEventListener('click', () => $<HTMLDialogElement>('scan').close());
+  $<HTMLDialogElement>('scan').addEventListener('click', (e) => { if (e.target === $('scan')) $<HTMLDialogElement>('scan').close(); });
+  $('cr').textContent = 'Photos from Marquis\'s own gallery. Some by Ryan M Rogers.';
+
+  // The camera. Position tweens between sectors; the pointer adds a gentle look-around.
+  let cx = 0, cy = 0, cz = SP * 1.6, look = { x: 0, y: 0 }, lookT = { x: 0, y: 0 }, speed = 0, flying = false;
+  const place = () => { world.style.transform = `rotateX(${look.y}deg) rotateY(${look.x}deg) translate3d(${-cx}px, ${-cy}px, ${-cz}px)`; };
+  // Distance blur and dimming: far worlds are soft and dark, near ones are sharp and lit.
+  const depthFx = () => {
+    for (const p of planes) {
+      const d = p.z - cz; // negative means in front of the camera
+      const ahead = d < 0 ? -d : 0;
+      const blur = Math.min(5, Math.max(0, (ahead - 700) / 520));
+      const bright = Math.max(0.28, 1.05 - ahead / 3200);
+      p.f.style.filter = `blur(${blur.toFixed(2)}px) brightness(${bright.toFixed(2)})`;
+      p.f.style.opacity = d > 260 ? '0' : '1';
+      p.f.classList.toggle('near', ahead > 160 && ahead < 900 && Math.abs(p.x - cx) < 700);
+    }
+  };
+  const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  function fly(to: { x: number; y: number; z: number }, ms = 1700) {
+    return new Promise<void>((res) => {
+      if (reduce) { cx = to.x; cy = to.y; cz = to.z; place(); depthFx(); return res(); }
+      const a = { x: cx, y: cy, z: cz }, t0 = performance.now(); flying = true; el.classList.add('warp');
+      const step = (now: number) => {
+        const t = Math.min(1, (now - t0) / ms), e = ease(t);
+        cx = a.x + (to.x - a.x) * e; cy = a.y + (to.y - a.y) * e; cz = a.z + (to.z - a.z) * e;
+        speed = Math.sin(Math.PI * t) * 26;
+        place(); depthFx();
+        if (t < 1) requestAnimationFrame(step); else { flying = false; speed = 0; el.classList.remove('warp'); res(); }
+      };
+      requestAnimationFrame(step);
+    });
+  }
+  const go = (k: number) => (k < 0 ? fly({ x: 0, y: 0, z: SP * 1.6 }, 1400) : fly(cam(k)));
+  addEventListener('pointermove', (e) => {
+    lookT.x = (e.clientX / innerWidth - 0.5) * 9; lookT.y = -(e.clientY / innerHeight - 0.5) * 6;
+    el.style.setProperty('--fx', (60 + (e.clientX / innerWidth) * 36) + '%'); el.style.setProperty('--fy', (8 + (e.clientY / innerHeight) * 24) + '%');
+  }, { passive: true });
+  addEventListener('deviceorientation', (e) => { if (e.gamma != null && e.beta != null) { lookT.x = Math.max(-6, Math.min(6, e.gamma / 6)); lookT.y = Math.max(-4, Math.min(4, (e.beta - 45) / 12)); } }, { passive: true });
+
+  // The sky: stars with depth that streak when the ship moves, over a soft nebula.
+  const g = sky.getContext('2d')!;
+  let W2 = 0, H2 = 0; const dpr = Math.min(devicePixelRatio || 1, 1.5);
+  const stars = Array.from({ length: small ? 220 : 480 }, (_, i) => ({ x: seed(i) * 2 - 1, y: seed(i + 99) * 2 - 1, z: seed(i + 7), c: seed(i + 33) }));
+  let neb: HTMLCanvasElement;
+  const buildNebula = () => {
+    neb = document.createElement('canvas'); neb.width = W2; neb.height = H2; const n = neb.getContext('2d')!;
+    const blob = (x: number, y: number, r: number, col: string) => { const gr = n.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, col); gr.addColorStop(1, 'rgba(0,0,0,0)'); n.fillStyle = gr; n.fillRect(0, 0, W2, H2); };
+    blob(W2 * 0.2, H2 * 0.3, W2 * 0.55, 'rgba(20,110,110,.28)'); blob(W2 * 0.82, H2 * 0.62, W2 * 0.5, 'rgba(120,60,150,.22)');
+    blob(W2 * 0.55, H2 * 0.12, W2 * 0.4, 'rgba(255,170,60,.12)'); blob(W2 * 0.4, H2 * 0.9, W2 * 0.5, 'rgba(10,70,110,.25)');
+  };
+  const resize = () => { W2 = sky.width = Math.floor(innerWidth * dpr); H2 = sky.height = Math.floor(innerHeight * dpr); buildNebula(); };
+  resize(); addEventListener('resize', resize);
+  let last = performance.now();
+  const frame = (now: number) => {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    look.x += (lookT.x - look.x) * 0.06; look.y += (lookT.y - look.y) * 0.06;
+    if (!flying) place();
+    g.fillStyle = '#02070A'; g.fillRect(0, 0, W2, H2);
+    g.drawImage(neb, (-look.x * 6) * dpr, (-look.y * 6) * dpr, W2, H2);
+    const v = reduce ? 0 : speed;
+    for (const s of stars) {
+      const prevZ = s.z;
+      s.z -= (0.012 + v * 0.0065) * dt * 30; if (s.z <= 0.02) { s.z = 1; s.x = Math.random() * 2 - 1; s.y = Math.random() * 2 - 1; }
+      const k = 1 / s.z, px = W2 / 2 + (s.x - look.x * 0.02) * k * W2 * 0.18, py = H2 / 2 + (s.y - look.y * 0.02) * k * H2 * 0.18;
+      if (px < -20 || px > W2 + 20 || py < -20 || py > H2 + 20) continue;
+      const a = Math.min(1, (1 - s.z) * 1.4 + 0.15), size = (1 - s.z) * 2.2 * dpr + 0.3;
+      g.strokeStyle = s.c > 0.85 ? `rgba(255,200,120,${a})` : s.c < 0.2 ? `rgba(140,230,255,${a})` : `rgba(235,245,255,${a})`;
+      g.fillStyle = g.strokeStyle;
+      if (v > 1.5) { const k2 = 1 / Math.min(1, prevZ + 0.04 + v * 0.002), qx = W2 / 2 + s.x * k2 * W2 * 0.18, qy = H2 / 2 + s.y * k2 * H2 * 0.18; g.lineWidth = size; g.beginPath(); g.moveTo(px, py); g.lineTo(px + (px - qx) * 0.9, py + (py - qy) * 0.9); g.stroke(); }
+      else { g.beginPath(); g.arc(px, py, size, 0, 6.283); g.fill(); }
+    }
+    requestAnimationFrame(frame);
+  };
+  if (!reduce) requestAnimationFrame(frame); else { place(); frame(performance.now()); }
+
+  const setHud = (i: number) => {
+    ticks.hidden = i < 0; wipeBtn.hidden = i < 0;
+    sector.textContent = i >= 0 ? `Sector ${String(i + 1).padStart(2, '0')} / ${String(SECT).padStart(2, '0')}  ·  ${ROUTE[i]}` : 'Galaxy view';
+    ticks.innerHTML = ROUTE.map((_, k) => `<i class="${k < i ? 'on' : k === i ? 'now' : ''}"></i>`).join('');
   };
 
-  // Alan, drawn inline so his eyes can follow what you do.
-  const ALAN = `<svg class="alan" viewBox="0 0 120 130" aria-hidden="true">
-    <defs><radialGradient id="ab" cx="40%" cy="30%"><stop offset="0" stop-color="#FFE29A"/><stop offset="1" stop-color="#F5B82E"/></radialGradient></defs>
-    <g class="tail"><path d="M60 78 C 40 92 70 98 52 112 C 46 117 58 122 64 118" fill="none" stroke="#F5B82E" stroke-width="9" stroke-linecap="round" opacity=".85"/></g>
-    <ellipse cx="60" cy="52" rx="38" ry="40" fill="url(#ab)"/>
-    <circle cx="44" cy="48" r="9" fill="#fff"/><circle cx="76" cy="48" r="9" fill="#fff"/>
-    <g class="eye" id="eyes"><circle cx="44" cy="49" r="4.2" fill="#0F2B2A"/><circle cx="76" cy="49" r="4.2" fill="#0F2B2A"/></g>
-    <g class="lids"><rect x="34" y="38" width="20" height="20" fill="#F9C84F"/><rect x="66" y="38" width="20" height="20" fill="#F9C84F"/></g>
-    <path class="mouth" d="M52 64 q8 6 16 0" fill="none" stroke="#7A4B06" stroke-width="3" stroke-linecap="round"/>
-    <path d="M30 20 q-8 -10 2 -16 M90 20 q8 -10 -2 -16" stroke="#F5B82E" stroke-width="5" fill="none" stroke-linecap="round"/>
-    <circle class="spark" cx="12" cy="30" r="3" fill="#FFE29A"/><circle class="spark" cx="108" cy="70" r="2.4" fill="#FFE29A"/></svg>`;
-  const look = (dx: number, dy: number) => { const e = document.getElementById('eyes'); if (e) e.style.transform = `translate(${dx}px, ${dy}px)`; };
-  addEventListener('pointermove', (ev) => { const r = document.querySelector('.alan')?.getBoundingClientRect(); if (!r) return; look(Math.max(-3, Math.min(3, (ev.clientX - (r.left + r.width / 2)) / 120)), Math.max(-2, Math.min(3, (ev.clientY - (r.top + r.height / 2)) / 120))); });
-
+  const PILOT = `<div class="orb" aria-hidden="true"></div>`;
   const type = (node: HTMLElement, text: string, done?: () => void) => {
     if (reduce) { node.textContent = text; return done?.(); }
-    // The unwritten rest stays in the box, invisible, so the layout never jumps while Alan "talks".
+    // The unwritten rest stays in the box, invisible, so the layout never jumps while Alan talks.
     let n = 0; const tick = () => { n += 2; node.innerHTML = esc(text.slice(0, n)) + `<span style="visibility:hidden" aria-hidden="true">${esc(text.slice(n))}</span>`; if (n < text.length) setTimeout(tick, 16); else { node.textContent = text; done?.(); } }; tick();
   };
-  const show = (html: string) => { stage.innerHTML = `<div class="fd">${html}</div>`; window.scrollTo({ top: 0 }); };
-  const setFoot = () => { $('ft').textContent = S.mode === 'ai' ? 'AI mode: what you write at each stop is sent to an AI to answer you, with names and ID numbers removed first. Not stored. Not therapy, not for emergencies.' : 'Private mode: nothing leaves this device. Not therapy, not for emergencies.'; };
+  const pilot = (id = 'say') => `<div class="pilot">${PILOT}<div><p class="who">Alan, your pilot</p><p class="say" id="${id}"></p></div></div>`;
+  const show = (html: string, cls = 'panel') => { stage.innerHTML = `<div class="${cls}">${html}</div>`; window.scrollTo({ top: 0 }); };
+  const setFoot = () => { $('ft').textContent = S.mode === 'ai' ? 'AI mode: what you write at each sector is sent to an AI to answer you, with names and ID numbers removed first. Not stored. Not therapy, not for emergencies.' : 'Private mode: nothing leaves this device. Not therapy, not for emergencies.'; };
 
   // ---------- idle wipe and manual wipe ----------
   let idle: number | undefined;
   const bumpIdle = () => { clearTimeout(idle); idle = window.setTimeout(() => wipe('You were away for a while, so I cleared everything.'), 15 * 60 * 1000); };
   ['pointerdown', 'keydown', 'input'].forEach((t) => addEventListener(t, bumpIdle, { passive: true }));
   function wipe(msg?: string) {
-    S = fresh(); setRoute(-1); route.hidden = true; wipeBtn.hidden = true; $('ft').textContent = 'Not therapy and not for emergencies. Nothing here is saved.';
-    gate(msg);
+    S = fresh(); setHud(-1); $('ft').textContent = 'Not therapy and not for emergencies. Nothing here is saved.';
+    go(-1); gate(msg);
   }
   wipeBtn.addEventListener('click', () => wipe('Done. Everything is cleared from this page.'));
 
   // ---------- screens ----------
   function gate(note?: string) {
-    S.step = -1; setRoute(-1); route.hidden = true; wipeBtn.hidden = true;
-    show(`<div class="gate"><div class="guide">${ALAN}<div class="bubble" id="hi"></div></div>
+    S.step = -1; setHud(-1);
+    show(`<div class="gate">${pilot('hi')}
       ${note ? `<p class="hint" role="status">${esc(note)}</p>` : ''}
-      <h1>Ride the bus. Find your seven words.</h1>
-      <p>I will not ask you to look straight at the hard thing. We go around it, shrink it, look inside it, and you finish with two lines of seven words: what is in the way, and what you want instead.</p>
-      <ul><li>I am an AI guide. I am not a therapist, doctor or lawyer, and I cannot help in an emergency.</li><li>Please do not type names, ID numbers, addresses or medical record details. I remove what I can, but not everything.</li><li>Nothing is saved. Close the tab, or press Wipe, and it is gone.</li></ul>
+      <h1>Fly through it. Find your seven words.</h1>
+      <p>These are real moments from Marquis's life, drifting like a galaxy. We will not fly straight at your hard thing. We go around it, shrink it, look inside it, and you finish with two lines of seven words: what is in the way, and what you want instead.</p>
+      <ul><li>I am an AI pilot, not a therapist, doctor or lawyer, and I cannot help in an emergency.</li><li>Please do not type names, ID numbers, addresses or medical record details. I remove what I can, not everything.</li><li>Nothing is saved. Close the tab, or press Wipe, and it is gone.</li></ul>
       <label><input type="checkbox" id="ok"> <span>I understand that Alan is an AI, not a professional, and that in an emergency I should call 911 or 988.</span></label>
-      <div class="row"><button class="btn" id="go-ai" disabled>Ride with Alan</button><button class="btn alt" id="go-pr" disabled>Ride privately, no AI</button></div>
-      <p class="hint" style="margin-top:14px">With Alan, each answer is sent to an AI to write a reply. Privately, replies are written in advance and nothing leaves your device.</p></div>`);
-    type($('hi'), 'Hi. I am Alan. Think of me as a small genie with a bus. Your wish is a clear sentence.');
+      <div class="row"><button class="btn" id="go-ai" disabled>Launch with Alan</button><button class="btn alt" id="go-pr" disabled>Launch privately, no AI</button></div>
+      <p class="hint" style="margin-top:12px">With Alan, each answer is sent to an AI to write a reply. Privately, replies are written in advance and nothing leaves your device.</p></div>`);
+    type($('hi'), 'Welcome aboard. Think of me as a small genie with a very good ship.');
     const ok = $<HTMLInputElement>('ok');
     ok.addEventListener('change', () => { $<HTMLButtonElement>('go-ai').disabled = $<HTMLButtonElement>('go-pr').disabled = !ok.checked; });
     $('go-ai').addEventListener('click', () => { S.mode = 'ai'; el.dataset.mode = 'ai'; setFoot(); stop(0); });
@@ -212,22 +320,23 @@ import Base from '../layouts/Base.astro';
 
   function crisis() {
     el.classList.remove('think');
-    show(`<div class="crisis" role="alert"><h2>Please talk to a person right now.</h2><p>${esc(CRISIS_MESSAGE)}</p>
-      <div class="row"><a class="btn" href="tel:988">Call 988</a><a class="btn alt" href="sms:988">Text 988</a><button class="ghost" id="back">I am okay, go back</button></div></div>`);
+    show(`<h2>Please talk to a person right now.</h2><p>${esc(CRISIS_MESSAGE)}</p>
+      <div class="row"><a class="btn" href="tel:988">Call 988</a><a class="btn alt" href="sms:988">Text 988</a><button class="ghost" id="back">I am okay, go back</button></div>`, 'panel crisis');
     $('back').addEventListener('click', () => stop(Math.max(S.step, 0)));
   }
 
-  function stop(i: number) {
-    S.step = i; setRoute(i);
+  async function stop(i: number) {
+    const arriving = S.step !== i;
+    S.step = i; setHud(i);
+    if (arriving) { stage.innerHTML = ''; await go(i); }
     const s = STOPS[i];
     const chips = s.chips ? `<div class="chips" role="group" aria-label="Weather">${s.chips.map((c) => `<button type="button" class="chip" aria-pressed="${S.picks.includes(c)}">${esc(c)}</button>`).join('')}</div>` : '';
-    show(`<div class="guide">${ALAN}<div class="bubble" id="say"></div></div>
-      <h2>${esc(s.q)}</h2>${chips}
+    show(`${pilot()}<h2>${esc(s.q)}</h2>${chips}
       <textarea id="ans" aria-label="Your answer" autocomplete="off" spellcheck="false" placeholder="${esc(s.ph)}">${esc(S.ans[s.id] || '')}</textarea>
       <div class="row"><button class="btn" id="next">Continue</button>${i > 0 ? '<button class="btn alt" id="prev">Back</button>' : ''}<button class="ghost" id="skip">Skip</button></div>`);
     type($('say'), s.say);
     const ta = $<HTMLTextAreaElement>('ans'); ta.focus({ preventScroll: true });
-    ta.addEventListener('input', () => { S.ans[s.id] = ta.value; look(0, 3); });
+    ta.addEventListener('input', () => { S.ans[s.id] = ta.value; });
     document.querySelectorAll<HTMLButtonElement>('.chip').forEach((b) => b.addEventListener('click', () => { S.picks = S.picks[0] === b.textContent ? [] : [b.textContent!]; document.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', String(S.picks.includes(c.textContent!)))); }));
     $('next').addEventListener('click', () => reply(i));
     $('prev')?.addEventListener('click', () => stop(i - 1));
@@ -248,9 +357,8 @@ import Base from '../layouts/Base.astro';
     const s = STOPS[i]; const text = full(s);
     if (!text.trim()) return forward(i);
     if (isCrisis(text)) return crisis();
-    const bubble = `<div class="guide">${ALAN}<div class="bubble" id="say"></div></div>`;
-    const cont = `<div class="row"><button class="btn" id="cont" hidden>${i + 1 < STOPS.length ? 'Next stop' : 'Find my seven words'}</button><button class="btn alt" id="edit" hidden>Say it differently</button></div>`;
-    show(bubble + `<p class="listen" id="ls" role="status">Alan is thinking<span>.</span><span>.</span><span>.</span></p>` + cont);
+    show(`${pilot()}<p class="listen" id="ls" role="status">Alan is thinking<span>.</span><span>.</span><span>.</span></p>
+      <div class="row"><button class="btn" id="cont" hidden>${i + 1 < STOPS.length ? 'Fly to the next sector' : 'Find my seven words'}</button><button class="btn alt" id="edit" hidden>Say it differently</button></div>`);
     let out: any = null;
     if (S.mode === 'ai') {
       el.classList.add('think');
@@ -260,31 +368,31 @@ import Base from '../layouts/Base.astro';
     $('ls')?.remove();
     if (out?.crisis) return crisis();
     if (out?.prov) S.replies.push(out.prov);
-    const msg = out?.reply || s.written;
-    type($('say'), msg, () => { $('cont').hidden = false; $('edit').hidden = false; $('cont').focus(); });
+    type($('say'), out?.reply || s.written, () => { $('cont').hidden = false; $('edit').hidden = false; $('cont').focus(); });
     if (S.mode === 'ai' && !out) stage.firstElementChild!.insertAdjacentHTML('beforeend', '<p class="hint">Alan could not be reached, so that reply was written in advance.</p>');
     $('cont').addEventListener('click', () => forward(i)); $('edit').addEventListener('click', () => stop(i));
   }
 
-  // ---------- the seven-word stops ----------
-  function seven(kind: 'friction' | 'outcome') {
+  // ---------- the seven-word sectors ----------
+  async function seven(kind: 'friction' | 'outcome') {
     const f = kind === 'friction';
-    S.step = f ? 6 : 7; setRoute(S.step);
+    const k = f ? 6 : 7; S.step = k; setHud(k); stage.innerHTML = ''; await go(k);
     const heading = f ? 'Say what is in the way in exactly seven words.' : 'Make your wish: what do you want instead, in exactly seven words?';
     const tips = f ? 'Name the thing in the way, not only the feeling. Use your own words.' : 'Make it something another person could see happen. Add a day or a person if you can.';
-    show(`<div class="guide">${ALAN}<div class="bubble" id="say"></div></div>
-      <h2>${esc(heading)}</h2><p class="hint">${esc(tips)}</p>
+    show(`${pilot()}<h2>${esc(heading)}</h2><p class="hint">${esc(tips)}</p>
       <div id="opts" class="opts" aria-live="polite"></div>
-      <textarea id="sv" rows="2" style="min-height:70px" aria-label="Your seven words" autocomplete="off" spellcheck="false" placeholder="Seven words..."></textarea>
+      <textarea id="sv" rows="2" style="min-height:64px" aria-label="Your seven words" autocomplete="off" spellcheck="false" placeholder="Seven words..."></textarea>
+      <div class="nodes" id="nodes" aria-hidden="true">${'<i></i>'.repeat(SEVEN)}</div>
       <p class="count" id="cnt" role="status"></p>
       <div class="row"><button class="btn" id="lock" disabled>${f ? 'Lock in the friction' : 'Lock in the wish'}</button><button class="btn alt" id="more" hidden>Show me other versions</button><button class="ghost" id="back">Back</button></div>`);
     type($('say'), f ? 'Here is the trick. Seven words is short enough that you cannot hide in it.' : 'Genie rules: one wish, and it has to be specific enough for me to grant.');
-    const sv = $<HTMLTextAreaElement>('sv'), cnt = $('cnt'), lock = $<HTMLButtonElement>('lock');
+    const sv = $<HTMLTextAreaElement>('sv'), cnt = $('cnt'), lock = $<HTMLButtonElement>('lock'), nodes = $('nodes');
     let source: Line['source'] = 'you', offered: string[] = [];
     const update = () => {
       const n = words(sv.value).length; lock.disabled = n !== SEVEN;
+      nodes.classList.toggle('full', n === SEVEN); nodes.querySelectorAll('i').forEach((d, x) => d.classList.toggle('lit', x < n));
       cnt.className = 'count' + (n === SEVEN ? ' ok' : '');
-      cnt.textContent = n === SEVEN ? '7 of 7. That is it.' : n < SEVEN ? `${n} of 7. Add ${SEVEN - n}.` : `${n} of 7. Cut ${n - SEVEN}.`;
+      cnt.textContent = n === SEVEN ? '7 of 7. Constellation complete.' : n < SEVEN ? `${n} of 7. Add ${SEVEN - n}.` : `${n} of 7. Cut ${n - SEVEN}.`;
       if (source === 'alan' && !offered.includes(sv.value.trim())) source = 'alan edited';
     };
     sv.addEventListener('input', update); update();
@@ -312,7 +420,7 @@ import Base from '../layouts/Base.astro';
     sv.focus({ preventScroll: true });
   }
 
-  // ---------- the card and its receipt ----------
+  // ---------- the star chart and its receipt ----------
   const sha = async (s: string) => Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s))), (b) => b.toString(16).padStart(2, '0')).join('');
   const canon = (o: unknown): string => JSON.stringify(o, (_k, v) => (v && typeof v === 'object' && !Array.isArray(v) ? Object.keys(v).sort().reduce((a: any, k) => { a[k] = v[k]; return a; }, {}) : v));
 
@@ -320,22 +428,29 @@ import Base from '../layouts/Base.astro';
     const lines = await Promise.all([['friction', S.friction!], ['outcome', S.wish!]].map(async ([k, l]) => ({ kind: k, text: (l as Line).text, source: (l as Line).source, sha256: await sha((l as Line).text) })));
     const body = { schema: 'alan-receipt/1', createdAt: new Date().toISOString(), mode: S.mode, visit: await sha('v:' + S.sid).then((h) => h.slice(0, 16)), lines,
       aiReplies: S.replies.map((p) => ({ rid: p.rid, model: p.model, promptVersion: p.promptV, policyVersion: p.policyV, build: p.build, at: p.ts })),
-      notes: 'Contains only the two seven-word lines and metadata about which AI replies helped. The stop-by-stop answers are not included. Each rid can be matched to the signed server audit log.' };
+      notes: 'Contains only the two seven-word lines and metadata about which AI replies helped. The sector-by-sector answers are not included. Each rid can be matched to the signed server audit log.' };
     return { ...body, receiptSha256: await sha(canon(body)) };
   }
 
+  // Seven points drawn from the line itself, joined like a constellation.
+  const constellation = (text: string) => {
+    const w = words(text).slice(0, SEVEN);
+    const pts = w.map((x, i) => { let h = 0; for (const c of x) h = (h * 31 + c.charCodeAt(0)) % 997; return [i * (320 / 6) + 6, 6 + (h % 22)]; });
+    return `<svg class="con" viewBox="0 0 332 34" aria-hidden="true"><polyline points="${pts.map((p) => p.join(',')).join(' ')}" fill="none" stroke="rgba(111,227,212,.55)" stroke-width="1.2"/>${pts.map((p) => `<circle cx="${p[0]}" cy="${p[1]}" r="3.4" fill="#FFC857"/>`).join('')}</svg>`;
+  };
+
   async function card() {
-    S.step = 8; setRoute(8);
+    S.step = 8; setHud(8); stage.innerHTML = ''; await go(8);
     const rc = await receipt();
     const srcLabel = (l: Line) => (l.source === 'you' ? 'in your words' : l.source === 'alan' ? 'suggested by Alan, chosen by you' : 'started by Alan, edited by you');
-    show(`<div class="guide">${ALAN}<div class="bubble" id="say"></div></div>
-      <div class="seven" id="seven"><h2>The friction</h2><p class="line">${esc(S.friction!.text)}.</p><p class="src">${srcLabel(S.friction!)}</p><hr>
-        <h2>The wish</h2><p class="line">${esc(S.wish!.text)}.</p><p class="src">${srcLabel(S.wish!)}</p>
-        <div class="prov"><b>Provenance.</b> Made ${new Date(rc.createdAt).toLocaleString()} in ${S.mode === 'ai' ? 'AI' : 'private'} mode. ${S.replies.length} AI ${S.replies.length === 1 ? 'reply' : 'replies'}${S.replies[0] ? `, model ${esc(S.replies[0].model)}, prompt ${esc(S.replies[0].promptV)}, build ${esc(S.replies[0].build)}` : ''}. Receipt <b>${rc.receiptSha256.slice(0, 16)}</b>.</div></div>
+    show(`<div class="pilot">${PILOT}<div><p class="who">Alan, your pilot</p><p class="say" id="say"></p></div></div>
+      <p class="lab">The friction</p>${constellation(S.friction!.text)}<p class="line">${esc(S.friction!.text)}.</p><p class="src">${srcLabel(S.friction!)}</p><hr>
+      <p class="lab">The wish</p>${constellation(S.wish!.text)}<p class="line">${esc(S.wish!.text)}.</p><p class="src">${srcLabel(S.wish!)}</p>
+      <div class="log"><b>Flight log.</b> ${new Date(rc.createdAt).toLocaleString()} · ${S.mode === 'ai' ? 'AI' : 'private'} mode · ${S.replies.length} AI ${S.replies.length === 1 ? 'reply' : 'replies'}${S.replies[0] ? ` · model ${esc(S.replies[0].model)} · prompt ${esc(S.replies[0].promptV)} · build ${esc(S.replies[0].build)}` : ''} · receipt <b>${rc.receiptSha256.slice(0, 16)}</b></div>
       <div class="row noprint"><button class="btn" id="copy">Copy the two lines</button><button class="btn alt" id="dl">Download receipt</button><button class="btn alt" id="pr">Print</button></div>
-      <div class="trip noprint"><div><b>Next</b>Say the wish to one person today. A line nobody hears is still just a thought.</div><div><b>Go further</b><a href="/partner/" style="color:var(--gold)">Build your personal operating system</a> or <a href="/mindset-coaching/" style="color:var(--gold)">book a Pattern Audit with Marquis</a>.</div></div>
-      <div class="row noprint"><button class="ghost" id="again">Start a new ride</button><button class="ghost" id="clr">Wipe everything</button></div>`);
-    type($('say'), 'That is the whole trip. Look how small and clear that is.');
+      <p class="hint noprint" style="margin-top:12px">Next: say the wish to one person today. Then <a href="/partner/" style="color:var(--gold)">build your personal operating system</a> or <a href="/mindset-coaching/" style="color:var(--gold)">book a Pattern Audit with Marquis</a>.</p>
+      <div class="row noprint"><button class="ghost" id="again">Fly again</button><button class="ghost" id="clr">Wipe everything</button></div>`, 'chart');
+    type($('say'), 'That is the whole flight. Look how small and clear that is.');
     $('copy').addEventListener('click', async () => { try { await navigator.clipboard.writeText(`Friction: ${S.friction!.text}\nWish: ${S.wish!.text}`); $('copy').textContent = 'Copied'; } catch { $('copy').textContent = 'Select and copy'; } });
     $('dl').addEventListener('click', () => { const u = URL.createObjectURL(new Blob([JSON.stringify(rc, null, 2)], { type: 'application/json' })); const a = document.createElement('a'); a.href = u; a.download = 'alan-receipt.json'; a.click(); URL.revokeObjectURL(u); });
     $('pr').addEventListener('click', () => print());
@@ -343,5 +458,6 @@ import Base from '../layouts/Base.astro';
     $('clr').addEventListener('click', () => wipe('Done. Everything is cleared from this page.'));
   }
 
-  gate();
+  // Open in galaxy view, a distant look at everything, then the gate.
+  place(); depthFx(); gate();
 </script>
