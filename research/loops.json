@@ -1,0 +1,21 @@
+{
+  "_about": "The negative-loop map the Alan app reads. Each loop links to evidence (library.json ids) and to a strategy drawn from Marquis's frameworks. Strategy wording is a DRAFT for Marquis to rewrite in his voice; it is not yet his approved language.",
+  "mindsetArchitecture": [
+    { "id": "beliefs", "name": "What you believe is possible", "question": "What do you quietly assume about what you can change?" },
+    { "id": "identity", "name": "Who you say you are", "question": "Which sentence about yourself do you act in line with, even when it costs you?" },
+    { "id": "decisions", "name": "How you decide under pressure", "question": "What do you see first when stakes are high, and what do you miss?" },
+    { "id": "emotion", "name": "How you handle the feeling", "question": "What do you do with the discomfort between wanting and doing?" },
+    { "id": "system", "name": "Your operating system", "question": "What daily structure turns a decision into a repeated action?" }
+  ],
+  "loops": [
+    { "id": "story-rewrite", "name": "The story rewrite", "plain": "You don't do the thing, so you change what you say you wanted.", "evidence": ["festinger-carlsmith-1959", "bryan-2011"], "strategy": { "tool": "Pattern Audit", "god": "Destroyer", "move": "Write the want and the last three actions side by side. Name the cheapest excuse your mind used to close the gap." } },
+    { "id": "borrowed-goal", "name": "The borrowed goal", "plain": "You are chasing something someone else would be proud of.", "evidence": ["sheldon-elliot-1999", "bryan-2011"], "strategy": { "tool": "Pattern Audit", "god": "Destroyer", "move": "For each goal ask whose voice is asking. Cut or rewrite any goal you would not choose if no one ever knew." } },
+    { "id": "wish-without-obstacle", "name": "The wish without the obstacle", "plain": "You picture the finish line and skip the part in the middle.", "evidence": ["oettingen-2012"], "strategy": { "tool": "Pattern Audit", "god": "Generator then Destroyer", "move": "Say the wish, then the real thing most likely to stop you this week. Decide whether to commit or release." } },
+    { "id": "intention-action-gap", "name": "The intention-action gap", "plain": "You know what to do and still don't start.", "evidence": ["gollwitzer-sheeran-2006", "oettingen-2012"], "strategy": { "tool": "Mindset Sprint action map", "god": "Operator", "move": "Write one if-then plan: when this cue happens, I do this exact step." } },
+    { "id": "rumination", "name": "The replay loop", "plain": "You go over the problem again and again without moving.", "evidence": ["nolen-hoeksema-2008", "gollwitzer-sheeran-2006"], "strategy": { "tool": "Pattern Audit", "god": "Operator", "move": "Swap 'why is this happening' for 'what is the next 15-minute step'. Refer out if this looks like depression." } },
+    { "id": "defensiveness", "name": "The defense reflex", "plain": "Honest feedback feels like an attack, so you wave it off.", "evidence": ["cohen-sherman-2014"], "strategy": { "tool": "Pattern Audit", "god": "Generator", "move": "Start by naming a value you stand on, then look at the hard truth." } },
+    { "id": "all-or-nothing", "name": "The all-or-nothing reset", "plain": "You miss a day and decide the whole thing is dead.", "evidence": ["lally-2010"], "strategy": { "tool": "Mindset Retainer", "god": "Operator", "move": "Plan the miss. Rule: never miss twice, and restart at the smallest version." } },
+    { "id": "fixed-label", "name": "The fixed label", "plain": "I'm just not a ___ person.", "evidence": ["yeager-2019"], "strategy": { "tool": "Mindset Sprint", "god": "Generator", "move": "Turn the label into 'not yet' and attach one concrete practice, because belief alone moves little." } },
+    { "id": "willpower-myth", "name": "The willpower myth", "plain": "I ran out of willpower, so it's not my fault.", "evidence": ["hagger-2016"], "strategy": { "tool": "Pattern Audit", "god": "Destroyer", "move": "Redesign the environment and the cue instead of arguing with your tank. Don't promise clients a willpower-battery model." } }
+  ]
+}
