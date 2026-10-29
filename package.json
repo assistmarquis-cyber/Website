@@ -7,7 +7,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "pdf": "node scripts/make-pdf.mjs"
+    "pdf": "node scripts/make-pdf.mjs",
+    "test": "node --test tests/safety.test.mjs",
+    "audit:verify": "node scripts/verify-audit.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",

@@ -1,0 +1,23 @@
+groups:
+  - name: alan
+    rules:
+      - alert: AlanErrorRateHigh
+        expr: sum(rate(alan_requests_total{status=~"5.."}[5m])) / sum(rate(alan_requests_total[5m])) > 0.05
+        for: 10m
+        annotations: { summary: "More than 5% of Alan requests are failing (model provider or function)." }
+      - alert: AlanSlow
+        expr: histogram_quantile(0.95, sum(rate(alan_request_ms_bucket[5m])) by (le)) > 15000
+        for: 10m
+        annotations: { summary: "Alan p95 latency above 15 seconds." }
+      - alert: AlanBlockedOriginsSpike
+        expr: sum(rate(alan_requests_total{status="403"}[5m])) > 0.2
+        for: 5m
+        annotations: { summary: "Many requests from disallowed origins. Possible scripted abuse." }
+      - alert: AlanRateLimited
+        expr: sum(rate(alan_requests_total{status="429"}[5m])) > 0.2
+        for: 5m
+        annotations: { summary: "Visitors are hitting the rate limit. Abuse or a launch spike." }
+      - alert: AlanSilent
+        expr: absent(alan_requests_total) 
+        for: 30m
+        annotations: { summary: "No Alan events seen for 30 minutes. Check the log drain." }

@@ -1,0 +1,347 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base bare noindex title="Alan | Ride the bus, find your seven words" description="A small guide named Alan helps you go around a hard problem instead of at it, and land your friction and your outcome in seven words each.">
+  <meta name="referrer" content="no-referrer" />
+  <div class="al" id="al" data-mode="ai">
+    <div class="glow" aria-hidden="true"></div>
+    <header class="top">
+      <a class="mk" href="/">Marquis Harmon</a>
+      <div class="tr">
+        <span id="stopname" class="sn" aria-live="polite"></span>
+        <button class="wipe" id="wipe" hidden>Wipe everything</button>
+      </div>
+    </header>
+
+    <div class="route" id="route" aria-hidden="true" hidden>
+      <div class="road"></div>
+      <div class="dots" id="dots"></div>
+      <svg class="bus" id="bus" viewBox="0 0 64 36" width="48" height="27"><rect x="2" y="4" width="58" height="22" rx="7" fill="#F5B82E"/><rect x="8" y="8" width="10" height="9" rx="2" fill="#0F2B2A"/><rect x="21" y="8" width="10" height="9" rx="2" fill="#0F2B2A"/><rect x="34" y="8" width="10" height="9" rx="2" fill="#0F2B2A"/><rect x="47" y="8" width="9" height="9" rx="2" fill="#E8F3F1"/><rect x="2" y="20" width="58" height="3" fill="#C98E12"/><g class="wh"><circle cx="16" cy="27" r="5" fill="#2A1D14"/><circle cx="48" cy="27" r="5" fill="#2A1D14"/><circle cx="16" cy="27" r="1.8" fill="#F4EEE3"/><circle cx="48" cy="27" r="1.8" fill="#F4EEE3"/></g></svg>
+    </div>
+
+    <main class="stage" id="stage"></main>
+
+    <footer class="ft" id="ft">Not therapy and not for emergencies. Nothing here is saved.</footer>
+  </div>
+</Base>
+
+<style is:global>
+  html, body { background: #0F2B2A; }
+  .al { --ink:#F4EEE3; --soft:#B9CCC8; --faint:#7F9894; --line:rgba(244,238,227,.15); --gold:#F5B82E; --card:rgba(244,238,227,.06);
+    position: relative; min-height: 100svh; display: flex; flex-direction: column; overflow: hidden; color: var(--ink); font-family: var(--sans);
+    background: radial-gradient(120% 90% at 50% -10%, #1D4B49 0%, #0F2B2A 55%, #0A1E1D 100%); }
+  .al .glow { position: absolute; left: 50%; top: 30%; width: min(80vw, 620px); aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle at 40% 35%, rgba(245,184,46,.22), rgba(27,102,99,.16) 45%, transparent 70%); filter: blur(28px); animation: alb 9s ease-in-out infinite; transition: filter .6s; }
+  .al.think .glow { animation-duration: 2.2s; filter: blur(22px) brightness(1.5); }
+  @keyframes alb { 0%,100% { transform: scale(.92); opacity: .75 } 50% { transform: scale(1.08); opacity: 1 } }
+  .top, .route, .stage, .ft { position: relative; z-index: 1; width: 100%; max-width: 760px; margin: 0 auto; }
+  .top { display: flex; justify-content: space-between; align-items: center; padding: 16px var(--pad); }
+  .mk { font: 15px var(--serif); color: var(--soft); text-decoration: none; }
+  .tr { display: flex; align-items: center; gap: 12px; }
+  .sn { font: 600 11px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+  .wipe { background: none; border: 1px solid var(--line); border-radius: 999px; color: var(--soft); font: 12px var(--sans); padding: 6px 12px; cursor: pointer; }
+  .wipe:hover { color: var(--ink); border-color: var(--soft); }
+
+  .route { height: 52px; padding: 0 calc(var(--pad) + 14px); }
+  .road { position: absolute; left: calc(var(--pad) + 14px); right: calc(var(--pad) + 14px); top: 33px; border-top: 2px dashed rgba(244,238,227,.22); }
+  .dots { position: absolute; left: calc(var(--pad) + 14px); right: calc(var(--pad) + 14px); top: 29px; height: 10px; }
+  .dots i { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #0F2B2A; border: 2px solid rgba(244,238,227,.35); translate: -50% 0; transition: .5s; }
+  .dots i.on { background: var(--gold); border-color: var(--gold); }
+  .bus { position: absolute; top: 3px; translate: -50% 0; transition: left 1s cubic-bezier(.5,0,.2,1); filter: drop-shadow(0 4px 8px rgba(0,0,0,.4)); }
+  .route .bus { left: calc(var(--pad) + 14px); }
+  .al.ride .bus { animation: bump .5s ease 2; }
+  @keyframes bump { 50% { transform: translateY(-3px) } }
+
+  .stage { flex: 1; padding: clamp(6px, 4vh, 40px) var(--pad) 28px; display: flex; flex-direction: column; justify-content: flex-start; }
+  .ft { text-align: center; font-size: 12px; color: var(--faint); padding: 10px var(--pad) 18px; }
+  .fd { animation: alr .6s ease both; }
+  @keyframes alr { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+
+  .guide { display: flex; gap: 14px; align-items: flex-end; margin-bottom: 16px; }
+  .alan { flex: none; width: 84px; height: 94px; }
+  .alan .eye { transition: transform .25s; }
+  .alan .lids { animation: blink 5s infinite; transform-origin: center; transform-box: fill-box; }
+  @keyframes blink { 0%,94%,100% { transform: scaleY(0) } 96% { transform: scaleY(1) } }
+  .alan .tail { animation: sway 4s ease-in-out infinite; transform-origin: 60px 78px; }
+  @keyframes sway { 50% { transform: rotate(5deg) } }
+  .alan .spark { animation: tw 2.4s ease-in-out infinite; }
+  .alan .spark:nth-of-type(2) { animation-delay: .8s; }
+  @keyframes tw { 50% { opacity: .2 } }
+  .al.think .alan .mouth { d: path("M52 62 q8 7 16 0 q-8 -3 -16 0"); }
+  .bubble { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 18px 18px 18px 4px; padding: 14px 18px; font: 500 18px/1.45 var(--serif); color: var(--ink); min-height: 54px; }
+  .bubble.quiet { font: 16px/1.5 var(--sans); color: var(--soft); }
+
+  .al h1 { font: 500 clamp(30px, 6vw, 46px)/1.1 var(--serif); margin: 6px 0 14px; color: var(--ink); }
+  .al h2 { font: 500 clamp(22px, 4.2vw, 30px)/1.2 var(--serif); margin: 0 0 10px; color: var(--ink); }
+  .al p { color: var(--soft); font-size: 16px; line-height: 1.6; margin: 0 0 12px; }
+  .al .hint { color: var(--faint); font-size: 14px; }
+  .al .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
+  .al .btn { background: var(--gold); color: #2A1D14; border: 0; border-radius: 999px; padding: 13px 24px; font: 600 16px var(--sans); cursor: pointer; transition: transform .2s, box-shadow .2s; }
+  .al .btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 26px rgba(245,184,46,.28); }
+  .al .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .al .btn.alt { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .al .ghost { background: none; border: 0; color: var(--faint); font: 14px var(--sans); cursor: pointer; padding: 8px; }
+  .al .ghost:hover { color: var(--ink); }
+  .al textarea, .al input[type=text] { width: 100%; background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 14px; padding: 15px; font: 17px/1.5 var(--sans); resize: vertical; min-height: 110px; }
+  .al textarea::placeholder { color: var(--faint); }
+  .al button:focus-visible, .al textarea:focus-visible, .al a:focus-visible, .al input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+  .chip { background: var(--card); color: var(--soft); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; font: 14px var(--sans); cursor: pointer; }
+  .chip[aria-pressed="true"] { background: rgba(245,184,46,.16); border-color: var(--gold); color: var(--ink); }
+  .listen { color: var(--soft); font: 18px var(--serif); margin: 4px 0; }
+  .listen span { animation: dd 1.2s infinite; opacity: .2; } .listen span:nth-child(2) { animation-delay: .2s } .listen span:nth-child(3) { animation-delay: .4s }
+  @keyframes dd { 50% { opacity: 1 } }
+
+  .gate label { display: flex; gap: 12px; align-items: flex-start; color: var(--soft); font-size: 15px; line-height: 1.5; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; cursor: pointer; }
+  .gate input[type=checkbox] { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--gold); flex: none; }
+  .gate ul { margin: 0 0 14px; padding-left: 18px; color: var(--soft); font-size: 15px; line-height: 1.6; }
+  .crisis { background: rgba(184,50,42,.14); border: 1px solid rgba(232,120,110,.5); border-radius: 16px; padding: 18px; }
+  .crisis p { color: var(--ink); }
+
+  .opts { display: grid; gap: 10px; margin: 0 0 12px; }
+  .opt { text-align: left; background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; font: 500 19px/1.35 var(--serif); cursor: pointer; }
+  .opt:hover { border-color: var(--gold); }
+  .count { font: 600 13px var(--sans); letter-spacing: .06em; color: var(--faint); margin: 8px 0 0; }
+  .count.ok { color: var(--gold); }
+
+  .seven { background: #FBF8F3; color: #2A1D14; border-radius: 20px; padding: clamp(22px, 5vw, 38px); box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+  .seven h2 { color: #124A48; font-size: 16px; letter-spacing: .14em; text-transform: uppercase; font-family: var(--sans); font-weight: 600; margin: 0 0 6px; }
+  .seven .line { font: 500 clamp(26px, 5.2vw, 40px)/1.15 var(--serif); color: #2A1D14; margin: 0 0 6px; }
+  .seven .src { font-size: 12px; color: #6B5646; margin: 0 0 22px; }
+  .seven hr { border: 0; border-top: 1px solid #E6DDD0; margin: 4px 0 20px; }
+  .seven .prov { font-size: 12px; line-height: 1.6; color: #6B5646; border-top: 1px solid #E6DDD0; padding-top: 14px; margin-top: 8px; word-break: break-word; }
+  .seven .prov b { color: #2A1D14; }
+
+  .trip { display: grid; gap: 8px; margin-top: 14px; }
+  .trip div { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: 14px; color: var(--soft); }
+  .trip b { color: var(--gold); font: 600 11px var(--sans); letter-spacing: .12em; text-transform: uppercase; display: block; margin-bottom: 2px; }
+
+  @media (max-width: 520px) { .alan { width: 64px; height: 72px; } .bubble { font-size: 17px; } .sn { display: none; } }
+  @media print { html, body, .al { background: #fff !important; } .top, .route, .ft, .row, .glow, .trip, .noprint { display: none !important; } .seven { box-shadow: none; padding: 0; } }
+  @media (prefers-reduced-motion: reduce) { .glow, .fd, .alan .tail, .alan .spark, .alan .lids, .bus { animation: none !important; transition: none !important; } }
+</style>
+
+<script>
+  import { scrub, isCrisis, CRISIS_MESSAGE } from '../lib/safety.mjs';
+
+  type Stop = { id: string; name: string; say: string; q: string; ph: string; chips?: string[]; written: string };
+  const STOPS: Stop[] = [
+    { id: 'board', name: 'Boarding', say: 'Hop on. I am Alan. We are not going to charge at the hard thing. We are going to ride around it first.', q: 'What is the weather like inside right now?', ph: 'Optional. Or say more...', chips: ['Stormy', 'Foggy', 'Heavy', 'Buzzing', 'Flat', 'Tangled'], written: 'Good. Weather is real information, and it is a lot easier to say than the whole story.' },
+    { id: 'window', name: 'The Window', say: 'First stop. We look at it through the bus window, from a safe distance.', q: 'If someone you love were carrying this, what would you notice about them?', ph: 'I would notice...', written: 'Interesting. You can often see a problem more kindly from the window than from the driver\'s seat.' },
+    { id: 'shrink', name: 'The Shrink Ray', say: 'Now we shrink the bus. Big problems are made of small pieces.', q: 'Pick one piece, small enough for a single afternoon. What is it?', ph: 'The piece is...', written: 'That is a piece you can actually hold. We will ride inside it next.' },
+    { id: 'inside', name: 'Inside the Machine', say: 'Inside the piece, there are parts. Let us listen to them.', q: 'What does your survival voice say in there? And what does your quieter instinct say?', ph: 'Survival says... Instinct says...', written: 'You do not have to silence the loud one. You just have to know which voice is talking.' },
+    { id: 'map', name: 'The Map Room', say: 'Time to sort the luggage.', q: 'Which part of this is yours to carry, and which part is not?', ph: 'Mine: ... Not mine: ...', written: 'Setting down what was never yours is not quitting. It is packing lighter.' },
+    { id: 'lever', name: 'The Loose Thread', say: 'Last stop before the wish. Every tangle has a loose thread.', q: 'If one small thing moved, what else would loosen?', ph: 'If this moved...', written: 'That is your lever. Now we say it short.' },
+  ];
+  const ROUTE = [...STOPS.map((s) => s.name), 'Your Friction', 'Your Wish', 'Seven Words'];
+  const SEVEN = 7;
+
+  const rnd = () => Array.from(crypto.getRandomValues(new Uint8Array(8)), (b) => b.toString(16).padStart(2, '0')).join('');
+  // Everything lives in this object, in memory only. Closing the tab, wiping, or 15 idle minutes ends it.
+  type Prov = { rid: string; model: string; promptV: string; policyV: string; build: string; ts: string };
+  type Line = { text: string; source: 'you' | 'alan' | 'alan edited' };
+  let S: { mode: 'ai' | 'private'; sid: string; step: number; ans: Record<string, string>; picks: string[]; replies: Prov[]; friction?: Line; wish?: Line } = fresh();
+  function fresh() { return { mode: 'ai' as const, sid: rnd(), step: -1, ans: {}, picks: [], replies: [] }; }
+
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const el = $('al'), stage = $('stage'), dots = $('dots'), bus = $('bus'), route = $('route'), sn = $('stopname'), wipeBtn = $('wipe');
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+  const words = (s: string) => s.trim().split(/\s+/).filter(Boolean);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  dots.innerHTML = ROUTE.map((_, i) => `<i style="left:${(i / (ROUTE.length - 1)) * 100}%"></i>`).join('');
+  const setRoute = (i: number) => {
+    route.hidden = i < 0; wipeBtn.hidden = i < 0;
+    const pos = (Math.max(i, 0) / (ROUTE.length - 1)) * 100;
+    (bus as unknown as HTMLElement).style.left = `calc(var(--pad) + 14px + (100% - 2 * (var(--pad) + 14px)) * ${pos / 100})`;
+    dots.querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k <= i));
+    sn.textContent = i >= 0 ? ROUTE[i] : '';
+    el.classList.add('ride'); setTimeout(() => el.classList.remove('ride'), 1100);
+  };
+
+  // Alan, drawn inline so his eyes can follow what you do.
+  const ALAN = `<svg class="alan" viewBox="0 0 120 130" aria-hidden="true">
+    <defs><radialGradient id="ab" cx="40%" cy="30%"><stop offset="0" stop-color="#FFE29A"/><stop offset="1" stop-color="#F5B82E"/></radialGradient></defs>
+    <g class="tail"><path d="M60 78 C 40 92 70 98 52 112 C 46 117 58 122 64 118" fill="none" stroke="#F5B82E" stroke-width="9" stroke-linecap="round" opacity=".85"/></g>
+    <ellipse cx="60" cy="52" rx="38" ry="40" fill="url(#ab)"/>
+    <circle cx="44" cy="48" r="9" fill="#fff"/><circle cx="76" cy="48" r="9" fill="#fff"/>
+    <g class="eye" id="eyes"><circle cx="44" cy="49" r="4.2" fill="#0F2B2A"/><circle cx="76" cy="49" r="4.2" fill="#0F2B2A"/></g>
+    <g class="lids"><rect x="34" y="38" width="20" height="20" fill="#F9C84F"/><rect x="66" y="38" width="20" height="20" fill="#F9C84F"/></g>
+    <path class="mouth" d="M52 64 q8 6 16 0" fill="none" stroke="#7A4B06" stroke-width="3" stroke-linecap="round"/>
+    <path d="M30 20 q-8 -10 2 -16 M90 20 q8 -10 -2 -16" stroke="#F5B82E" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <circle class="spark" cx="12" cy="30" r="3" fill="#FFE29A"/><circle class="spark" cx="108" cy="70" r="2.4" fill="#FFE29A"/></svg>`;
+  const look = (dx: number, dy: number) => { const e = document.getElementById('eyes'); if (e) e.style.transform = `translate(${dx}px, ${dy}px)`; };
+  addEventListener('pointermove', (ev) => { const r = document.querySelector('.alan')?.getBoundingClientRect(); if (!r) return; look(Math.max(-3, Math.min(3, (ev.clientX - (r.left + r.width / 2)) / 120)), Math.max(-2, Math.min(3, (ev.clientY - (r.top + r.height / 2)) / 120))); });
+
+  const type = (node: HTMLElement, text: string, done?: () => void) => {
+    if (reduce) { node.textContent = text; return done?.(); }
+    // The unwritten rest stays in the box, invisible, so the layout never jumps while Alan "talks".
+    let n = 0; const tick = () => { n += 2; node.innerHTML = esc(text.slice(0, n)) + `<span style="visibility:hidden" aria-hidden="true">${esc(text.slice(n))}</span>`; if (n < text.length) setTimeout(tick, 16); else { node.textContent = text; done?.(); } }; tick();
+  };
+  const show = (html: string) => { stage.innerHTML = `<div class="fd">${html}</div>`; window.scrollTo({ top: 0 }); };
+  const setFoot = () => { $('ft').textContent = S.mode === 'ai' ? 'AI mode: what you write at each stop is sent to an AI to answer you, with names and ID numbers removed first. Not stored. Not therapy, not for emergencies.' : 'Private mode: nothing leaves this device. Not therapy, not for emergencies.'; };
+
+  // ---------- idle wipe and manual wipe ----------
+  let idle: number | undefined;
+  const bumpIdle = () => { clearTimeout(idle); idle = window.setTimeout(() => wipe('You were away for a while, so I cleared everything.'), 15 * 60 * 1000); };
+  ['pointerdown', 'keydown', 'input'].forEach((t) => addEventListener(t, bumpIdle, { passive: true }));
+  function wipe(msg?: string) {
+    S = fresh(); setRoute(-1); route.hidden = true; wipeBtn.hidden = true; $('ft').textContent = 'Not therapy and not for emergencies. Nothing here is saved.';
+    gate(msg);
+  }
+  wipeBtn.addEventListener('click', () => wipe('Done. Everything is cleared from this page.'));
+
+  // ---------- screens ----------
+  function gate(note?: string) {
+    S.step = -1; setRoute(-1); route.hidden = true; wipeBtn.hidden = true;
+    show(`<div class="gate"><div class="guide">${ALAN}<div class="bubble" id="hi"></div></div>
+      ${note ? `<p class="hint" role="status">${esc(note)}</p>` : ''}
+      <h1>Ride the bus. Find your seven words.</h1>
+      <p>I will not ask you to look straight at the hard thing. We go around it, shrink it, look inside it, and you finish with two lines of seven words: what is in the way, and what you want instead.</p>
+      <ul><li>I am an AI guide. I am not a therapist, doctor or lawyer, and I cannot help in an emergency.</li><li>Please do not type names, ID numbers, addresses or medical record details. I remove what I can, but not everything.</li><li>Nothing is saved. Close the tab, or press Wipe, and it is gone.</li></ul>
+      <label><input type="checkbox" id="ok"> <span>I understand that Alan is an AI, not a professional, and that in an emergency I should call 911 or 988.</span></label>
+      <div class="row"><button class="btn" id="go-ai" disabled>Ride with Alan</button><button class="btn alt" id="go-pr" disabled>Ride privately, no AI</button></div>
+      <p class="hint" style="margin-top:14px">With Alan, each answer is sent to an AI to write a reply. Privately, replies are written in advance and nothing leaves your device.</p></div>`);
+    type($('hi'), 'Hi. I am Alan. Think of me as a small genie with a bus. Your wish is a clear sentence.');
+    const ok = $<HTMLInputElement>('ok');
+    ok.addEventListener('change', () => { $<HTMLButtonElement>('go-ai').disabled = $<HTMLButtonElement>('go-pr').disabled = !ok.checked; });
+    $('go-ai').addEventListener('click', () => { S.mode = 'ai'; el.dataset.mode = 'ai'; setFoot(); stop(0); });
+    $('go-pr').addEventListener('click', () => { S.mode = 'private'; el.dataset.mode = 'private'; setFoot(); stop(0); });
+    bumpIdle();
+  }
+
+  function crisis() {
+    el.classList.remove('think');
+    show(`<div class="crisis" role="alert"><h2>Please talk to a person right now.</h2><p>${esc(CRISIS_MESSAGE)}</p>
+      <div class="row"><a class="btn" href="tel:988">Call 988</a><a class="btn alt" href="sms:988">Text 988</a><button class="ghost" id="back">I am okay, go back</button></div></div>`);
+    $('back').addEventListener('click', () => stop(Math.max(S.step, 0)));
+  }
+
+  function stop(i: number) {
+    S.step = i; setRoute(i);
+    const s = STOPS[i];
+    const chips = s.chips ? `<div class="chips" role="group" aria-label="Weather">${s.chips.map((c) => `<button type="button" class="chip" aria-pressed="${S.picks.includes(c)}">${esc(c)}</button>`).join('')}</div>` : '';
+    show(`<div class="guide">${ALAN}<div class="bubble" id="say"></div></div>
+      <h2>${esc(s.q)}</h2>${chips}
+      <textarea id="ans" aria-label="Your answer" autocomplete="off" spellcheck="false" placeholder="${esc(s.ph)}">${esc(S.ans[s.id] || '')}</textarea>
+      <div class="row"><button class="btn" id="next">Continue</button>${i > 0 ? '<button class="btn alt" id="prev">Back</button>' : ''}<button class="ghost" id="skip">Skip</button></div>`);
+    type($('say'), s.say);
+    const ta = $<HTMLTextAreaElement>('ans'); ta.focus({ preventScroll: true });
+    ta.addEventListener('input', () => { S.ans[s.id] = ta.value; look(0, 3); });
+    document.querySelectorAll<HTMLButtonElement>('.chip').forEach((b) => b.addEventListener('click', () => { S.picks = S.picks[0] === b.textContent ? [] : [b.textContent!]; document.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', String(S.picks.includes(c.textContent!)))); }));
+    $('next').addEventListener('click', () => reply(i));
+    $('prev')?.addEventListener('click', () => stop(i - 1));
+    $('skip').addEventListener('click', () => forward(i));
+  }
+  const forward = (i: number) => (i + 1 < STOPS.length ? stop(i + 1) : seven('friction'));
+
+  async function ask(body: object): Promise<any | null> {
+    try {
+      const r = await fetch('/.netlify/functions/alan', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...body, sid: S.sid }), signal: AbortSignal.timeout(25000) });
+      return r.ok ? await r.json() : null;
+    } catch { return null; }
+  }
+  const trail = (upto: number) => STOPS.slice(0, upto).filter((x) => S.ans[x.id]).map((x) => ({ stop: x.name, a: scrub(S.ans[x.id]).text.slice(0, 400) }));
+  const full = (s: Stop) => [S.picks[0], S.ans[s.id]].filter(Boolean).join('. ');
+
+  async function reply(i: number) {
+    const s = STOPS[i]; const text = full(s);
+    if (!text.trim()) return forward(i);
+    if (isCrisis(text)) return crisis();
+    const bubble = `<div class="guide">${ALAN}<div class="bubble" id="say"></div></div>`;
+    const cont = `<div class="row"><button class="btn" id="cont" hidden>${i + 1 < STOPS.length ? 'Next stop' : 'Find my seven words'}</button><button class="btn alt" id="edit" hidden>Say it differently</button></div>`;
+    show(bubble + `<p class="listen" id="ls" role="status">Alan is thinking<span>.</span><span>.</span><span>.</span></p>` + cont);
+    let out: any = null;
+    if (S.mode === 'ai') {
+      el.classList.add('think');
+      out = await ask({ stop: s.name, question: s.q, answer: scrub(text).text, trail: trail(i) });
+      el.classList.remove('think');
+    } else { await new Promise((r) => setTimeout(r, reduce ? 0 : 700)); }
+    $('ls')?.remove();
+    if (out?.crisis) return crisis();
+    if (out?.prov) S.replies.push(out.prov);
+    const msg = out?.reply || s.written;
+    type($('say'), msg, () => { $('cont').hidden = false; $('edit').hidden = false; $('cont').focus(); });
+    if (S.mode === 'ai' && !out) stage.firstElementChild!.insertAdjacentHTML('beforeend', '<p class="hint">Alan could not be reached, so that reply was written in advance.</p>');
+    $('cont').addEventListener('click', () => forward(i)); $('edit').addEventListener('click', () => stop(i));
+  }
+
+  // ---------- the seven-word stops ----------
+  function seven(kind: 'friction' | 'outcome') {
+    const f = kind === 'friction';
+    S.step = f ? 6 : 7; setRoute(S.step);
+    const heading = f ? 'Say what is in the way in exactly seven words.' : 'Make your wish: what do you want instead, in exactly seven words?';
+    const tips = f ? 'Name the thing in the way, not only the feeling. Use your own words.' : 'Make it something another person could see happen. Add a day or a person if you can.';
+    show(`<div class="guide">${ALAN}<div class="bubble" id="say"></div></div>
+      <h2>${esc(heading)}</h2><p class="hint">${esc(tips)}</p>
+      <div id="opts" class="opts" aria-live="polite"></div>
+      <textarea id="sv" rows="2" style="min-height:70px" aria-label="Your seven words" autocomplete="off" spellcheck="false" placeholder="Seven words..."></textarea>
+      <p class="count" id="cnt" role="status"></p>
+      <div class="row"><button class="btn" id="lock" disabled>${f ? 'Lock in the friction' : 'Lock in the wish'}</button><button class="btn alt" id="more" hidden>Show me other versions</button><button class="ghost" id="back">Back</button></div>`);
+    type($('say'), f ? 'Here is the trick. Seven words is short enough that you cannot hide in it.' : 'Genie rules: one wish, and it has to be specific enough for me to grant.');
+    const sv = $<HTMLTextAreaElement>('sv'), cnt = $('cnt'), lock = $<HTMLButtonElement>('lock');
+    let source: Line['source'] = 'you', offered: string[] = [];
+    const update = () => {
+      const n = words(sv.value).length; lock.disabled = n !== SEVEN;
+      cnt.className = 'count' + (n === SEVEN ? ' ok' : '');
+      cnt.textContent = n === SEVEN ? '7 of 7. That is it.' : n < SEVEN ? `${n} of 7. Add ${SEVEN - n}.` : `${n} of 7. Cut ${n - SEVEN}.`;
+      if (source === 'alan' && !offered.includes(sv.value.trim())) source = 'alan edited';
+    };
+    sv.addEventListener('input', update); update();
+    const offer = async () => {
+      if (S.mode !== 'ai') return;
+      const box = $('opts'); box.innerHTML = '<p class="listen">Alan is thinking<span>.</span><span>.</span><span>.</span></p>'; el.classList.add('think');
+      const out = await ask({ mode: 'seven', kind, answer: scrub(sv.value).text, trail: [...trail(STOPS.length), ...(!f && S.friction ? [{ stop: 'Friction', a: S.friction.text }] : [])] });
+      el.classList.remove('think');
+      if (out?.crisis) return crisis();
+      if (out?.prov) S.replies.push(out.prov);
+      offered = out?.options || [];
+      box.innerHTML = offered.length ? offered.map((o: string) => `<button class="opt" type="button">${esc(o)}</button>`).join('') : '<p class="hint">Alan could not find a clean seven-word version. Try writing it yourself, and the counter will help.</p>';
+      box.querySelectorAll<HTMLButtonElement>('.opt').forEach((b) => b.addEventListener('click', () => { sv.value = b.textContent!; source = 'alan'; update(); sv.focus(); }));
+      $('more').hidden = false;
+    };
+    $('more').addEventListener('click', offer);
+    if (S.mode === 'ai') offer();
+    lock.addEventListener('click', () => {
+      const text = sv.value.trim();
+      if (isCrisis(text)) return crisis();
+      const line: Line = { text: scrub(text).text, source };
+      if (f) { S.friction = line; seven('outcome'); } else { S.wish = line; card(); }
+    });
+    $('back').addEventListener('click', () => (f ? stop(STOPS.length - 1) : seven('friction')));
+    sv.focus({ preventScroll: true });
+  }
+
+  // ---------- the card and its receipt ----------
+  const sha = async (s: string) => Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s))), (b) => b.toString(16).padStart(2, '0')).join('');
+  const canon = (o: unknown): string => JSON.stringify(o, (_k, v) => (v && typeof v === 'object' && !Array.isArray(v) ? Object.keys(v).sort().reduce((a: any, k) => { a[k] = v[k]; return a; }, {}) : v));
+
+  async function receipt() {
+    const lines = await Promise.all([['friction', S.friction!], ['outcome', S.wish!]].map(async ([k, l]) => ({ kind: k, text: (l as Line).text, source: (l as Line).source, sha256: await sha((l as Line).text) })));
+    const body = { schema: 'alan-receipt/1', createdAt: new Date().toISOString(), mode: S.mode, visit: await sha('v:' + S.sid).then((h) => h.slice(0, 16)), lines,
+      aiReplies: S.replies.map((p) => ({ rid: p.rid, model: p.model, promptVersion: p.promptV, policyVersion: p.policyV, build: p.build, at: p.ts })),
+      notes: 'Contains only the two seven-word lines and metadata about which AI replies helped. The stop-by-stop answers are not included. Each rid can be matched to the signed server audit log.' };
+    return { ...body, receiptSha256: await sha(canon(body)) };
+  }
+
+  async function card() {
+    S.step = 8; setRoute(8);
+    const rc = await receipt();
+    const srcLabel = (l: Line) => (l.source === 'you' ? 'in your words' : l.source === 'alan' ? 'suggested by Alan, chosen by you' : 'started by Alan, edited by you');
+    show(`<div class="guide">${ALAN}<div class="bubble" id="say"></div></div>
+      <div class="seven" id="seven"><h2>The friction</h2><p class="line">${esc(S.friction!.text)}.</p><p class="src">${srcLabel(S.friction!)}</p><hr>
+        <h2>The wish</h2><p class="line">${esc(S.wish!.text)}.</p><p class="src">${srcLabel(S.wish!)}</p>
+        <div class="prov"><b>Provenance.</b> Made ${new Date(rc.createdAt).toLocaleString()} in ${S.mode === 'ai' ? 'AI' : 'private'} mode. ${S.replies.length} AI ${S.replies.length === 1 ? 'reply' : 'replies'}${S.replies[0] ? `, model ${esc(S.replies[0].model)}, prompt ${esc(S.replies[0].promptV)}, build ${esc(S.replies[0].build)}` : ''}. Receipt <b>${rc.receiptSha256.slice(0, 16)}</b>.</div></div>
+      <div class="row noprint"><button class="btn" id="copy">Copy the two lines</button><button class="btn alt" id="dl">Download receipt</button><button class="btn alt" id="pr">Print</button></div>
+      <div class="trip noprint"><div><b>Next</b>Say the wish to one person today. A line nobody hears is still just a thought.</div><div><b>Go further</b><a href="/partner/" style="color:var(--gold)">Build your personal operating system</a> or <a href="/mindset-coaching/" style="color:var(--gold)">book a Pattern Audit with Marquis</a>.</div></div>
+      <div class="row noprint"><button class="ghost" id="again">Start a new ride</button><button class="ghost" id="clr">Wipe everything</button></div>`);
+    type($('say'), 'That is the whole trip. Look how small and clear that is.');
+    $('copy').addEventListener('click', async () => { try { await navigator.clipboard.writeText(`Friction: ${S.friction!.text}\nWish: ${S.wish!.text}`); $('copy').textContent = 'Copied'; } catch { $('copy').textContent = 'Select and copy'; } });
+    $('dl').addEventListener('click', () => { const u = URL.createObjectURL(new Blob([JSON.stringify(rc, null, 2)], { type: 'application/json' })); const a = document.createElement('a'); a.href = u; a.download = 'alan-receipt.json'; a.click(); URL.revokeObjectURL(u); });
+    $('pr').addEventListener('click', () => print());
+    $('again').addEventListener('click', () => { const m = S.mode; S = fresh(); S.mode = m; stop(0); });
+    $('clr').addEventListener('click', () => wipe('Done. Everything is cleared from this page.'));
+  }
+
+  gate();
+</script>
