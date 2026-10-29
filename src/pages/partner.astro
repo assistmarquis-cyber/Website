@@ -15,7 +15,7 @@ import Base from '../layouts/Base.astro';
 
     <main class="stage" id="stage" aria-live="polite"></main>
 
-    <footer class="foot">Stays on this device. No account, no tracking, nothing sent. <span id="saved"></span></footer>
+    <footer class="foot"><span id="foot-t">Stays on this device. No account, no tracking, nothing sent.</span> <span id="saved"></span></footer>
   </div>
 </Base>
 
@@ -98,13 +98,26 @@ import Base from '../layouts/Base.astro';
   .how div { display: flex; gap: 14px; color: var(--soft); font-size: 16px; }
   .how b { color: var(--glow); font-family: var(--serif); font-weight: 500; min-width: 22px; }
 
+  .app.typing .orb { animation-duration: 3.5s; filter: blur(26px) brightness(1.35); }
+  .app.thinking .orb { animation-duration: 2.2s; filter: blur(22px) brightness(1.6); }
+  .orb { transition: filter .6s; }
+  .listen { color: var(--soft); font-family: var(--serif); font-size: 20px; margin: 6px 0 22px; }
+  .listen span { animation: dot 1.2s infinite; opacity: .2; }
+  .listen span:nth-child(2) { animation-delay: .2s; } .listen span:nth-child(3) { animation-delay: .4s; }
+  @keyframes dot { 50% { opacity: 1 } }
+  .follow { margin: 8px 0 20px; animation: rise .6s ease both; }
+  .follow h2 { font-size: clamp(22px, 4vw, 30px); }
+  .os section { animation: rise .7s ease both; }
+  .os section:nth-of-type(1) { animation-delay: .1s } .os section:nth-of-type(2) { animation-delay: .3s } .os section:nth-of-type(3) { animation-delay: .5s }
+  .os section:nth-of-type(4) { animation-delay: .7s } .os section:nth-of-type(5) { animation-delay: .9s } .os section:nth-of-type(6) { animation-delay: 1.1s }
+  .os section:nth-of-type(7) { animation-delay: 1.3s } .os section:nth-of-type(8) { animation-delay: 1.5s }
   @media print {
     html, body, .app { background: #fff !important; }
     .bar, .foot, .orb, .row, .log, .note, .noprint { display: none !important; }
     .stage { max-width: none; padding: 0; }
     .os { box-shadow: none; padding: 0; }
   }
-  @media (prefers-reduced-motion: reduce) { .orb, .fade { animation: none; } .prog i { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .orb, .fade, .os section, .follow { animation: none; } .prog i { transition: none; } }
 </style>
 
 <script>
@@ -175,7 +188,7 @@ import Base from '../layouts/Base.astro';
   ];
 
   const KEY = 'marquis-room-v1';
-  type State = { i: number; a: Record<string, string>; picks: string[]; os?: Record<string, string>; log: { t: string; v: string; r: string; c: string }[] };
+  type State = { live?: boolean; i: number; a: Record<string, string>; picks: string[]; os?: Record<string, string>; log: { t: string; v: string; r: string; c: string }[] };
   const load = (): State => {
     try { const s = JSON.parse(localStorage.getItem(KEY) || ''); if (s && s.a) return s; } catch (_) {}
     return { i: -1, a: {}, picks: [], log: [] };
@@ -189,6 +202,10 @@ import Base from '../layouts/Base.astro';
   const stage = $('stage'), app = $('app'), prog = $('prog'), fill = $('prog-fill'), reset = $('reset');
   const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
   const snippet = (s: string) => { const t = s.trim().replace(/\s+/g, ' '); return t.length > 150 ? t.slice(0, 147).replace(/\s\S*$/, '') + '...' : t; };
+  // The glow answers the person: it brightens while they type, and swells while a live reflection is written.
+  let pt: number | undefined;
+  const pulse = () => { app.classList.add('typing'); clearTimeout(pt); pt = window.setTimeout(() => app.classList.remove('typing'), 900); };
+  const foot = () => { $('foot-t').textContent = S.live ? 'Live reflections on: each answer is sent to an AI to write a reply, and is not stored by us. Everything else stays on this device.' : 'Stays on this device. No account, no tracking, nothing sent.'; };
   const render = (html: string) => { stage.innerHTML = `<div class="fade">${html}</div>`; stage.scrollIntoView({ block: 'start' }); window.scrollTo({ top: 0 }); };
   const setBar = (i: number) => {
     const on = i >= 0 && i < rooms.length;
@@ -208,12 +225,14 @@ import Base from '../layouts/Base.astro';
         <div><b>2</b><span>I reflect back what I heard, so you can hear it too.</span></div>
         <div><b>3</b><span>You leave with a page you can edit, print, and live by.</span></div>
       </div>
-      <p class="hint">About 15 minutes. Everything stays in this browser.</p>
+      <p class="hint">About 15 minutes. Your page is saved in this browser only.</p>
       <div class="row">
-        ${S.os ? '<button class="btn" id="go-os">Open my operating system</button>' : `<button class="btn" id="go">${back ? 'Pick up where I left off' : 'Begin'}</button>`}
-        ${back && !S.os ? '' : S.os ? '<button class="btn alt" id="go-redo">Revisit the questions</button>' : ''}
-      </div>`);
-    $('go')?.addEventListener('click', () => { if (S.i < 0) S.i = 0; ask(S.i); });
+        ${S.os ? '<button class="btn" id="go-os">Open my operating system</button><button class="btn alt" id="go-redo">Revisit the questions</button>' : back ? `<button class="btn" id="go">Pick up where I left off</button>` : '<button class="btn" id="go-live">Begin with live reflections</button><button class="btn alt" id="go">Begin privately</button>'}
+      </div>
+      ${!S.os && !back ? '<p class="hint" style="margin-top:14px">Live: an AI reads each answer and replies to you, with a follow-up question. Your answer is sent to it for that, and not stored. Private: written reflections only, nothing leaves this device.</p>' : ''}`);
+    foot();
+    $('go-live')?.addEventListener('click', () => { S.live = true; S.i = 0; foot(); ask(0); });
+    $('go')?.addEventListener('click', () => { if (S.i < 0) { S.live = false; S.i = 0; } foot(); ask(S.i); });
     $('go-os')?.addEventListener('click', showOS);
     $('go-redo')?.addEventListener('click', () => { S.i = 0; ask(0); });
   }
@@ -234,7 +253,7 @@ import Base from '../layouts/Base.astro';
         <button class="ghost" id="skip">Skip for now</button>
       </div>`);
     const ta = $<HTMLTextAreaElement>('ans'); ta.focus({ preventScroll: true });
-    ta.addEventListener('input', () => { S.a[r.id] = ta.value; save(); });
+    ta.addEventListener('input', () => { S.a[r.id] = ta.value; save(); pulse(); });
     document.querySelectorAll<HTMLButtonElement>('.chip').forEach((b) => b.addEventListener('click', () => {
       const v = b.textContent!;
       if (S.picks.includes(v)) S.picks = S.picks.filter((x) => x !== v);
@@ -249,22 +268,67 @@ import Base from '../layouts/Base.astro';
 
   const advance = (i: number) => (i + 1 < rooms.length ? ask(i + 1) : build());
 
-  function reflect(i: number) {
+  // Live reflection: the answer goes to /.netlify/functions/reflect, which asks Claude
+  // for a short reflection and one follow-up question. Any failure falls back to the
+  // written line, so the app never breaks.
+  async function live(i: number, heard: string): Promise<{ reflection: string; followup: string } | null> {
+    const r = rooms[i];
+    const prior = rooms.slice(0, i).filter((x) => S.a[x.id]).map((x) => ({ q: x.q, a: S.a[x.id] }));
+    try {
+      const res = await fetch('/.netlify/functions/reflect', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ question: r.q, answer: heard, prior }),
+        signal: AbortSignal.timeout(25000),
+      });
+      if (!res.ok) return null;
+      const j = await res.json();
+      return j.reflection ? j : null;
+    } catch (_) { return null; }
+  }
+
+  const type = (el: HTMLElement, text: string, done: () => void) => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = text; return done(); }
+    let n = 0;
+    const tick = () => { n += 2; el.textContent = text.slice(0, n); if (n < text.length) setTimeout(tick, 18); else done(); };
+    tick();
+  };
+
+  async function reflect(i: number) {
     const r = rooms[i];
     const a = (S.a[r.id] || '').trim();
     const heard = r.id === 'gifts' ? S.picks.join(', ') || a : a;
     if (!heard) return advance(i);
     app.dataset.stage = 'reflect'; setBar(i + 1);
-    render(`
-      <p class="eyebrow-l">What I heard</p>
-      <div class="echo"><q>${esc(snippet(heard))}</q><p>${esc(r.echo(heard))}</p></div>
-      <div class="row">
-        <button class="btn" id="cont">${i + 1 < rooms.length ? 'Next question' : 'Build my operating system'}</button>
-        <button class="btn alt" id="edit">Say it differently</button>
-      </div>`);
-    $('cont').addEventListener('click', () => advance(i));
-    $('edit').addEventListener('click', () => ask(i));
-    $('cont').focus();
+    const last = i + 1 >= rooms.length;
+    const quote = `<div class="echo"><q>${esc(snippet(heard))}</q><p id="rf"></p></div>`;
+    const actions = (extra = '') => `${extra}<div class="row"><button class="btn" id="cont">${last ? 'Build my operating system' : 'Next question'}</button><button class="btn alt" id="edit">Say it differently</button></div>`;
+    const wire = () => { $('cont').addEventListener('click', () => advance(i)); $('edit').addEventListener('click', () => ask(i)); };
+
+    if (!S.live) {
+      render(`<p class="eyebrow-l">What I heard</p>${quote}${actions()}`);
+      $('rf').textContent = r.echo(heard); wire(); $('cont').focus(); return;
+    }
+
+    render(`<p class="eyebrow-l">What I heard</p>${quote}<p class="listen" id="ls" role="status">Listening<span>.</span><span>.</span><span>.</span></p>`);
+    app.classList.add('thinking');
+    const out = await live(i, heard);
+    app.classList.remove('thinking');
+    if (app.dataset.stage !== 'reflect') return;
+    $('ls')?.remove();
+    const fallback = !out;
+    const text = out ? out.reflection : r.echo(heard);
+    const follow = out ? out.followup : '';
+    const slot = document.createElement('div');
+    slot.innerHTML = actions(follow ? `<div id="fu" class="follow" hidden><p class="eyebrow-l">One more thing</p><h2 id="fq"></h2><textarea id="fa" aria-label="Your answer to the follow-up" placeholder="Take a sentence or two..."></textarea></div>` : '') + (fallback ? '<p class="hint" style="margin-top:14px">Live reflection is not reachable right now, so this one is written.</p>' : '');
+    stage.firstElementChild!.append(...Array.from(slot.childNodes));
+    wire();
+    type($('rf'), text, () => {
+      if (!follow) { $('cont').focus(); return; }
+      const fu = $('fu'); fu.hidden = false; $('fq').textContent = follow;
+      const fa = $<HTMLTextAreaElement>('fa');
+      fa.addEventListener('input', () => { S.a[r.id] = (S.a[r.id] || '').split('\n\n+ ')[0] + (fa.value.trim() ? '\n\n+ ' + fa.value.trim() : ''); save(); pulse(); });
+      fa.focus({ preventScroll: true });
+    });
   }
 
   const lines = (s: string) => s.trim();
