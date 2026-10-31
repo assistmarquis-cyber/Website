@@ -321,6 +321,55 @@
         "tool": "Mindset Retainer",
         "god": "Operator"
       }
+    },
+    {
+      "id": "gross-john-2003",
+      "citation": "Gross, J. J., & John, O. P. (2003). Individual differences in two emotion regulation processes: Implications for affect, relationships, and well-being. Journal of Personality and Social Psychology, 85(2), 348-362.",
+      "year": 2003,
+      "doi": null,
+      "verifiedUrl": "https://pubmed.ncbi.nlm.nih.gov/12916575/",
+      "verifiedOn": "2026-10-31",
+      "topics": [
+        "negative-loops",
+        "mental-wellbeing"
+      ],
+      "design": "Five studies building and testing questionnaire measures",
+      "evidence": "moderate",
+      "finding": "People who habitually reframe a situation (reappraisal) reported and showed more positive and less negative emotion, better relationships and higher well-being. People who habitually hold feelings in (suppression) reported less positive emotion, more negative emotion, worse relationships and lower well-being.",
+      "caveat": "Mostly questionnaire and correlational data, so it shows association, not that teaching reappraisal causes the change. Suppression is not always harmful in the moment; the pattern is about habit.",
+      "loops": [
+        "swallow-it"
+      ],
+      "maps": {
+        "pillar": "Mindset",
+        "tool": "Pattern Audit",
+        "god": "Operator"
+      }
+    },
+    {
+      "id": "a-tjak-2015",
+      "citation": "A-Tjak, J. G. L., et al. (2015). A meta-analysis of the efficacy of acceptance and commitment therapy for clinically relevant mental and physical health problems. Psychotherapy and Psychosomatics, 84(1), 30-36.",
+      "year": 2015,
+      "doi": "10.1159/000365764",
+      "verifiedUrl": "https://pubmed.ncbi.nlm.nih.gov/25547522/",
+      "verifiedOn": "2026-10-31",
+      "topics": [
+        "negative-loops",
+        "mental-wellbeing",
+        "commitment"
+      ],
+      "design": "Meta-analysis of 39 randomized trials, 1,821 patients",
+      "evidence": "strong, for clinical populations",
+      "finding": "Acceptance and commitment therapy, which teaches people to notice thoughts without obeying them and to act on chosen values, beat waitlist, usual care and psychological placebo overall (average g=0.57), and did not differ significantly from CBT.",
+      "caveat": "Trials of therapy for diagnosed mental and physical health problems, delivered by clinicians. It supports the idea of values-based action; it does not show coaching produces the same effects. Refer out for clinical problems.",
+      "loops": [
+        "fused-with-thought"
+      ],
+      "maps": {
+        "pillar": "Mindset",
+        "tool": "Pattern Audit",
+        "god": "Operator"
+      }
     }
   ]
 }

@@ -164,6 +164,32 @@
         "god": "Operator",
         "move": "After a miss, say what happened without a verdict, then name the next smallest step. Treat yourself the way you would a client you respect."
       }
+    },
+    {
+      "id": "swallow-it",
+      "name": "The swallow-it loop",
+      "plain": "You push the feeling down and carry on, so it leaks out somewhere else.",
+      "evidence": [
+        "gross-john-2003"
+      ],
+      "strategy": {
+        "tool": "Pattern Audit",
+        "god": "Operator",
+        "move": "Name the feeling in one sentence, then ask what else could be true about the situation. Pick one reframe you can act on today."
+      }
+    },
+    {
+      "id": "fused-with-thought",
+      "name": "The thought-is-a-fact loop",
+      "plain": "I feel I can't, so I can't.",
+      "evidence": [
+        "a-tjak-2015"
+      ],
+      "strategy": {
+        "tool": "Pattern Audit",
+        "god": "Destroyer",
+        "move": "Write the thought as 'I'm having the thought that...', then ask what you value here and take one step toward it anyway. Refer out if the distress is clinical."
+      }
     }
   ]
 }
