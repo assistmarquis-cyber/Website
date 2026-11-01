@@ -190,6 +190,33 @@
         "god": "Destroyer",
         "move": "Write the thought as 'I'm having the thought that...', then ask what you value here and take one step toward it anyway. Refer out if the distress is clinical."
       }
+    },
+    {
+      "id": "hours-myth",
+      "name": "The hours myth",
+      "plain": "If I just put in more hours, I'll get there.",
+      "evidence": [
+        "macnamara-2014"
+      ],
+      "strategy": {
+        "tool": "Mindset Sprint",
+        "god": "Destroyer",
+        "move": "Ask what the hours are aimed at. Cut the work that is not moving the one outcome, then spend the time on feedback and the weak spot."
+      }
+    },
+    {
+      "id": "going-it-alone",
+      "name": "The going-it-alone loop",
+      "plain": "I should handle this by myself.",
+      "evidence": [
+        "holt-lunstad-2010",
+        "ryan-deci-2000"
+      ],
+      "strategy": {
+        "tool": "Mindset Retainer",
+        "god": "Generator",
+        "move": "Name two people who will know your commitment and ask one for a specific check-in. Accountability is the point of the retainer."
+      }
     }
   ]
 }

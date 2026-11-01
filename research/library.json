@@ -370,6 +370,55 @@
         "tool": "Pattern Audit",
         "god": "Operator"
       }
+    },
+    {
+      "id": "macnamara-2014",
+      "citation": "Macnamara, B. N., Hambrick, D. Z., & Oswald, F. L. (2014). Deliberate practice and performance in music, games, sports, education, and professions: A meta-analysis. Psychological Science, 25(8), 1608-1618.",
+      "year": 2014,
+      "doi": null,
+      "verifiedUrl": "https://www.princeton.edu/news/2014/07/03/becoming-expert-takes-more-practice",
+      "verifiedOn": "2026-11-01",
+      "topics": [
+        "mindset-architecture",
+        "execution",
+        "caution"
+      ],
+      "design": "Meta-analysis of 88 studies, 11,135 participants",
+      "evidence": "moderate, contested",
+      "finding": "Deliberate practice explained about 12% of performance differences overall: roughly 26% in games, 21% in music, 18% in sports, 4% in education and under 1% in professions. Practice mattered, but far from everything.",
+      "caveat": "Verified through a university news summary of the paper rather than the abstract page, and the percentages come from that summary. The authors' conclusions are disputed by researchers who favor the deliberate-practice view. Use as a guardrail against 'just put in the hours', not as proof that practice does not matter.",
+      "loops": [
+        "hours-myth"
+      ],
+      "maps": {
+        "pillar": "Execution",
+        "tool": "Mindset Sprint",
+        "god": "Destroyer"
+      }
+    },
+    {
+      "id": "holt-lunstad-2010",
+      "citation": "Holt-Lunstad, J., Smith, T. B., & Layton, J. B. (2010). Social relationships and mortality risk: A meta-analytic review. PLoS Medicine, 7(7), e1000316.",
+      "year": 2010,
+      "doi": "10.1371/journal.pmed.1000316",
+      "verifiedUrl": "https://journals.plos.org/plosmedicine/article/info:doi/10.1371/journal.pmed.1000316",
+      "verifiedOn": "2026-11-01",
+      "topics": [
+        "mental-wellbeing",
+        "commitment"
+      ],
+      "design": "Meta-analysis of 148 studies, 308,849 participants",
+      "evidence": "strong, for health outcomes",
+      "finding": "People with stronger social relationships had about 50% higher odds of survival over the follow-up periods, a link comparable in size to well-known risk factors like smoking. The effect was largest for broad social integration and smaller for simply living alone.",
+      "caveat": "Observational, and about survival, not follow-through on goals. It supports taking people's relationships seriously in a coaching plan; it does not show that adding support makes goals succeed. Do not turn it into a claim about coaching results.",
+      "loops": [
+        "going-it-alone"
+      ],
+      "maps": {
+        "pillar": "Mindset",
+        "tool": "Mindset Retainer",
+        "god": "Generator"
+      }
     }
   ]
 }
